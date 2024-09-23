@@ -1,0 +1,36 @@
+body{
+    background-color: rgb(197, 164, 164);
+}
+
+#formulario{
+    margin-left: 670px;
+    padding: 20px;
+    
+}
+
+h2{
+    margin-left: 670px;
+}
+
+#login{
+    margin-left: 690px;
+
+}
+
+#paciente{
+    margin-left: 800px;
+}
+
+#analisis{
+    margin-left: 800px;
+}
+
+#titulo{
+    text-align: center;
+}
+
+#enviar{
+    margin-left: 670px;
+    width: 500px;
+    height: 500px;
+}

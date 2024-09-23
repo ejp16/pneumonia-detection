@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+</head>
+
+<body>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Inicio</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-link active" href="{% url 'registrar_paciente' %}">Registrar paciente</a>
+            <a class="nav-link active" href="{% url 'registrar_analisis' %}">Registrar Analisis</a>
+            <a class="nav-link active" href="{% url 'logout' %}">Cerrar sesion</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <h2 id="paciente">Registro de paciente</h2>
+
+
+
+<form method='post'>
+
+    {% csrf_token %}
+
+    <div id="formulario">
+
+        {% csrf_token %}
+    
+        <div class="col-sm-5">
+            {{ form.nombre_paciente.label_tag }}
+            {{ form.nombre_paciente.value }}
+
+    
+        </div>
+    
+        <div class="col-sm-5">
+            {{ form.edad.label_tag }}
+            {{ form.edad }}
+        </div>
+
+            
+        <div class="col-sm-5">
+            {{ form.cedula.label_tag }}
+            {{ form.cedula }}
+        </div>
+
+            
+        <div class="col-sm-5">
+            {{ form.telefono.label_tag }}
+            {{ form.telefono }}
+        </div>
+  
+        <div class="col-sm-5">
+            {{ form.email_paciente.label_tag }}
+            {{ form.email_paciente }}
+        </div>
+
+            
+        <div class="col-sm-5">
+            {{ form.observaciones.label_tag }}
+            {{ form.observaciones }}
+        </div>
+        <input type="submit" class="btn btn-primary">
+    
+        
+    </div>
+    
+</form>
+</body>
+
+</html>
