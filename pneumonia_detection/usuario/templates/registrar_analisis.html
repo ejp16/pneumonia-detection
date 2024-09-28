@@ -15,41 +15,27 @@
 <body>
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">Inicio</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-          <a class="nav-link active" href="{% url 'registrar_paciente' %}">Registrar paciente</a>
-          <a class="nav-link active" href="{% url 'registrar_analisis' %}">Registrar Analisis</a>
-          <a class="nav-link active" href="{% url 'logout' %}">Cerrar sesion</a>
-      </div>
-    </div>
-  </div>
-</nav>
 
-<h2 id="analisis">Registro de analisis</h2>
+<h2 id="analisis">Realizar analisis al paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
 
 
 <h3>Cargue la imagen de su radiografia para realizar el analisis</h3>
-
+<h4>La red neuronal solo procesas imagenes postero anteriores del torax, no se garantiza una alta precision si se utiliza otro tipo de proyeccion</h4>
+<h4>Una vez subida la imagen, podra ver los resultados del analisis en la pagina del paciente</h4>
+<h4>El paciente tambien podra ver el resultado del analisis</h4>
 
 <form method="post" enctype="multipart/form-data">
 
     {% csrf_token %}
 
+
     <input type="file" name="radiografia"> <br>
 
-    <label for="paciente">Seleccione al paciente:</label>
-    <select name="paciente">
-        {% for paciente in pacientes %}
-      <option value="{{ paciente.id }}">{{ paciente.cedula }}</option>
-        {% endfor %}
-    </select>
     <br>
+
+    
+    <input type='hidden' value='{{ paciente.id }}' name='pk'>
+
     <input type="submit">
 
 </form>

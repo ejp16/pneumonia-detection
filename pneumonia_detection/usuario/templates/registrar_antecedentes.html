@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+</head>
+
+<body>
+
+
+  <h2 id="paciente">Registro de antecedentes de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+
+
+
+<form method='post'>
+
+    {% csrf_token %}
+
+    <div id="formulario">
+
+        {% csrf_token %}
+    
+        <div class="col-sm-5">
+            {{ form.medicos.label_tag }}
+            {{ form.medicos }}
+    
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.quirurgicos.label_tag }}
+            {{ form.quirurgicos }}
+    
+        </div>
+                
+        <div class="col-sm-5">
+            {{ form.alergologicos.label_tag }}
+            {{ form.alergologicos }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.cardiovasculares.label_tag }}
+            {{ form.cardiovasculares }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.sociales.label_tag }}
+            {{ form.sociales }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.familiares.label_tag }}
+            {{ form.familiares }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.vacunacion.label_tag }}
+            {{ form.vacunacion }}
+        </div>
+
+        <input type='hidden' value='{{ paciente.id }}' name='pk'>
+
+    
+        <input type="submit" class="btn btn-primary">
+    
+        
+    </div>
+    
+</form>
+</body>
+
+</html>

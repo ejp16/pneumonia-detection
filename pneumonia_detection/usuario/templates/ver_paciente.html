@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+  
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+  
+  </head>
+
+<body>
+  
+
+  
+<h2 id="titulo">Historia del paciente</h2>
+
+    {% csrf_token %}
+
+    <h4>Nombre: {{ paciente.nombre }} </h4>
+    <h4>Apellido: {{ paciente.apellido }} </h4>
+    <h4>Cedula: {{ paciente.cedula }}</h4>
+    <h4>Sexo: {{ paciente.sexo }}</h4>
+    <h4>Peso en Kg: {{ paciente.peso }}</h4>
+    <h4>Altura: {{ paciente.altura }}</h4>
+    <h4>Telefono: {{ paciente.telefono }}</h4>
+    <h4>Correo electronico: {{ paciente.email }}</h4>
+    <h4>Direccion: {{ paciente.direccion }}</h4>
+    <h4>Edad: {{ paciente.edad }} </h4>
+    <h4>Fecha de nacimiento: {{ paciente.fecha_nacimiento }}</h4>
+
+    {% if antecedentes %}
+        {% for antecedenteID, antecedente in antecedentes %}
+            <h4>Tipo de antecedente {{ antecedenteID.tipo_antecedente }}: {{ antecedente.antecedente_descrip }}</h4>
+        {% endfor %}
+
+    {% else  %}
+        
+        <h4>Este paciente no tiene antecedentes registrados</h4>
+
+    {% endif %}
+
+    {% if analisis %}
+
+        {% for item in analisis %}
+            <h4>Analisis N: {{ item.id }}</h4>
+            <h4>Resultado de la red neuronal: {{ item.resultado }}</h4>
+            <h4>Probabilidad: {{ item.probabilidad }}</h4>
+            <h4>Recomendaciones: {{ item.recomendaciones }}</h4>
+        {% endfor %}
+    
+    {% else %}
+        <h4>El paciente no tiene analisis registrados</h4>
+    {% endif %}
+
+    {% if imagenes %}
+
+        {% for imagen in imagenes %}
+            <img src="{{ imagen.imagen.url }}" alt="" srcset="">
+        {% endfor %}
+
+    {% else %}
+
+        <h4>El paciente no tiene ninguna imagen registrada</h4>
+        
+    {% endif %}
+
+    {% if informes %}
+
+        {% for informe in informes %}
+
+            <h4>Informe N: {{ informe.id }} correspondiente al analisis: {{ informe.id_analisis.id }}</h4>
+            <h4>Motivo de la consulta: {{ informe.motivo_consulta }}</h4>
+            <h4>Observaciones: {{ informe.observaciones }}</h4>
+            <h4>Recomendaciones: {{ informe.recomendaciones }}</h4>
+            <h4>Medicacion prescrita: {{ informe.medicacion }}</h4>
+        
+        {% endfor %}
+    {% else %}
+
+        <h4>No ha registrado informes a este paciente</h4>
+
+    {% endif %}
+
+</body>
+
+</html>

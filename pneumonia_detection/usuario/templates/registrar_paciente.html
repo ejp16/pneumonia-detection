@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+</head>
+
+<body>
+
+
+
+  <h2 id="paciente">Registro de paciente</h2>
+
+
+
+<form method='post'>
+
+    {% csrf_token %}
+
+    <div id="formulario">
+
+        {% csrf_token %}
+    
+        <div class="col-sm-5">
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+    
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.apellido.label_tag }}
+            {{ form.apellido }}
+    
+        </div>
+                
+        <div class="col-sm-5">
+            {{ form.cedula.label_tag }}
+            {{ form.cedula }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.peso.label_tag }}
+            {{ form.peso }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.altura.label_tag }}
+            {{ form.altura }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.telefono.label_tag }}
+            {{ form.telefono }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.correo.label_tag }}
+            {{ form.correo }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.direccion.label_tag }}
+            {{ form.direccion }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.edad.label_tag }}
+            {{ form.edad }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.fecha_nacimiento.label_tag }}
+            {{ form.fecha_nacimiento }}
+        </div>
+
+        <div class="col-sm-5">
+            {{ form.sexo.label_tag }}
+            {{ form.sexo }}
+        </div>
+
+    
+        <input type="submit" class="btn btn-primary">
+    
+        
+    </div>
+    
+</form>
+</body>
+
+</html>

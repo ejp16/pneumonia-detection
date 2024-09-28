@@ -13,29 +13,15 @@
   </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">Inicio</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-link active" href="{% url 'registrar_paciente' %}">Registrar paciente</a>
-            <a class="nav-link active" href="{% url 'registrar_analisis' %}">Registrar Analisis</a>
-            <a class="nav-link active" href="{% url 'logout' %}">Cerrar sesion</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+  
 
-
-
+  
 <h2 id="titulo">Historia del paciente</h2>
 
     {% csrf_token %}
 
-    <h4>Nombre del paciente: {{ paciente.nombre_paciente }} </h4>
+    <h4>Nombre del paciente: {{ paciente.nombre }} </h4>
+    <h4>Nombre del paciente: {{ paciente.apellido }} </h4>
     <h4>Edad: {{ paciente.edad }} </h4>
     <h4>Cedula: {{ paciente.cedula }}</h4>
     <h4>Telefono: {{ paciente.telefono }}</h4>
