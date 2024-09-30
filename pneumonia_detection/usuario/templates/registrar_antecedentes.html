@@ -17,8 +17,6 @@
 
   <h2 id="paciente">Registro de antecedentes de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
 
-
-
 <form method='post'>
 
     {% csrf_token %}
@@ -28,6 +26,7 @@
         {% csrf_token %}
     
         <div class="col-sm-5">
+            
             {{ form.medicos.label_tag }}
             {{ form.medicos }}
     

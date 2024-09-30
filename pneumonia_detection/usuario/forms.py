@@ -1,5 +1,5 @@
 from django import forms
-from usuario.models import MedicoUsuario, Paciente, Informe
+from usuario.models import MedicoUsuario, Paciente, Informe, AntecedentesPaciente
 
 class RegisterForm(forms.ModelForm):
     class Meta:
@@ -57,6 +57,7 @@ class PacienteForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control'}))
 
 class AntecedentesForm(forms.Form):
+    
     medicos = forms.CharField(required=True, widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     quirurgicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     alergologicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))

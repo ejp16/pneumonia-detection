@@ -18,6 +18,9 @@
   
 <h2 id="titulo">Historia del paciente</h2>
 
+<h3>Usuario del paciente: {{ paciente.email }}</h3>
+<h3>Contraseña: </h3>
+
     {% csrf_token %}
 
     <h4>Nombre: {{ paciente.nombre }} </h4>
@@ -32,14 +35,21 @@
     <h4>Edad: {{ paciente.edad }} </h4>
     <h4>Fecha de nacimiento: {{ paciente.fecha_nacimiento }}</h4>
 
+    <h5><a href="{% url 'editar_paciente' pk=paciente.id %}">Editar datos del paciente</a></h5>
+
     {% if antecedentes %}
         {% for antecedenteID, antecedente in antecedentes %}
             <h4>Tipo de antecedente {{ antecedenteID.tipo_antecedente }}: {{ antecedente.antecedente_descrip }}</h4>
+
         {% endfor %}
+
+        <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
+        
 
     {% else  %}
         
         <h4>Este paciente no tiene antecedentes registrados</h4>
+        <h5><a href="{% url 'registrar_antecedentes' pk=paciente.id %}">Registrar antecedentes de este paciente</a></h5>
 
     {% endif %}
 
@@ -50,6 +60,9 @@
             <h4>Resultado de la red neuronal: {{ item.resultado }}</h4>
             <h4>Probabilidad: {{ item.probabilidad }}</h4>
             <h4>Recomendaciones: {{ item.recomendaciones }}</h4>
+
+            <h5><a href="{% url 'registrar_analisis' pk=paciente.id %}">Realizar nuevo analisis</a></h5>
+            
         {% endfor %}
     
     {% else %}
@@ -59,8 +72,10 @@
     {% if imagenes %}
 
         {% for imagen in imagenes %}
+            <h4>Imagen correspondiente al analisis N: {{ imagen.id }}</h4>
             <img src="{{ imagen.imagen.url }}" alt="" srcset="">
         {% endfor %}
+
 
     {% else %}
 
@@ -79,6 +94,8 @@
             <h4>Medicacion prescrita: {{ informe.medicacion }}</h4>
         
         {% endfor %}
+
+        <h5><a href="{% url 'registrar_informe' pk=paciente.id%}">Realizar nuevo informe</a></h5>
     {% else %}
 
         <h4>No ha registrado informes a este paciente</h4>
