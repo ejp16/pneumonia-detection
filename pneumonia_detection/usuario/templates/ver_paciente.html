@@ -18,8 +18,9 @@
   
 <h2 id="titulo">Historia del paciente</h2>
 
-<h3>Usuario del paciente: {{ paciente.email }}</h3>
-<h3>Contraseña: </h3>
+<h5>Datos del usuario del paciente:</h5>
+<h5>Correo: {{ usuario_paciente.email }}</h5>
+<h5>Contraseña: {{ usuario_paciente.clave_acceso }}</h5>
 
     {% csrf_token %}
 
@@ -37,13 +38,14 @@
 
     <h5><a href="{% url 'editar_paciente' pk=paciente.id %}">Editar datos del paciente</a></h5>
 
-    {% if antecedentes %}
+    {% if antecedentes == True %}
+        <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
+
         {% for antecedenteID, antecedente in antecedentes %}
             <h4>Tipo de antecedente {{ antecedenteID.tipo_antecedente }}: {{ antecedente.antecedente_descrip }}</h4>
 
         {% endfor %}
 
-        <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
         
 
     {% else  %}
@@ -67,6 +69,7 @@
     
     {% else %}
         <h4>El paciente no tiene analisis registrados</h4>
+        <a href="{% url 'registrar_analisis' pk=paciente.id%}">Registrar analisis</a>
     {% endif %}
 
     {% if imagenes %}
@@ -99,6 +102,8 @@
     {% else %}
 
         <h4>No ha registrado informes a este paciente</h4>
+        <h5><a href="{% url 'registrar_informe' pk=paciente.id%}">Realizar nuevo informe</a></h5>
+
 
     {% endif %}
 

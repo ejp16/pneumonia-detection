@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from .forms import RegisterForm, LoginForm, AntecedentesForm, PacienteForm, InformeForm
 from .utils import Modelo
+from django.utils.crypto import get_random_string
 from django.urls import reverse
 import string
 import random
@@ -40,14 +41,14 @@ class LoginView(View):
             if medico_user and medico_user.password == password:
                 request.session['email_medico'] = email
                 return redirect('index_medico')
-            elif paciente_user and paciente_user.password == password:
+            elif paciente_user and paciente_user.clave_acceso == password:
                 request.session['email_paciente'] = email
                 return redirect('index_paciente')
             else:
                 messages.warning(request, 'Correo o contraseña incorrectos')
             return redirect('login')
 
-class IndexMedicoView(View):
+class IndexMedico(View):
     template_name = 'index_medico.html'
     def get(self, request):
         if 'email_medico' in request.session:
@@ -58,12 +59,13 @@ class IndexMedicoView(View):
         else:
             return redirect('login')
 
-class Indexpaciente(View):
+class IndexPaciente(View):
+    template_name = 'index_paciente.html'
     def get(self, request):
         if 'email_paciente' in request.session:
-            email = request.session.get('email')
-            paciente = Paciente.objects.filter(email = email).first()
-            reports = Informe.objects.filter(id = pacientes.id)
+            email = request.session.get('email_paciente')
+            paciente = Paciente.objects.filter(correo = email).first()
+            reports = Informe.objects.filter(id = paciente.id).all()
             return render(request, self.template_name, {'paciente': paciente, 'reports': reports})
         else:
             return redirect('login')
@@ -80,7 +82,18 @@ class CrearPaciente(CreateView):
         user_medico = MedicoUsuario.objects.filter(email=email).first()
         print(user_medico)
         form.id_medico_id = user_medico.id
+        print(form.correo)
+        clave = get_random_string(8)
+
         form.save()
+        paciente = Paciente.objects.get(id=form.id)
+        PacienteUsuario.objects.create(
+            id_paciente = paciente,
+            clave_acceso = clave,
+            email = form.correo
+        )
+        
+
         return redirect('index_medico')
     
     def form_invalid(self, form):
@@ -103,15 +116,15 @@ class VerPaciente(View):
         user_medico = MedicoUsuario.objects.filter(email = email).first()
         id_paciente = kwargs['pk']
         paciente = Paciente.objects.get(id = id_paciente)
-        if paciente.id == user_medico.id:
+        if paciente.id_medico_id == user_medico.id:
             antecedentes = AntecedentesPaciente.objects.filter(id_paciente = paciente.id).all()
             imagenes = Imagen.objects.filter(id_paciente = paciente.id).all()
             analisis = Analisis.objects.filter(id_imagen__in = imagenes).all()
             informes = Informe.objects.filter(id_paciente = paciente.id).all()
             antecedentesID = AntecedentesID.objects.all()
             lista_antecedentes = zip(antecedentesID, antecedentes)
-            
-            return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'imagenes': imagenes, 'analisis': analisis, 'informes': informes})
+            usuario_paciente = PacienteUsuario.objects.get(id_paciente_id=paciente.id)
+            return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'imagenes': imagenes, 'analisis': analisis, 'informes': informes, 'usuario_paciente': usuario_paciente})
         else:
             return redirect('index_medico')
 
@@ -259,8 +272,22 @@ class EditarAntecedentes(FormView):
         else:
             return redirect('index_paciente', pk=id_paciente)
     
+class RegistrarUsuarioPaciente(View):
+    template_name = 'registrar_usuario_paciente.html'
 
-class Logout(View):
+    def get(self, request, **kwargs):
+        id_paciente = request.POST.get('pk')
+        nombre = Paciente.objects.get(id=id_paciente)
+        return render(request, self.template_name, {'paciente': paciente})
+
+
+class LogoutMedico(View):
     def get(self, request):
         request.session.pop('email_medico')
         return redirect('login')
+
+class LogoutPaciente(View):
+    def get(self, request):
+        request.session.pop('email_paciente')
+        return redirect('login')
+    
