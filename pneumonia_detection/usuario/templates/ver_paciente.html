@@ -18,11 +18,6 @@
   
 <h2 id="titulo">Historia del paciente</h2>
 
-<h5>Datos del usuario del paciente:</h5>
-<h5>Correo: {{ usuario_paciente.email }}</h5>
-<h5>Contraseña: {{ usuario_paciente.clave_acceso }}</h5>
-
-    {% csrf_token %}
 
     <h4>Nombre: {{ paciente.nombre }} </h4>
     <h4>Apellido: {{ paciente.apellido }} </h4>
@@ -36,17 +31,14 @@
     <h4>Edad: {{ paciente.edad }} </h4>
     <h4>Fecha de nacimiento: {{ paciente.fecha_nacimiento }}</h4>
 
-    <h5><a href="{% url 'editar_paciente' pk=paciente.id %}">Editar datos del paciente</a></h5>
-
-    {% if antecedentes == True %}
-        <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
+    {% if antecedentes %}
 
         {% for antecedenteID, antecedente in antecedentes %}
             <h4>Tipo de antecedente {{ antecedenteID.tipo_antecedente }}: {{ antecedente.antecedente_descrip }}</h4>
 
         {% endfor %}
 
-        
+        <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
 
     {% else  %}
         

@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv('../.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -72,6 +71,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pneumonia_detection.wsgi.application'
 
+AUTH_USER_MODEL = 'usuario.User'
+
+AUTHENTICATION_BACKENDS = [
+    'usuario.backend.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

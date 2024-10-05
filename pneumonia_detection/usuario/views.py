@@ -1,143 +1,163 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.contrib.auth import login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
 from django.shortcuts import redirect
-from .forms import RegisterForm, LoginForm, AntecedentesForm, PacienteForm, InformeForm
+from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm
 from .utils import Modelo
-from django.utils.crypto import get_random_string
 from django.urls import reverse
-import string
-import random
+from django.contrib.auth import get_user_model
+from django.utils.crypto import get_random_string
 
 class RegistroView(CreateView):
     template_name = 'registro.html'
-    form_class = RegisterForm
+    form_class = FormRegistro
     success_url = '/usuario/login'
-    model = MedicoUsuario()
+    model = User
     def form_valid(self, form_class):
         form_class.save()
-        return super().form_valid(form_class)
+        return redirect('login')
+    
+    def form_invalid(self, form_class):
+        response = form_class.errors
+        print(response)
+        return redirect('register')
+    
     
 class LoginView(View):
     template_name = "login.html"
     form_class = LoginForm()
     def get(self, request):
-        if 'email_medico' not in request.session:
-            return render(request, self.template_name, {'form': self.form_class})
-        else:
-            return redirect('index_medico')
+        return render(request, self.template_name, {'form': self.form_class})
 
     def post(self, request):
         form = LoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            medico_user = MedicoUsuario.objects.filter(email=email).first()
-            paciente_user = PacienteUsuario.objects.filter(email=email).first()
-            print(medico_user and medico_user.password == password)
-            if medico_user and medico_user.password == password:
-                request.session['email_medico'] = email
+            user = EmailBackend.authenticate(self, request=request, email=email, password=password)
+            if user and user.rol == 'Medico':
+                login(request, user, backend='usuario.backend.EmailBackend')
                 return redirect('index_medico')
-            elif paciente_user and paciente_user.clave_acceso == password:
-                request.session['email_paciente'] = email
+            elif user and user.rol == 'Paciente':
+                login(request, user, backend='usuario.backend.EmailBackend')
                 return redirect('index_paciente')
             else:
+                print('malas credenciales')
                 messages.warning(request, 'Correo o contraseña incorrectos')
             return redirect('login')
 
-class IndexMedico(View):
-    template_name = 'index_medico.html'
-    def get(self, request):
-        if 'email_medico' in request.session:
-            email = request.session.get('email_medico')
-            user_medico = MedicoUsuario.objects.filter(email=email).first()
-            pacientes = Paciente.objects.filter(id_medico = user_medico.id).all()
-            return render(request, self.template_name, {'pacientes': pacientes, })
-        else:
-            return redirect('login')
 
-class IndexPaciente(View):
+class IndexMedicoView(LoginRequiredMixin, View):
+    template_name = 'index_medico.html'
+    permission_denied_message = "You are not allowed here."
+    raise_exception = True  # Raise exception when no access instead of redirect
+    def get(self, request):
+        if request.user.rol == 'Medico':
+            user = request.user
+            pacientes = Paciente.objects.filter(id_medico = user.id).all()
+            context = {
+                'pacientes': pacientes
+            }
+            return render(request, self.template_name, context)
+        return redirect('index_paciente')
+
+class IndexPaciente(LoginRequiredMixin, View):
     template_name = 'index_paciente.html'
     def get(self, request):
-        if 'email_paciente' in request.session:
-            email = request.session.get('email_paciente')
-            paciente = Paciente.objects.filter(correo = email).first()
-            reports = Informe.objects.filter(id = paciente.id).all()
+        if request.user.rol == 'Paciente':
+            user_paciente = request.user
+            print(user_paciente)
+            paciente = Paciente.objects.get(id_usuario_paciente_id = user_paciente.id)
+            reports = Informe.objects.filter(id = user_paciente.id).all()
             return render(request, self.template_name, {'paciente': paciente, 'reports': reports})
-        else:
-            return redirect('login')
+        return redirect('index_medico')
 
-class CrearPaciente(CreateView):
+class RegistrarPacienteView(LoginRequiredMixin, CreateView):
     template_name = 'registrar_paciente.html'
-    form_class = PacienteForm
+    form_class = FormRegistrarPaciente
     success_url = 'usuario/index_medico'
     model = Paciente
 
+    def get(self, request):
+        if request.user.rol == 'Medico':
+            return render(request, self.template_name, {'form': self.form_class})
+        return redirect('index_paciente')
+
     def form_valid(self, form_class):
         form = form_class.save(commit=False)
-        email = self.request.session.get('email_medico')
-        user_medico = MedicoUsuario.objects.filter(email=email).first()
-        print(user_medico)
-        form.id_medico_id = user_medico.id
-        print(form.correo)
+        user = self.request.user
+        form.id_medico_id = user.id
         clave = get_random_string(8)
-
-        form.save()
-        paciente = Paciente.objects.get(id=form.id)
-        PacienteUsuario.objects.create(
-            id_paciente = paciente,
-            clave_acceso = clave,
-            email = form.correo
-        )
-        
-
+        print(f'CLAVE DEL PACIENTE: {clave}')
+        try:
+            user_paciente = User.objects.create_user(
+                username=form.nombre,
+                email=form.email,
+                password=clave,
+                rol='Paciente'
+            )
+            form.id_usuario_paciente_id = user_paciente.id
+            form.save()
+        except:
+            print('ESTE CORREO PERTENECE A OTRO PACIENTE')
+            return redirect('registrar_paciente')
+    
         return redirect('index_medico')
     
     def form_invalid(self, form):
         response = super().form_invalid(form)
         print(form.errors)
         return redirect('index_medico')
-    
-class EditarPaciente(UpdateView):
-    template_name = 'registrar_paciente.html'
-    form_class = PacienteForm
-    model = Paciente
-    def get_success_url(self):
-        print(self.object.id)
-        return reverse('ver_paciente', args=[self.object.id])
 
-class VerPaciente(View):
+class VerPaciente(LoginRequiredMixin, View):
     template_name = 'ver_paciente.html'
     def get(self, request, **kwargs):
-        email = self.request.session.get('email_medico')
-        user_medico = MedicoUsuario.objects.filter(email = email).first()
-        id_paciente = kwargs['pk']
-        paciente = Paciente.objects.get(id = id_paciente)
-        if paciente.id_medico_id == user_medico.id:
-            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = paciente.id).all()
-            imagenes = Imagen.objects.filter(id_paciente = paciente.id).all()
-            analisis = Analisis.objects.filter(id_imagen__in = imagenes).all()
-            informes = Informe.objects.filter(id_paciente = paciente.id).all()
-            antecedentesID = AntecedentesID.objects.all()
-            lista_antecedentes = zip(antecedentesID, antecedentes)
-            usuario_paciente = PacienteUsuario.objects.get(id_paciente_id=paciente.id)
-            return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'imagenes': imagenes, 'analisis': analisis, 'informes': informes, 'usuario_paciente': usuario_paciente})
-        else:
-            return redirect('index_medico')
+        if request.user.rol == 'Medico':
+            id_paciente = kwargs['pk']
+            paciente = Paciente.objects.get(id = id_paciente)
+            user_medico = self.request.user
+            if paciente.id_medico_id == user_medico.id:
+                antecedentes = AntecedentesPaciente.objects.filter(id_paciente = paciente.id).all()
+                imagenes = Imagen.objects.filter(id_paciente = paciente.id).all()
+                analisis = Analisis.objects.filter(id_imagen__in = imagenes).all()
+                informes = Informe.objects.filter(id_paciente = paciente.id).all()
+                antecedentesID = AntecedentesID.objects.all()
+                lista_antecedentes = list(zip(antecedentesID, antecedentes))
+                print(lista_antecedentes)
+                return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'imagenes': imagenes, 'analisis': analisis, 'informes': informes})
+            else:
+                return redirect('index_medico')
+        return redirect('index_paciente')
+class EditarPaciente(LoginRequiredMixin, UpdateView):
+    template_name = 'registrar_paciente.html'
+    form_class = FormRegistrarPaciente
+    model = Paciente
 
-class RegistrarAntecedentes(FormView):
+    def get(self, request):
+        if request.user.rol == 'Medico':
+            return render(request, self.template_name, {'form': self.form_class})
+        return redirect('index_paciente')
+
+    def get_success_url(self):
+        return reverse('ver_paciente', args=[self.object.id])
+
+class RegistrarAntecedentes(LoginRequiredMixin, FormView):
     template_name = 'registrar_antecedentes.html'
     form_class = AntecedentesForm
     
     def get(self, request, **kwargs):
-        if 'email_medico' in request.session:
+        if request.user.rol == 'Medico':
             id_paciente = kwargs['pk']
             paciente = Paciente.objects.get(id=id_paciente)
             return render(request, self.template_name, {'form': self.form_class, 'paciente': paciente})
-    
+        return redirect('index_paciente')
+
     def post(self, request, **kwargs):
         form = AntecedentesForm(request.POST)
         id_paciente = request.POST.get('pk')
@@ -154,37 +174,32 @@ class RegistrarAntecedentes(FormView):
                 form.cleaned_data['vacunacion']
             ]
             for indice, antecedente in enumerate(antecedentesID):
-                AntecedentesPaciente(
+                AntecedentesPaciente.objects.create(
                     id_antecedentesID=antecedente, 
                     antecedente_descrip=data[indice], 
-                    id_paciente=paciente).save()
+                    id_paciente=paciente)
                 
             return redirect('index_medico')
         else:
-
+            print('ERRORES DEL FORM: ')
+            print(form.errors)
             return redirect('registrar_antecedentes', pk=id_paciente)
    
 
-class RegistrarAnalisis(FormView):
+class RegistrarAnalisis(LoginRequiredMixin, FormView):
     template_name = 'registrar_analisis.html'
     def get(self, request, **kwargs):
-        if 'email_medico' in request.session:
-            email = request.session['email_medico']
-            user_medico = MedicoUsuario.objects.filter(email = email).first()
+        if request.user.rol == 'Medico':
             id_paciente = kwargs['pk']
             paciente = Paciente.objects.get(id=id_paciente)
             return render(request, self.template_name, {'paciente': paciente})
-        else:
-            return redirect('index_medico')
-    
+        return redirect('index_paciente')    
+
     def post(self, request, **kwargs):
         imagen = request.FILES['radiografia']
-        email = request.session.get('email')
         id_paciente = request.POST.get('pk')
-        user_medico = MedicoUsuario.objects.filter(email=email).first()
         paciente = Paciente.objects.get(id=id_paciente)
-        Imagen(imagen = imagen, id_paciente=paciente).save()
-        img = Imagen.objects.all().last()
+        img = Imagen.objects.create(imagen = imagen, id_paciente=paciente)
         img_url = img.imagen.url
         modelo = Modelo(img_url)
         respuesta = modelo.prediccion()
@@ -196,44 +211,39 @@ class RegistrarAnalisis(FormView):
         ).save()
         return redirect('ver_paciente', pk=id_paciente)
 
-class RegistrarInforme(FormView):
+class RegistrarInforme(LoginRequiredMixin, FormView):
     template_name = 'registrar_informe.html'
     form_class = InformeForm
     model = Informe
     def get(self, request, **kwargs):
-        if 'email_medico' in request.session:
-            email = request.session.get('email_medico')
-            user_medico = MedicoUsuario.objects.filter(email=email).first()
+        if request.user.rol == 'Medico':
             id_paciente = kwargs.get('pk')
             paciente = Paciente.objects.get(id=id_paciente)
             img = Imagen.objects.filter(id_paciente_id = id_paciente).all()
             analisis = Analisis.objects.filter(id_imagen__in = img).all()
             return render(request, self.template_name, {'form': self.form_class, 'paciente': paciente, 'analisis': analisis})
-        else:
-            return redirect('ver_paciente', pk=id_paciente)
+        return redirect('index_paciente')
 
     def form_valid(self, form_class):
         form = form_class.save(commit=False)            
-        email = self.request.session.get('email_medico')
         id_paciente = self.request.POST.get('pk')
-        user_medico = MedicoUsuario.objects.filter(email=email).first()
         analisis_id = self.request.POST.get('analisis_id')
+        user_medico = self.request.user
         form.id_medico_id = user_medico.id
         form.id_paciente_id = id_paciente
         form.id_analisis_id = analisis_id
         form.save()
         return redirect('ver_paciente', pk=id_paciente)
 
-class EditarAntecedentes(FormView):
+class EditarAntecedentes(LoginRequiredMixin, FormView):
     template_name = 'registrar_antecedentes.html'
     form_class = AntecedentesForm
     
     def get(self, request, **kwargs):
-        if 'email_medico' in request.session:
+        if request.user.rol == 'Medico':
             id_paciente = kwargs['pk']
             paciente = Paciente.objects.get(id=id_paciente)
             id = kwargs['pk']
-            context = {}
             data = list(AntecedentesPaciente.objects.filter(id_paciente = id).order_by('-id_antecedentesID'))
             antecedentesIds = list(AntecedentesID.objects.all())
             initial_data = {}
@@ -242,9 +252,8 @@ class EditarAntecedentes(FormView):
             
             form = AntecedentesForm(initial=initial_data)
             return render(request, self.template_name, {'form': form, 'paciente': paciente})
+        return redirect('index_paciente')
 
-        else:
-            return redirect('/index_medico')
 
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
@@ -263,31 +272,22 @@ class EditarAntecedentes(FormView):
                 form.cleaned_data['familiares'],
                 form.cleaned_data['vacunacion']
             ]
-            print(antecedentes_paciente)
             for indice, tipo in enumerate(antecedentes_paciente):
                 tipo.antecedente_descrip = antecedente_descrip=data[indice]
                 tipo.save()
-            return redirect('index_medico')
+            return redirect('ver_paciente', pk=id_paciente)
         
         else:
             return redirect('index_paciente', pk=id_paciente)
-    
-class RegistrarUsuarioPaciente(View):
-    template_name = 'registrar_usuario_paciente.html'
-
-    def get(self, request, **kwargs):
-        id_paciente = request.POST.get('pk')
-        nombre = Paciente.objects.get(id=id_paciente)
-        return render(request, self.template_name, {'paciente': paciente})
 
 
 class LogoutMedico(View):
     def get(self, request):
-        request.session.pop('email_medico')
+        logout(request)
         return redirect('login')
 
 class LogoutPaciente(View):
     def get(self, request):
-        request.session.pop('email_paciente')
+        logout(request)
         return redirect('login')
     

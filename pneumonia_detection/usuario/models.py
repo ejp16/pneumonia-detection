@@ -1,9 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import Group
 
-class MedicoUsuario(models.Model):
-    nombre = models.CharField(max_length=50, )
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=16, )
+class CustomUserManager(UserManager):
+    pass
+
+class User(AbstractUser):
+    MEDICO = 1
+    PACIENTE = 1
+    ROLE_CHOICES = (
+        (MEDICO, 'Medico'),
+        (PACIENTE, 'Paciente')
+    )
+
+    username = models.CharField(max_length=50, unique=False)
+    email = models.EmailField(max_length=100, unique=True)
+    rol = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Medico')
+    
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ('username',)
+
 
 class Paciente(models.Model):
     nombre = models.CharField(max_length=40, )
@@ -18,18 +36,14 @@ class Paciente(models.Model):
     edad = models.CharField(max_length=3, )
     fecha_nacimiento = models.DateField()
     registro = models.DateField(auto_now=True)
-    id_medico = models.ForeignKey(MedicoUsuario, on_delete=models.PROTECT)
+    id_medico = models.ForeignKey(User, on_delete=models.PROTECT, related_name='id_medico')
+    id_usuario_paciente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='id_paciente')
 
-class PacienteUsuario(models.Model):
-    id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
-    clave_acceso = models.CharField(max_length=8, )
-    email = models.CharField(max_length=50, )
-   
 class AntecedentesID(models.Model):
     tipo_antecedente = models.CharField(max_length=20)
 
 class AntecedentesPaciente(models.Model):
-    id_antecedentesID = models.ManyToManyField(AntecedentesID)
+    id_antecedentesID = models.ForeignKey(AntecedentesID, on_delete=models.PROTECT)
     antecedente_descrip = models.TextField()
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
 
@@ -48,7 +62,7 @@ class Informe(models.Model):
     observaciones = models.TextField()
     recomendaciones = models.TextField()
     medicacion = models.CharField(max_length=255, )
-    id_medico = models.ForeignKey(MedicoUsuario, on_delete=models.PROTECT)
+    id_medico = models.ForeignKey(User, on_delete=models.PROTECT)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
     id_analisis = models.ForeignKey(Analisis, on_delete=models.PROTECT)
 
