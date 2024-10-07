@@ -14,31 +14,103 @@
 
 <body>
   
-
-  
 <h2 id="titulo">Historia del paciente</h2>
 
-
-    <h4>Nombre: {{ paciente.nombre }} </h4>
-    <h4>Apellido: {{ paciente.apellido }} </h4>
-    <h4>Cedula: {{ paciente.cedula }}</h4>
-    <h4>Sexo: {{ paciente.sexo }}</h4>
-    <h4>Peso en Kg: {{ paciente.peso }}</h4>
-    <h4>Altura: {{ paciente.altura }}</h4>
-    <h4>Telefono: {{ paciente.telefono }}</h4>
-    <h4>Correo electronico: {{ paciente.email }}</h4>
-    <h4>Direccion: {{ paciente.direccion }}</h4>
-    <h4>Edad: {{ paciente.edad }} </h4>
-    <h4>Fecha de nacimiento: {{ paciente.fecha_nacimiento }}</h4>
+      <div class="container mt-5">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Datos del Paciente</h3>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Nombres:</strong> {{ paciente.nombre }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Apellido:</strong> {{ paciente.apellido }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Cédula de Identidad:</strong> {{ paciente.cedula }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Sexo:</strong> {{ paciente.sexo }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Peso:</strong> {{ paciente.peso }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Altura:</strong> {{ paciente.altura }} cm
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Correo Electrónico:</strong> {{ paciente.email }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Teléfono:</strong> {{ paciente.telefono }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Dirección:</strong> {{ paciente.direccion }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Edad:</strong> {{ paciente.edad }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="patient-info">
+                  <strong>Fecha de Nacimiento:</strong> {{ paciente.fecha_nacimiento }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
     {% if antecedentes %}
 
+    <div class="container mt-5">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Antecedentes del Paciente</h3>
+          </div>
+          <div class="card-body">
+            <div class="row g-4">
+            
         {% for antecedenteID, antecedente in antecedentes %}
-            <h4>Tipo de antecedente {{ antecedenteID.tipo_antecedente }}: {{ antecedente.antecedente_descrip }}</h4>
+
+            <div class="col-12">
+                <div class="patient-history">
+                  <strong>{{ antecedenteID.tipo_antecedente }}:</strong>
+                  <div class="history-content mt-2">
+                    {{ antecedente.antecedente_descrip }}
+                  </div>
+                </div>
+              </div>
 
         {% endfor %}
-
         <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
+
+              </div>
+          </div>
+        </div>
+      </div>
+
 
     {% else  %}
         
@@ -49,16 +121,56 @@
 
     {% if analisis %}
 
-        {% for item in analisis %}
-            <h4>Analisis N: {{ item.id }}</h4>
-            <h4>Resultado de la red neuronal: {{ item.resultado }}</h4>
-            <h4>Probabilidad: {{ item.probabilidad }}</h4>
-            <h4>Recomendaciones: {{ item.recomendaciones }}</h4>
+    <div class="container mt-5">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Resultados del Análisis</h3>
+          </div>
+          
+          <div class="card-body">
 
-            <h5><a href="{% url 'registrar_analisis' pk=paciente.id %}">Realizar nuevo analisis</a></h5>
-            
+        {% for item in analisis %}
+
+        
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="analysis-info">
+                  <strong>Número de Análisis:</strong>
+                  <div class="info-content mt-2">{{ item.id }}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="analysis-info">
+                  <strong>Resultado de la Red Neuronal: </strong>
+                  <div class="info-content mt-2">{{ item.resultado }}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="analysis-info">
+                  <strong>Probabilidad: </strong>
+                  <div class="info-content mt-2">{{ item.probabilidad }}</div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="analysis-info">
+                  <strong>Recomendaciones: </strong>
+                  <div class="info-content recommendations mt-2">
+                    {{ item.recomendaciones }}
+                  </div>
+                </div>
+              </div>
+
         {% endfor %}
+
+        <h5><a href="{% url 'registrar_analisis' pk=paciente.id %}">Realizar nuevo analisis</a></h5>
+
+        </div>
+        </div>
     
+    </div>
+    </div>
+
+    <br><br>
     {% else %}
         <h4>El paciente no tiene analisis registrados</h4>
         <a href="{% url 'registrar_analisis' pk=paciente.id%}">Registrar analisis</a>
@@ -66,9 +178,24 @@
 
     {% if imagenes %}
 
+    
+
         {% for imagen in imagenes %}
-            <h4>Imagen correspondiente al analisis N: {{ imagen.id }}</h4>
-            <img src="{{ imagen.imagen.url }}" alt="" srcset="">
+
+
+        <div class="container mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div class="image-container">
+                  <img src="{{ imagen.imagen.url }}" alt="Imagen de análisis" class="analysis-image">
+                </div>
+                <div class="analysis-number mt-3">
+                  <strong>Número de Análisis:</strong> {{ imagen.id }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
         {% endfor %}
 
 

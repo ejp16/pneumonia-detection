@@ -68,7 +68,7 @@ class FormRegistrarPaciente(forms.ModelForm):
 
 class AntecedentesForm(forms.Form):
     
-    medicos = forms.CharField(required=True, widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
+    medicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     quirurgicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     alergologicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     cardiovasculares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))

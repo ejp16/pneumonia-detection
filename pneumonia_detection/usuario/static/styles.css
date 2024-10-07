@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(197, 164, 164);
+    background-color: rgb(146, 116, 116);
 }
 
 #formulario{
@@ -34,3 +34,67 @@ h2{
     width: 500px;
     height: 500px;
 }
+
+.patient-info {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+  }
+  .card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-size: 1.1rem;
+  }
+  .card-header h3 {
+    font-size: 1.5rem;
+  }
+  .analysis-info {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+  }
+  .analysis-info strong {
+    font-size: 1.2rem;
+  }
+  .info-content {
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  .recommendations {
+    min-height: 150px;
+  }
+
+  .card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-size: 1.1rem;
+  }
+  .card-header h3 {
+    font-size: 1.5rem;
+  }
+  .analysis-info {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+  }
+  .analysis-info strong {
+    font-size: 1.2rem;
+  }
+  .info-content {
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  .recommendations {
+    min-height: 150px;
+  }

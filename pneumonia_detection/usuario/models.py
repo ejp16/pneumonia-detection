@@ -44,7 +44,7 @@ class AntecedentesID(models.Model):
 
 class AntecedentesPaciente(models.Model):
     id_antecedentesID = models.ForeignKey(AntecedentesID, on_delete=models.PROTECT)
-    antecedente_descrip = models.TextField()
+    antecedente_descrip = models.TextField(blank=True, null=True)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
 
 class Imagen(models.Model):
@@ -54,14 +54,16 @@ class Imagen(models.Model):
 class Analisis(models.Model):
     resultado = models.CharField(max_length=8, )
     probabilidad = models.CharField(max_length=4, )
-    recomendaciones = models.CharField(max_length=255, )
+    recomendaciones = models.TextField(blank=True, null=True)
     id_imagen = models.ForeignKey(Imagen, on_delete=models.PROTECT)
 
 class Informe(models.Model):
     motivo_consulta = models.CharField(max_length=255, )
+    fecha_consulta = models.DateField()
     observaciones = models.TextField()
-    recomendaciones = models.TextField()
+    recomendaciones = models.TextField(max_length=1000)
     medicacion = models.CharField(max_length=255, )
+    fecha_informe = models.DateField(auto_now=True)
     id_medico = models.ForeignKey(User, on_delete=models.PROTECT)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
     id_analisis = models.ForeignKey(Analisis, on_delete=models.PROTECT)

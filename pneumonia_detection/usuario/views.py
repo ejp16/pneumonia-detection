@@ -1,18 +1,17 @@
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
 from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView
 from django.views import View
-from django.shortcuts import render
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
-from django.shortcuts import redirect
 from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm
 from .utils import Modelo
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
+
 
 class RegistroView(CreateView):
     template_name = 'registro.html'
@@ -119,6 +118,7 @@ class VerPaciente(LoginRequiredMixin, View):
     template_name = 'ver_paciente.html'
     def get(self, request, **kwargs):
         if request.user.rol == 'Medico':
+            
             id_paciente = kwargs['pk']
             paciente = Paciente.objects.get(id = id_paciente)
             user_medico = self.request.user
@@ -129,7 +129,6 @@ class VerPaciente(LoginRequiredMixin, View):
                 informes = Informe.objects.filter(id_paciente = paciente.id).all()
                 antecedentesID = AntecedentesID.objects.all()
                 lista_antecedentes = list(zip(antecedentesID, antecedentes))
-                print(lista_antecedentes)
                 return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'imagenes': imagenes, 'analisis': analisis, 'informes': informes})
             else:
                 return redirect('index_medico')
@@ -199,16 +198,23 @@ class RegistrarAnalisis(LoginRequiredMixin, FormView):
         imagen = request.FILES['radiografia']
         id_paciente = request.POST.get('pk')
         paciente = Paciente.objects.get(id=id_paciente)
+        antecedentes = list(AntecedentesPaciente.objects.filter(id_paciente = paciente.id).order_by('-id_antecedentesID'))
         img = Imagen.objects.create(imagen = imagen, id_paciente=paciente)
         img_url = img.imagen.url
         modelo = Modelo(img_url)
-        respuesta = modelo.prediccion()
-        Analisis(
-            resultado=respuesta['resultado'],
-            probabilidad=respuesta['probabilidad'],
-            recomendaciones='lol',
+        prediccion = modelo.prediccion()
+        recomendacion = modelo.prompt(
+            edad=paciente.edad,
+            peso=paciente.peso,
+            altura=paciente.altura,
+            antecedentes=antecedentes
+        )
+        Analisis.objects.create(
+            resultado=prediccion['resultado'],
+            probabilidad=prediccion['probabilidad'],
+            recomendaciones=recomendacion,
             id_imagen=img
-        ).save()
+        )
         return redirect('ver_paciente', pk=id_paciente)
 
 class RegistrarInforme(LoginRequiredMixin, FormView):
@@ -253,7 +259,6 @@ class EditarAntecedentes(LoginRequiredMixin, FormView):
             form = AntecedentesForm(initial=initial_data)
             return render(request, self.template_name, {'form': form, 'paciente': paciente})
         return redirect('index_paciente')
-
 
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)

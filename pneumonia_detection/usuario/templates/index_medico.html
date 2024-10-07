@@ -21,9 +21,27 @@
 
 {% for paciente in pacientes %}
 
-<h4><a href="{% url 'ver_paciente' paciente.id %}">{{ paciente.nombre }} {{ paciente.apellido }}</a></h4>
-<br>
+<h4></h4>
+
+<div class="py-5">
+    <div class="container">
+      <div class="row hidden-md-up">
+        <div class="col-md-4">
+          <div class="card ">
+            <div class="card-block w-100">
+              <h4 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h4>
+              <a href="{% url 'ver_paciente' paciente.id %}">Revisar historial</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
 {% endfor %}
+
+
+
 
 
 </body>
