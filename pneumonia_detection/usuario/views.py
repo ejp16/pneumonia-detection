@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
-from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView, ListView
 from django.views import View
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -52,19 +52,17 @@ class LoginView(View):
             return redirect('login')
 
 
-class IndexMedicoView(LoginRequiredMixin, View):
+class IndexMedicoView(LoginRequiredMixin, ListView):
     template_name = 'index_medico.html'
-    permission_denied_message = "You are not allowed here."
-    raise_exception = True  # Raise exception when no access instead of redirect
-    def get(self, request):
-        if request.user.rol == 'Medico':
-            user = request.user
-            pacientes = Paciente.objects.filter(id_medico = user.id).all()
-            context = {
-                'pacientes': pacientes
-            }
-            return render(request, self.template_name, context)
-        return redirect('index_paciente')
+    model = Paciente
+    context_object_name = 'pacientes'
+
+    def get_queryset(self):
+        if self.request.user.rol == 'Medico':
+            return Paciente.objects.filter(id_medico = self.request.user.id)
+        return redirect('login')
+    
+    
 
 class IndexPaciente(LoginRequiredMixin, View):
     template_name = 'index_paciente.html'
@@ -133,15 +131,11 @@ class VerPaciente(LoginRequiredMixin, View):
             else:
                 return redirect('index_medico')
         return redirect('index_paciente')
+        
 class EditarPaciente(LoginRequiredMixin, UpdateView):
     template_name = 'registrar_paciente.html'
     form_class = FormRegistrarPaciente
     model = Paciente
-
-    def get(self, request):
-        if request.user.rol == 'Medico':
-            return render(request, self.template_name, {'form': self.form_class})
-        return redirect('index_paciente')
 
     def get_success_url(self):
         return reverse('ver_paciente', args=[self.object.id])
@@ -285,14 +279,16 @@ class EditarAntecedentes(LoginRequiredMixin, FormView):
         else:
             return redirect('index_paciente', pk=id_paciente)
 
+class BusquedaView(ListView):
+    model = Paciente
+    template = 'index_medico.html'
 
-class LogoutMedico(View):
-    def get(self, request):
-        logout(request)
-        return redirect('login')
-
-class LogoutPaciente(View):
-    def get(self, request):
-        logout(request)
-        return redirect('login')
+    def get_queryset(self):
+        return Paciente.objects.filter(id_medico = self.request.user.id)
     
+
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
+

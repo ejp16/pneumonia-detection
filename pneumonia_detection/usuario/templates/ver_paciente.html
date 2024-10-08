@@ -1,19 +1,11 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
-<html>
+{% block content %}
 
-<head>
 
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% load static %}
-  
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-  
-  </head>
 
 <body>
-  
+
 <h2 id="titulo">Historia del paciente</h2>
 
       <div class="container mt-5">
@@ -79,6 +71,7 @@
                 </div>
               </div>
             </div>
+            <a href="{% url 'editar_paciente' pk=paciente.id%}">Editar datos del paciente</a>
           </div>
         </div>
 
@@ -160,6 +153,9 @@
                 </div>
               </div>
 
+
+              
+
         {% endfor %}
 
         <h5><a href="{% url 'registrar_analisis' pk=paciente.id %}">Realizar nuevo analisis</a></h5>
@@ -182,19 +178,20 @@
 
         {% for imagen in imagenes %}
 
-
         <div class="container mt-5">
-            <div class="card">
-              <div class="card-body">
-                <div class="image-container">
-                  <img src="{{ imagen.imagen.url }}" alt="Imagen de análisis" class="analysis-image">
-                </div>
-                <div class="analysis-number mt-3">
-                  <strong>Número de Análisis:</strong> {{ imagen.id }}
-                </div>
+          <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">
+                  <div class="card custom-card">
+                      <div class="card-img-container">
+                          <img src="{{ imagen.imagen.url }}" alt="Imagen de análisis" class="card-img-top">
+                          <div class="card-img-overlay">
+                              <p class="card-text">Numero de Analisis: {{ imagen.id }}</p>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
+      </div>
           
         {% endfor %}
 
@@ -209,11 +206,41 @@
 
         {% for informe in informes %}
 
-            <h4>Informe N: {{ informe.id }} correspondiente al analisis: {{ informe.id_analisis.id }}</h4>
-            <h4>Motivo de la consulta: {{ informe.motivo_consulta }}</h4>
-            <h4>Observaciones: {{ informe.observaciones }}</h4>
-            <h4>Recomendaciones: {{ informe.recomendaciones }}</h4>
-            <h4>Medicacion prescrita: {{ informe.medicacion }}</h4>
+            <div class="container mt-4">
+              <div class="card">
+                  <div class="card-header">
+                      <h2 class="card-title mb-0">Datos de la Consulta. Informe N: {{ informe.id }} correspondiente al analisis: {{ informe.id_analisis.id }}</h2>
+                  </div>
+                  <div class="card-body p-0">
+                      <div class="field">
+                          <div class="field-label">Motivo de consulta</div>
+                          <div class="field-value">{{ informe.motivo_consulta }}</div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Observaciones</div>
+                          <div class="field-value large-field">
+                            {{ informe.observaciones }}
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Recomendaciones</div>
+                          <div class="field-value large-field">
+                            {{ informe.recomendaciones }}
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Medicación</div>
+                          <div class="field-value large-field">
+                            {{ informe.medicacion }}
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Fecha de consulta</div>
+                          <div class="field-value">15 de mayo de 2023</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         
         {% endfor %}
 
@@ -228,4 +255,4 @@
 
 </body>
 
-</html>
+{% endblock %}

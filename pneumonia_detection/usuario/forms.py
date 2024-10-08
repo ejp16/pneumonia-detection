@@ -84,11 +84,12 @@ class InformeForm(forms.ModelForm):
             'observaciones',
             'recomendaciones',
             'medicacion',
+            'fecha_consulta'
         ]
 
     motivo_consulta = forms.CharField(label='Motivo de la consulta', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
+    fecha_consulta = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control'}))
     observaciones = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     recomendaciones = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     medicacion = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-
 

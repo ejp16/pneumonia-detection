@@ -1,20 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% load static %}
-
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-
-</head>
-
-<body>
-
-
+{% extends "base.html" %}
+{% block content %}
   <h2 id="paciente">Registro de antecedentes de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
 
 <form method='post'>
@@ -72,6 +57,5 @@
     </div>
     
 </form>
-</body>
 
-</html>
+{% endblock %}

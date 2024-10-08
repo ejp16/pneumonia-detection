@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-
-  {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
-  {% load static %}
-
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
-
-</head>
-
-<body>
-
-
+{% block content %}
 
 <h2 id="analisis">Realizar analisis al paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
 
@@ -39,7 +25,4 @@
     <input type="submit">
 
 </form>
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,27 +1,9 @@
-<!DOCTYPE html>
-<html>
-
-
-<head>
-
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% load static %}
-
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-
-</head>
-
-<body>
-
-    <a href="{% url 'logout_medico' %}">Cerrar sesion</a>
+{% extends "base.html" %}
+{% block content %}
 
 <h2 id="titulo">Listado de analisis</h2>
 
 {% for paciente in pacientes %}
-
-<h4></h4>
 
 <div class="py-5">
     <div class="container">
@@ -40,10 +22,5 @@
 
 {% endfor %}
 
+{% endblock %}
 
-
-
-
-</body>
-
-</html>
