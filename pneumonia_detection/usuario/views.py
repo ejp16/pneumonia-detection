@@ -51,7 +51,6 @@ class LoginView(View):
                 messages.warning(request, 'Correo o contraseña incorrectos')
             return redirect('login')
 
-
 class IndexMedicoView(LoginRequiredMixin, ListView):
     template_name = 'index_medico.html'
     model = Paciente
@@ -62,8 +61,6 @@ class IndexMedicoView(LoginRequiredMixin, ListView):
             return Paciente.objects.filter(id_medico = self.request.user.id)
         return redirect('login')
     
-    
-
 class IndexPaciente(LoginRequiredMixin, View):
     template_name = 'index_paciente.html'
     def get(self, request):
@@ -281,10 +278,25 @@ class EditarAntecedentes(LoginRequiredMixin, FormView):
 
 class BusquedaView(ListView):
     model = Paciente
-    template = 'index_medico.html'
-
+    template_name = 'index_medico.html'
+    context_object_name = 'pacientes'
+    
     def get_queryset(self):
-        return Paciente.objects.filter(id_medico = self.request.user.id)
+        filtro = self.request.GET.get('filtro')
+        datos = self.request.GET.get('datos')
+
+        if filtro == 'nombre':
+            return Paciente.objects.filter(id_medico = self.request.user.id, nombre__icontains=datos).all()
+
+        elif filtro == 'cedula':
+            return Paciente.objects.filter(
+                id_medico = self.request.user.id, cedula__contains=datos).all()
+        
+
+        return Paciente.objects.filter(
+                id_medico = self.request.user.id, 
+                apellido__icontains=datos).all()
+
     
 
 class Logout(View):
