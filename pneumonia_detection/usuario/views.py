@@ -113,7 +113,6 @@ class VerPaciente(LoginRequiredMixin, View):
     template_name = 'ver_paciente.html'
     def get(self, request, **kwargs):
         if request.user.rol == 'Medico':
-            
             id_paciente = kwargs['pk']
             paciente = Paciente.objects.get(id = id_paciente)
             user_medico = self.request.user
@@ -133,9 +132,21 @@ class EditarPaciente(LoginRequiredMixin, UpdateView):
     template_name = 'registrar_paciente.html'
     form_class = FormRegistrarPaciente
     model = Paciente
+    pk_url_kwarg = 'pk'
+    queryset = None
+
+    def form_valid(self, form_class):
+        form = form_class.save(commit=False)
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        user_paciente = User.objects.get(id = pk)
+        user_paciente.email = form.email
+        user_paciente.save()
+        form.save()
+        return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('ver_paciente', args=[self.object.id])
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        return reverse('ver_paciente', args=[pk])
 
 class RegistrarAntecedentes(LoginRequiredMixin, FormView):
     template_name = 'registrar_antecedentes.html'
@@ -276,7 +287,7 @@ class EditarAntecedentes(LoginRequiredMixin, FormView):
         else:
             return redirect('index_paciente', pk=id_paciente)
 
-class BusquedaView(ListView):
+class BusquedaView(LoginRequiredMixin, ListView):
     model = Paciente
     template_name = 'index_medico.html'
     context_object_name = 'pacientes'
@@ -298,7 +309,6 @@ class BusquedaView(ListView):
                 apellido__icontains=datos).all()
 
     
-
 class Logout(View):
     def get(self, request):
         logout(request)
