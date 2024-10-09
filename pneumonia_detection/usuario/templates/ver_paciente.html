@@ -239,12 +239,13 @@
                           <div class="field-value">15 de mayo de 2023</div>
                       </div>
                   </div>
+        <h5><a href="{% url 'registrar_informe' pk=paciente.id%}">Realizar nuevo informe</a></h5>
+
               </div>
           </div>
         
         {% endfor %}
 
-        <h5><a href="{% url 'registrar_informe' pk=paciente.id%}">Realizar nuevo informe</a></h5>
     {% else %}
 
         <h4>No ha registrado informes a este paciente</h4>

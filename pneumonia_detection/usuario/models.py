@@ -1,26 +1,35 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, UserManager
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-class CustomUserManager(UserManager):
-    pass
 
-class User(AbstractUser):
-    MEDICO = 1
-    PACIENTE = 1
-    ROLE_CHOICES = (
-        (MEDICO, 'Medico'),
-        (PACIENTE, 'Paciente')
-    )
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError('The Username must be set')
+        user = self.model(username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-    username = models.CharField(max_length=50, unique=False)
-    email = models.EmailField(max_length=100, unique=True)
-    rol = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Medico')
-    
+    def create_superuser(self, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(username, password, **extra_fields)
+
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=150)  # Permitir duplicados
+    email = models.EmailField(unique=True)  # Asegurarte de que los correos sean únicos
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now=True)
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('username',)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    def __str__(self):
+        return self.username
+    
 
 
 class Paciente(models.Model):

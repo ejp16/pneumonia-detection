@@ -1,3 +1,4 @@
 env
 .env
 pneumonia_detection/media
+pneumonia_detection/usuario/migrations
