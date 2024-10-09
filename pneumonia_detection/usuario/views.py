@@ -7,12 +7,14 @@ from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
 from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm
-from .utils import Modelo
+from .utils import Modelo, EnviarMail
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
+
+from django.template.loader import render_to_string
 
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
@@ -100,12 +102,23 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
                 email=form.email,
                 password=clave,
             )
-            form.id_usuario_paciente_id = user_paciente.id
-            form.save()
             user_group = Group.objects.get(name='Paciente')
             user_paciente.groups.add(user_group)
+            form.id_usuario_paciente_id = user_paciente.id
+            form.save()
+
+            context = {
+                'nombre_medico': user.username,
+                'correo': form.email,
+                'password': clave
+            }
+
+            mail = EnviarMail(context=context, recipient=form.email)
+            mail.enviar()
+            return redirect('index_medico',)
+
         except Exception as e:
-            print(e)
+            print(e.args)
             return redirect('registrar_paciente')
     
         return redirect('index_medico')

@@ -6,7 +6,9 @@ from django.conf import settings
 import google.generativeai as genai
 import typing_extensions as typing
 import json
-
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
 class Recomendacion(typing.TypedDict):
     recomendacion: str
 
@@ -54,8 +56,25 @@ class Modelo:
             texto,
         )
 
-        print(len(response.text))
-        print(response.text)
         return response.text
             
-        
+class EnviarMail:
+    def __init__(self, context, recipient):
+        self.context = context
+        self.recipient = recipient
+    def enviar(self):
+        template_name = 'correo.html'
+        convert_to_html_content = render_to_string(
+            template_name=template_name,
+            context=self.context
+        )
+        print(self.recipient)
+        plain_message = strip_tags(convert_to_html_content)
+        send_mail(
+            subject='Contraseña del sistema',
+            message=plain_message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.recipient],
+            html_message=convert_to_html_content,
+            fail_silently=True
+        )
