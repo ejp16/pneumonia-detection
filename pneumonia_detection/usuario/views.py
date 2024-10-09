@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponseRedirect, HttpRespons
 from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView, ListView
 from django.views import View
 from django.contrib.auth import login, logout
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
