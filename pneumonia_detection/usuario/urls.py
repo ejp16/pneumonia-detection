@@ -16,10 +16,13 @@ urlpatterns = [
     path('registrar_analisis/<int:pk>', views.RegistrarAnalisis.as_view(), name='registrar_analisis'),
     path('registrar_informe/<int:pk>', views.RegistrarInforme.as_view(), name='registrar_informe'),
 
-    path('reset_password/', auth_views.PasswordResetView.as_view(), name='reset_password'),
-    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset_password/', auth_views.PasswordResetView.as_view(
+        template_name='change_password_templates/reset_password.html'), name='reset_password'),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(
+        template_name='change_password_templates/password_reset_sent.html'), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset_password_complete/', auth_views.PasswordResetView.as_view(), name='password_reset_complete'),
+    path('reset_password_complete/', auth_views.PasswordResetView.as_view(
+        template_name='change_password_templates/reset_password_complete.html'), name='password_reset_complete'),
 
     path('buscar/', views.BusquedaView.as_view(), name='buscar'),
 
