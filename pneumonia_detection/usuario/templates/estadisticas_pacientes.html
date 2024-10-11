@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <canvas id="myChart"></canvas>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+
+
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Hombres', 'Mujeres',],
+        datasets: [{
+          label: 'Sexo de los pacientes registrados',
+          data: [{{hombres}}, {{mujeres}}],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+
+
+
+</script>
+
+{% endblock scripts %}

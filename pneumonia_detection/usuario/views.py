@@ -273,7 +273,6 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
         form = self.form_class(request.POST)
         id_paciente = request.POST.get('pk')
         if form.is_valid():
-
             paciente = Paciente.objects.get(id=id_paciente)
             antecedentesID = AntecedentesID.objects.all()
             antecedentes_paciente = AntecedentesPaciente.objects.filter(id_paciente=paciente.id).all()
@@ -314,7 +313,13 @@ class BusquedaView(MedicoUserMixin, ListView):
         return Paciente.objects.filter(
                 id_medico = self.request.user.id, 
                 apellido__icontains=datos).all()
-
+class EstadisticasView(MedicoUserMixin, TemplateView):
+    template_name = 'estadisticas_pacientes.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['hombres'] = Paciente.objects.filter(id_medico=self.request.user.id, sexo='H').count()
+        context['mujeres'] = Paciente.objects.filter(id_medico=self.request.user.id, sexo='M').count()
+        return context
     
 class Logout(View):
     def get(self, request):

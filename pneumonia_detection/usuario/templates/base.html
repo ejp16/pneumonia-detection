@@ -7,6 +7,8 @@
     {% load static %}
   
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
   
   </head>
 
@@ -22,7 +24,10 @@
                   <a class="nav-link active" aria-current="page" href="{% url 'registrar_paciente' %}">Registrar Nuevo Paciente</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'logout' %}" tabindex="-1">Cerrar Sesion</a>
+                  <a class="nav-link active" href="{% url 'estadisticas' %}">Estadisticas de pacientes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'logout' %}">Cerrar Sesion</a>
                 </li>
               </ul>
               <form class="d-flex" method="get" action="{% url 'buscar' %}">
@@ -33,7 +38,7 @@
                       <option value="cedula">Cedula</option>
                     </ul>
                 </select>
-                <input class="form-control me-2" type="search" placeholder="Seleccione el filtro de busqueda" aria-label="Search" name="datos">
+                <input class="form-control me-4 w-150" type="search" placeholder="Seleccionar filtro de busqueda" aria-label="Search" name="datos">
                 <button class="btn btn-outline-success" type="submit">Buscar paciente</button>
               </form>
             </div>
@@ -45,4 +50,9 @@
 
 
 {% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}
+
 </html>
