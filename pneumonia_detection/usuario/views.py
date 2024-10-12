@@ -70,8 +70,9 @@ class IndexMedicoView(MedicoUserMixin, ListView):
     template_name = 'index_medico.html'
     model = Paciente
     context_object_name = 'pacientes'
+
     def get_queryset(self):
-        return Paciente.objects.filter(id_medico = self.request.user.id)
+        return Paciente.objects.select_related('id_medico').filter(id_medico = self.request.user.id)
     
 class IndexPaciente(PacienteUserMixin, View):
     template_name = 'index_paciente.html'
@@ -135,7 +136,7 @@ class VerPaciente(MedicoUserMixin, View):
         paciente = Paciente.objects.get(id = id_paciente)
         user_medico = self.request.user
         if paciente.id_medico_id == user_medico.id:
-            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = paciente.id).all()
+            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = paciente.id)
             imagenes = Imagen.objects.filter(id_paciente = paciente.id).all()
             analisis = Analisis.objects.filter(id_imagen__in = imagenes).all()
             informes = Informe.objects.filter(id_paciente = paciente.id).all()
