@@ -180,7 +180,7 @@ class RegistrarAntecedentes(MedicoUserMixin, FormView):
         id_paciente = request.POST.get('pk')
         paciente = Paciente.objects.get(id=id_paciente)
         if form.is_valid():
-            antecedentesID = AntecedentesID.objects.all()
+            antecedentesID = list(AntecedentesID.objects.all())
             data = [
                 form.cleaned_data['medicos'],
                 form.cleaned_data['quirurgicos'],
@@ -190,11 +190,13 @@ class RegistrarAntecedentes(MedicoUserMixin, FormView):
                 form.cleaned_data['familiares'],
                 form.cleaned_data['vacunacion']
             ]
+            bulk_list = []
             for indice, antecedente in enumerate(antecedentesID):
-                AntecedentesPaciente.objects.create(
+                bulk_list.append(AntecedentesPaciente(
                     id_antecedentesID=antecedente, 
                     antecedente_descrip=data[indice], 
-                    id_paciente=paciente)
+                    id_paciente=paciente))
+            AntecedentesPaciente.objects.bulk_create(bulk_list)
                 
             return redirect('ver_paciente', pk=id_paciente)
         else:
@@ -276,8 +278,7 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
         id_paciente = request.POST.get('pk')
         if form.is_valid():
             paciente = Paciente.objects.get(id=id_paciente)
-            antecedentesID = AntecedentesID.objects.all()
-            antecedentes_paciente = AntecedentesPaciente.objects.filter(id_paciente=paciente.id).all()
+            antecedentes_paciente = AntecedentesPaciente.objects.filter(id_paciente=paciente.id).all() #Antecedentes del paciente
             data = [
                 form.cleaned_data['medicos'],
                 form.cleaned_data['quirurgicos'],
@@ -287,9 +288,9 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
                 form.cleaned_data['familiares'],
                 form.cleaned_data['vacunacion']
             ]
-            for indice, tipo in enumerate(antecedentes_paciente):
-                tipo.antecedente_descrip = antecedente_descrip=data[indice]
-                tipo.save()
+            for indice, descrip in enumerate(antecedentes_paciente):
+                descrip.antecedente_descrip = antecedente_descrip=data[indice]
+                descrip.save()
             return redirect('ver_paciente', pk=id_paciente)
         
         else:
