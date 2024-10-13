@@ -78,10 +78,13 @@ class IndexPaciente(PacienteUserMixin, View):
     template_name = 'index_paciente.html'
     def get(self, request):
         user_paciente = request.user
-        print(user_paciente)
+        print(user_paciente.id)
         paciente = Paciente.objects.get(id_usuario_paciente_id = user_paciente.id)
-        reports = Informe.objects.filter(id = user_paciente.id).all()
-        return render(request, self.template_name, {'paciente': paciente, 'reports': reports})
+        imagenes = Imagen.objects.filter(id_paciente=paciente.id).all()
+        analisis = Analisis.objects.filter(id_imagen__in=imagenes).all()
+        informes = Informe.objects.filter(id_paciente_id = paciente.id).all()
+        print(informes)
+        return render(request, self.template_name, {'paciente': paciente, 'informes': informes, 'analisis': analisis})
 
 class RegistrarPacienteView(MedicoUserMixin, CreateView):
     template_name = 'registrar_paciente.html'
@@ -142,7 +145,7 @@ class VerPaciente(MedicoUserMixin, View):
             informes = Informe.objects.filter(id_paciente = paciente.id).all()
             antecedentesID = AntecedentesID.objects.all()
             lista_antecedentes = list(zip(antecedentesID, antecedentes))
-            return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'imagenes': imagenes, 'analisis': analisis, 'informes': informes})
+            return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'analisis': analisis, 'informes': informes})
         else:
             return redirect('index_medico')
         
@@ -245,13 +248,9 @@ class RegistrarInforme(MedicoUserMixin, FormView):
     def form_valid(self, form_class):
         form = form_class.save(commit=False)            
         id_paciente = self.request.POST.get('pk')
-        analisis_id = self.request.POST.get('analisis_id')
         user_medico = self.request.user
         form.id_medico_id = user_medico.id
         form.id_paciente_id = id_paciente
-        if analisis_id is not int:
-            form.save()
-        form.id_analisis_id = analisis_id
         form.save()
         return redirect('ver_paciente', pk=id_paciente)
 

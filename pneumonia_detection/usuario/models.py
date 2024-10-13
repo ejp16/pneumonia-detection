@@ -70,12 +70,11 @@ class Informe(models.Model):
     motivo_consulta = models.CharField(max_length=255, )
     fecha_consulta = models.DateField()
     observaciones = models.TextField()
-    recomendaciones = models.TextField(max_length=1000)
+    recomendaciones = models.TextField()
     medicacion = models.CharField(max_length=255, )
     fecha_informe = models.DateField(auto_now=True)
     id_medico = models.ForeignKey(User, on_delete=models.PROTECT)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
-    id_analisis = models.ForeignKey(Analisis, on_delete=models.PROTECT, blank=True, null=True)
 
 
 

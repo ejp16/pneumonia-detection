@@ -48,7 +48,6 @@
     top: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
     padding: 15px;
 }
 .custom-card {
@@ -293,4 +292,11 @@ body {
   height: 1em;
   vertical-align: -0.125em;
   fill: currentColor;
+}
+
+#n-analisis{
+  color: white;
+}
+#titulo{
+  text-align: center;
 }

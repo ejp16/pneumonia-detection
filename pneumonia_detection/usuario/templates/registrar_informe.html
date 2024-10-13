@@ -10,15 +10,7 @@
         <h2 class="patient-report-title">Realizar informe del paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
         <form>
             <div class="mb-3">
-                <label for="patientReportAnalysisNumber" class="patient-report-label form-label">Seleccione el número de análisis al que corresponde este informe:</label>
-                <select class="patient-report-input form-select" id="patientReportAnalysisNumber" name="analisis_id"required>
-                    <option>Subir informe sin analisis relacionado</option>
-                    {% for item in analisis %}
-                        <option value="{{ item.id }}">
-                            Numero de analisis: {{ item.id }}
-                        </option>
-                    {% endfor %}
-                </select>
+                <label for="patientReportAnalysisNumber" class="patient-report-label form-label">Detalle todo lo relacionado a la consulta o analisis realizado:</label>
             </div>
             <div class="mb-3">
                 <label for="patientReportConsultationReason" class="patient-report-label form-label">Motivo de la consulta:</label>
