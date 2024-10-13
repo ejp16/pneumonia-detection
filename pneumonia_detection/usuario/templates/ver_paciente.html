@@ -4,8 +4,6 @@
 
 <body>
 
-<h2 id="titulo">Historia del paciente</h2>
-
       <div class="container mt-5">
         <div class="card">
           <div class="card-header bg-primary text-white">
@@ -69,7 +67,15 @@
                 </div>
               </div>
             </div>
-            <a href="{% url 'editar_paciente' pk=paciente.id%}">Editar datos del paciente</a>
+            <div class="card-footer bg-transparent border-0 pb-4">
+              <a href="{% url 'editar_paciente' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+                  <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                  Editar datos del paciente
+              </button></a>
+            </div>
           </div>
         </div>
 
@@ -95,18 +101,36 @@
               </div>
 
         {% endfor %}
-        <h5><a href="{% url 'editar_antecedentes' pk=paciente.id %}">Editar los antecedentes de este paciente</a></h5>
 
               </div>
           </div>
+          
+          <div class="card-footer bg-transparent border-0 pb-4">
+            <a href="{% url 'editar_antecedentes' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+                <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                Editar antecedentes del paciente
+            </button></a>
+
         </div>
       </div>
 
 
     {% else  %}
-        
-        <h4>Este paciente no tiene antecedentes registrados</h4>
-        <h5><a href="{% url 'registrar_antecedentes' pk=paciente.id %}">Registrar antecedentes de este paciente</a></h5>
+
+    <div class="medical-record-wrapper">      
+      <div class="medical-record-section">
+          <p class="medical-record-info">
+              <i class="fas fa-history medical-record-icon"></i>
+              Este paciente no tiene antecedentes registrados
+          </p>
+          <a href="{% url 'registrar_antecedentes' pk=paciente.id %}" class="medical-record-action">
+              <i class="fas fa-plus-circle"></i> Registrar antecedentes de este paciente
+          </a>
+      </div>
+  </div>
 
     {% endif %}
 
@@ -156,7 +180,15 @@
 
         {% endfor %}
 
-        <h5><a href="{% url 'registrar_analisis' pk=paciente.id %}">Realizar nuevo analisis</a></h5>
+        
+        <div class="card-footer bg-transparent border-0 pb-4">
+          <a href="{% url 'registrar_analisis' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+              <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              Realizar nuevo analisis
+          </button></a>
 
         </div>
         </div>
@@ -166,8 +198,19 @@
 
     <br><br>
     {% else %}
-        <h4>El paciente no tiene analisis registrados</h4>
-        <a href="{% url 'registrar_analisis' pk=paciente.id%}">Registrar analisis</a>
+
+    <div class="medical-record-wrapper">      
+      <div class="medical-record-section">
+          <p class="medical-record-info">
+              <i class="fas fa-history medical-record-icon"></i>
+              El paciente no tiene analisis registrados
+          </p>
+          <a href="{% url 'registrar_analisis' pk=paciente.id%}" class="medical-record-action">
+              <i class="fas fa-plus-circle"></i> Registrar analisis
+          </a>
+      </div>
+  </div>
+
     {% endif %}
 
     {% if imagenes %}
@@ -196,7 +239,7 @@
 
     {% else %}
 
-        <h4>El paciente no tiene ninguna imagen registrada</h4>
+        
         
     {% endif %}
 
@@ -237,7 +280,15 @@
                           <div class="field-value">15 de mayo de 2023</div>
                       </div>
                   </div>
-        <h5><a href="{% url 'registrar_informe' pk=paciente.id%}">Realizar nuevo informe</a></h5>
+        
+          <div class="card-footer bg-transparent border-0 pb-4">
+            <a href="{% url 'editar_antecedentes' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+                <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                Realizar nuevo informe
+            </button></a>
 
               </div>
           </div>
@@ -246,8 +297,18 @@
 
     {% else %}
 
-        <h4>No ha registrado informes a este paciente</h4>
-        <h5><a href="{% url 'registrar_informe' pk=paciente.id%}">Realizar nuevo informe</a></h5>
+    
+    <div class="medical-record-wrapper">      
+      <div class="medical-record-section">
+          <p class="medical-record-info">
+              <i class="fas fa-history medical-record-icon"></i>
+              No ha registrado informes a este paciente
+          </p>
+          <a href="{% url 'registrar_informe' pk=paciente.id%}" class="medical-record-action">
+              <i class="fas fa-plus-circle"></i> Realizar nuevo informe
+          </a>
+      </div>
+  </div>
 
 
     {% endif %}

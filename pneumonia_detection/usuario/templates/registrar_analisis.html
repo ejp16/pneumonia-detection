@@ -2,28 +2,33 @@
 
 {% block content %}
 <body>
-<h2 id="analisis">Realizar analisis al paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
 
+        <!-- Image Upload Form -->
+        <div class="upload-form p-4 mb-5">
+            <h2 class="mb-4">Realizar análisis al paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="mb-3">
+                    <label for="imageUpload" class="form-label">Cargue la imagen de su radiografía para realizar el análisis</label>
+                    <input class="form-control" type="file" id="imageUpload" accept="image/*" name="radiografia">
+                </div>
+                <p class="text-muted mb-3">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    La red neuronal solo procesa imágenes postero anteriores del tórax, no se garantiza una alta precisión si se utiliza otro tipo de proyección.
+                </p>
+                <p class="mb-3">
+                    <i class="fas fa-clipboard-list mr-2"></i>
+                    Una vez subida la imagen, podrá ver los resultados del análisis en la página del paciente.
+                </p>
+                <p class="mb-4">
+                    <i class="fas fa-user mr-2"></i>
+                    El paciente también podrá ver el resultado del análisis.
+                </p>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-upload mr-2"></i> Enviar
+                </button>
+                <input type='hidden' value='{{ paciente.id }}' name='pk'>
+            </form>
+        </div>
 
-<h3>Cargue la imagen de su radiografia para realizar el analisis</h3>
-<h4>La red neuronal solo procesas imagenes postero anteriores del torax, no se garantiza una alta precision si se utiliza otro tipo de proyeccion</h4>
-<h4>Una vez subida la imagen, podra ver los resultados del analisis en la pagina del paciente</h4>
-<h4>El paciente tambien podra ver el resultado del analisis</h4>
-
-<form method="post" enctype="multipart/form-data">
-
-    {% csrf_token %}
-
-
-    <input type="file" name="radiografia"> <br>
-
-    <br>
-
-    
-    <input type='hidden' value='{{ paciente.id }}' name='pk'>
-
-    <input type="submit">
-
-</form>
 </body>
 {% endblock content %}

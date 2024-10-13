@@ -75,7 +75,7 @@ class Informe(models.Model):
     fecha_informe = models.DateField(auto_now=True)
     id_medico = models.ForeignKey(User, on_delete=models.PROTECT)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
-    id_analisis = models.ForeignKey(Analisis, on_delete=models.PROTECT)
+    id_analisis = models.ForeignKey(Analisis, on_delete=models.PROTECT, blank=True, null=True)
 
 
 

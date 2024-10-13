@@ -1,61 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
 <body>
-  <h2 id="paciente">Registro de antecedentes de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
 
 <form method='post'>
 
     {% csrf_token %}
 
-    <div id="formulario">
-
-        {% csrf_token %}
-    
-        <div class="col-sm-5">
-            
-            {{ form.medicos.label_tag }}
-            {{ form.medicos }}
-    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 antecedentes-form-container">
+                <h2 class="antecedentes-form-title">Antecedentes del Paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="medicos" class="antecedentes-form-label">Antecedentes Médicos</label>
+                        {{ form.medicos }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="quirurgicos" class="antecedentes-form-label">Antecedentes Quirúrgicos</label>
+                        {{ form.quirurgicos }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="alergologicos" class="antecedentes-form-label">Antecedentes Alergológicos</label>
+                        {{ form.alergologicos }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="cardiovasculares" class="antecedentes-form-label">Antecedentes Cardiovasculares</label>
+                        {{ form.cardiovasculares }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="sociales" class="antecedentes-form-label">Antecedentes Sociales</label>
+                        {{ form.sociales }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="familiares" class="antecedentes-form-label">Antecedentes Familiares</label>
+                        {{ form.familiares }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="vacunacion" class="antecedentes-form-label">Antecedentes de Vacunación</label>
+                        {{ form.vacunacion }}
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary antecedentes-btn-submit">Guardar Antecedentes</button>
+                    </div>
+                     <input type='hidden' value='{{ paciente.id }}' name='pk'>
+                </form>
+            </div>
         </div>
-
-        <div class="col-sm-5">
-            {{ form.quirurgicos.label_tag }}
-            {{ form.quirurgicos }}
-    
-        </div>
-                
-        <div class="col-sm-5">
-            {{ form.alergologicos.label_tag }}
-            {{ form.alergologicos }}
-        </div>
-
-        <div class="col-sm-5">
-            {{ form.cardiovasculares.label_tag }}
-            {{ form.cardiovasculares }}
-        </div>
-
-        <div class="col-sm-5">
-            {{ form.sociales.label_tag }}
-            {{ form.sociales }}
-        </div>
-
-        <div class="col-sm-5">
-            {{ form.familiares.label_tag }}
-            {{ form.familiares }}
-        </div>
-
-        <div class="col-sm-5">
-            {{ form.vacunacion.label_tag }}
-            {{ form.vacunacion }}
-        </div>
-
-        <input type='hidden' value='{{ paciente.id }}' name='pk'>
-
-    
-        <input type="submit" class="btn btn-primary">
-    
-        
     </div>
+
+    
     
 </form>
 </body>

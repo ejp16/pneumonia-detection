@@ -3,26 +3,28 @@
 
 <body>
 
-<h2 id="titulo">Listado de analisis</h2>
+        
+        <div class="container mt-5">
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
 
 {% for paciente in pacientes %}
-
-<div class="py-5">
-    <div class="container">
-      <div class="row hidden-md-up">
-        <div class="col-md-4">
-          <div class="card ">
-            <div class="card-block w-100">
-              <h4 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h4>
-              <a href="{% url 'ver_paciente' paciente.id %}">Revisar historial</a>
-            </div>
+                
+            <div class="col">
+              <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h5>
+                      <p class="card-text"><i class="fas fa-id-card mr-2"></i> Cédula: {{ paciente.cedula }}</p>
+                      <a href="{% url 'ver_paciente' pk=paciente.id %}" class="card-link"><i class="fas fa-history mr-2"></i> Revisar historial</a>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
-    </div>
-</div>
 
 {% endfor %}
+
+
+</div>
+</div>
+
 </body>
 {% endblock content %}
 

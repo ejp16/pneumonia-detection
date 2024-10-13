@@ -2,64 +2,57 @@
     
 {% block content %}
 <body>
-<h2 id="titulo">Realizar informe del paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
-<label for="analisis_id">Seleccione el numero de analisis al que corresponde este informe:</label>
-
-
-
 <form method="post">
+{% csrf_token %}
 
-    {% csrf_token %}
-
-    <div id="formulario">
-
-        <select name="analisis_id">
-            {% for item in analisis %}
-                <option value="{{ item.id }}">
-                    {{ item.id }}
-                </option>
-            {% endfor %}
+<div class="patient-report-outer-container">
+    <div class="patient-report-inner-container">
+        <h2 class="patient-report-title">Realizar informe del paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+        <form>
+            <div class="mb-3">
+                <label for="patientReportAnalysisNumber" class="patient-report-label form-label">Seleccione el número de análisis al que corresponde este informe:</label>
+                <select class="patient-report-input form-select" id="patientReportAnalysisNumber" name="analisis_id"required>
+                    <option>Subir informe sin analisis relacionado</option>
+                    {% for item in analisis %}
+                        <option value="{{ item.id }}">
+                            Numero de analisis: {{ item.id }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="patientReportConsultationReason" class="patient-report-label form-label">Motivo de la consulta:</label>
+                {{ form.motivo_consulta }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportObservations" class="patient-report-label form-label">Observaciones:</label>
+                {{ form.observaciones }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportRecommendations" class="patient-report-label form-label">Recomendaciones:</label>
+                {{ form.recomendaciones }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportMedication" class="patient-report-label form-label">Medicación:</label>
+                {{ form.medicacion }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportConsultationDate" class="patient-report-label form-label">Fecha consulta:</label>
+                {{ form.fecha_consulta }}
+            </div>
+            <button type="submit" class="patient-report-submit-btn btn btn-primary">Enviar</button>
             
-            </select>
-    
-        <div class="col-sm-5">
-            {{ form.motivo_consulta.label_tag }}
-            {{ form.motivo_consulta }}
-            
-        </div>
+            <input type='hidden' value='{{ paciente.id }}' name='pk'>
 
-        <div class="col-sm-5">
-            {{ form.observaciones.label_tag }}
-            {{ form.observaciones }}
-    
-        </div>
-                
-        <div class="col-sm-5">
-            {{ form.recomendaciones.label_tag }}
-            {{ form.recomendaciones }}
-        </div>
-
-        <div class="col-sm-5">
-            {{ form.medicacion.label_tag }}
-            {{ form.medicacion }}
-        </div>
-        
-        <div class="col-sm-5">
-            {{ form.fecha_consulta.label_tag }}
-            {{ form.fecha_consulta }}
-        </div>
-
-        <input type='hidden' value='{{ paciente.id }}' name='pk'>
-
-        
-
-        <input type="submit" class="btn btn-primary">
-    
-        
+        </form>
     </div>
-
-
+</div>
 </form>
+
+
+
+
+
 </body>
     
 {% endblock content %}

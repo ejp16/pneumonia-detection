@@ -55,7 +55,7 @@ class FormRegistrarPaciente(forms.ModelForm):
     nombre = forms.CharField(label='Nombre', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
     apellido = forms.CharField(label='Apellido', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
     cedula = forms.CharField(label='Cedula', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    sexo = forms.ChoiceField(choices=CHOICES)
+    sexo = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-select'}))
     peso = forms.CharField(label='Peso en Kg', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
     altura = forms.CharField(label='Altura en cm', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
     telefono = forms.CharField(label='Telefono', required=True, widget=forms.TextInput(attrs={'class': 'form-control', }))
@@ -64,17 +64,17 @@ class FormRegistrarPaciente(forms.ModelForm):
     ))
     direccion = forms.CharField(required=True, widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     edad = forms.CharField(label='Edad', max_length=3, required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control'}))
+    fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
 class AntecedentesForm(forms.Form):
     
-    medicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    quirurgicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    alergologicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    cardiovasculares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    sociales = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    familiares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    vacunacion = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
+    medicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
+    quirurgicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
+    alergologicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
+    cardiovasculares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
+    sociales = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
+    familiares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
+    vacunacion = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control '}))
 
 class InformeForm(forms.ModelForm):
     class Meta:
@@ -87,9 +87,9 @@ class InformeForm(forms.ModelForm):
             'fecha_consulta'
         ]
 
-    motivo_consulta = forms.CharField(label='Motivo de la consulta', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    fecha_consulta = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control'}))
-    observaciones = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    recomendaciones = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    medicacion = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
+    motivo_consulta = forms.CharField(label='Motivo de la consulta', required=True, widget=forms.TextInput(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
+    fecha_consulta = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'patient-report-input form-control', 'type': 'date'}))
+    observaciones = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
+    recomendaciones = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
+    medicacion = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
 

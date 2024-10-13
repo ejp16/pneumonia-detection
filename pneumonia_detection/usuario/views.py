@@ -249,6 +249,8 @@ class RegistrarInforme(MedicoUserMixin, FormView):
         user_medico = self.request.user
         form.id_medico_id = user_medico.id
         form.id_paciente_id = id_paciente
+        if analisis_id is not int:
+            form.save()
         form.id_analisis_id = analisis_id
         form.save()
         return redirect('ver_paciente', pk=id_paciente)
