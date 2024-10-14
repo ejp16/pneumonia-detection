@@ -36,13 +36,7 @@ class RegistroView(CreateView):
         user.groups.add(group)
         
         return redirect('login')
-    
-    def form_invalid(self, form_class):
-        response = form_class.errors
-        print(response)
-        return redirect('register')
-    
-    
+        
 class LoginView(View):
     template_name = "login.html"
     form_class = LoginForm()

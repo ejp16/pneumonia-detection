@@ -8,34 +8,61 @@
         {% load static %}
     
         <link rel="stylesheet" href="{% static 'styles.css' %}">
+
     
 </head>
 
-<h2 id="login">Login</h2>
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+    {% endif %}
 
 
 <form method='post'>
-    <div id="formulario">
 
     {% csrf_token %}
 
-    <div class="col-sm-5">
-        {{ form.email.label_tag }}
-        {{ form.email }}
 
+<div class="contenedor-formulario d-flex align-items-center justify-content-center vh-100">
+    <div class="tarjeta-formulario card shadow-sm">
+      <div class="card-body">
+        <h2 class="titulo-formulario card-title text-center mb-4">Iniciar sesión</h2>
+        <form>
+          <div class="mb-3">
+            <label htmlFor="correo" class="form-label">Correo electrónico:</label>
+            {{ form.email }}
+          </div>
+          <div class="mb-3">
+            <label htmlFor="contrasena" class="form-label">Contraseña:</label>
+            {{ form.password }}
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+          <div class="text-center mt-3">
+            <a href="{% url 'reset_password' %}" class="enlace-recuperar">Recuperar contraseña</a>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div class="col-sm-5">
-        {{ form.password.label_tag }}
-        {{ form.password }}
-    </div>
-    <input type="submit" class="btn btn-primary">
 
-    <a href="{% url 'reset_password' %}">Recuperar contraseña</a>
-    
-</div>
+
 </form>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
 
+<script>
+    var m = document.getElementsByClassName("alert");  // Return an array
+    
+    setTimeout(function(){
+       if (m && m.length) {
+           m[0].classList.add('hide');
+       }
+    }, 3000);
+</script>
 
 </html>

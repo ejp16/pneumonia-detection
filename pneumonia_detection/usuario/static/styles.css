@@ -293,10 +293,71 @@ body {
   vertical-align: -0.125em;
   fill: currentColor;
 }
-
+/*Numero de analisis que aparece en la imagen*/
 #n-analisis{
   color: white;
 }
+/*Titulo del index paciente*/
 #titulo{
   text-align: center;
+}
+/*Login form*/
+
+.contenedor-formulario {
+  background-color: #f8f9fa;
+}
+.tarjeta-formulario {
+  width: 100%;
+  max-width: 400px;
+}
+.titulo-formulario {
+  color: #0d6efd;
+}
+.enlace-recuperar {
+  color: #6c757d;
+  text-decoration: none;
+}
+.enlace-recuperar:hover {
+  text-decoration: underline;
+}
+
+/*Messages*/
+.alert {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0px);
+  transition: visibility 0s, opacity 250ms, transform 250ms;
+}
+.alert.hide {
+  position: relative;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-10px); 
+  transition: visibility 0s 250ms, opacity 250ms, transform 250ms;
+}
+
+/*Form Registro*/
+.registro-form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.registro-form-title {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+.registro-form-input {
+  margin-bottom: 1rem;
+}
+.registro-form-button {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.registro-form-button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
 }

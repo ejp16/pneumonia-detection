@@ -12,46 +12,37 @@
 </head>
 
 <body>
-<h2 id="registro">Registro</h2>
-
-
-
-<form method='post'>
-    <div id="formulario">
-    {% csrf_token %}
-
-    <div class="col-sm-5">
-
-        {{ form.username.label_tag }}
-        {{ form.username }}
-
-    </div>
-
-    <div class="col-sm-5">
-        {{ form.email.label_tag }}
-        {{ form.email }}
-
-    </div>
-
-    <div class="col-sm-5">
-        {{ form.password1.label_tag }}
-        {{ form.password1 }}
-    </div>
-
-    <div class="col-sm-5">
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
-    </div>
     
+{% if form.errors %}
+<div class="alert alert-danger">
+    {{ form.errors }}
 </div>
+{% endif %}
 
-<input type="submit" class="btn btn-primary">
-
-
-
-    
-    
-</form>
+<div class="container">
+    <div class="registro-form-container">
+        <h2 class="text-center registro-form-title">Registro</h2>
+        <form method='post'>  {% csrf_token %}
+            <div class="registro-form-input">
+                <label for="nombre" class="form-label">Nombre</label>
+                {{ form.username }}
+            </div>
+            <div class="registro-form-input">
+                <label for="correo" class="form-label">Correo electrónico</label>
+                {{ form.email }}
+            </div>
+            <div class="registro-form-input">
+                <label for="contrasena" class="form-label">Contraseña</label>
+                {{ form.password1 }}
+            </div>
+            <div class="registro-form-input">
+                <label for="confirmar-contrasena" class="form-label">Confirmar contraseña</label>
+                {{ form.password2 }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100 registro-form-button">Registrarse</button>
+        </form>
+    </div>
+</div>
 
 
 </body>
