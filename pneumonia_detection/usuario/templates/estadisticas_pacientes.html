@@ -4,6 +4,8 @@
 <body>
 
     <canvas id="myChart"></canvas>
+
+    <canvas id="myGraph"></canvas>
 </body>
 {% endblock content %}
 
@@ -14,6 +16,28 @@
     const ctx = document.getElementById('myChart');
   
     new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Hombres', 'Mujeres',],
+        datasets: [{
+          label: 'Sexo de los pacientes registrados',
+          data: [{{hombres}}, {{mujeres}}],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    
+    const edades = document.getElementById('myGraph');
+  
+    new Graph(edades, {
       type: 'bar',
       data: {
         labels: ['Hombres', 'Mujeres',],

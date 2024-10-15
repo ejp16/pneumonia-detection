@@ -17,7 +17,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=150)  # Permitir duplicados
+    username = models.CharField(max_length=150, unique=False)  # Permitir duplicados
     email = models.EmailField(unique=True)  # Asegurarte de que los correos sean únicos
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -42,7 +42,7 @@ class Paciente(models.Model):
     telefono = models.CharField(max_length=16, )
     email = models.EmailField()
     direccion = models.CharField(max_length=255, )
-    edad = models.CharField(max_length=3, )
+    edad = models.IntegerField()
     fecha_nacimiento = models.DateField()
     registro = models.DateField(auto_now=True)
     id_medico = models.ForeignKey(User, on_delete=models.PROTECT, related_name='id_medico')

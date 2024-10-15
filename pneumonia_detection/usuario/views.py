@@ -116,15 +116,15 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
             return redirect('index_medico',)
 
         except Exception as e:
-            print(e.args)
+            messages.error(self.request, 'El correo ya esta registrado por otro usuario')
             return redirect('registrar_paciente')
     
         return redirect('index_medico')
-    
+
     def form_invalid(self, form):
         response = super().form_invalid(form)
-        print(form.errors)
-        return redirect('index_medico')
+        response
+    
 
 class VerPaciente(MedicoUserMixin, View):
     template_name = 'ver_paciente.html'
@@ -306,7 +306,6 @@ class BusquedaView(MedicoUserMixin, ListView):
             return Paciente.objects.filter(
                 id_medico = self.request.user.id, cedula__contains=datos).all()
         
-
         return Paciente.objects.filter(
                 id_medico = self.request.user.id, 
                 apellido__icontains=datos).all()
@@ -316,6 +315,9 @@ class EstadisticasView(MedicoUserMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['hombres'] = Paciente.objects.filter(id_medico=self.request.user.id, sexo='H').count()
         context['mujeres'] = Paciente.objects.filter(id_medico=self.request.user.id, sexo='M').count()
+        #Posiblemente util para los demas graficos
+        #context['edades_5_10'] = Paciente.objects.values_list('edad', flat=True).filter(id_medico=self.request.user.id, edad__range=(5,10))
+        #context['edades_10_20'] = Paciente.objects.values('edad').filter(id_medico=self.request.user.id, edad__range=(10,21)).order_by('-edad')
         return context
     
 class Logout(View):

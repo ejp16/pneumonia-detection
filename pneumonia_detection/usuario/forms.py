@@ -1,8 +1,8 @@
 from django import forms
 from usuario.models import Paciente, Informe, AntecedentesPaciente, User
-from django.contrib.auth.forms import UserCreationForm  
+from django.contrib.auth.forms import UserCreationForm, BaseUserCreationForm
 
-class FormRegistro(UserCreationForm):
+class FormRegistro(BaseUserCreationForm):
     class Meta:
         model = User
         fields = [
