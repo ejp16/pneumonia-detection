@@ -211,6 +211,9 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
         id_paciente = request.POST.get('pk')
         paciente = Paciente.objects.get(id=id_paciente)
         antecedentes = list(AntecedentesPaciente.objects.filter(id_paciente = paciente.id).order_by('-id_antecedentesID'))
+        if not antecedentes: 
+            messages.warning(request, 'Debe registrar los antecedentes del paciente antes de usar la red neuronal')
+            return redirect('registrar_analisis', pk=id_paciente)
         img = Imagen.objects.create(imagen = imagen, id_paciente=paciente)
         img_url = img.imagen.url
         modelo = Modelo(img_url)
