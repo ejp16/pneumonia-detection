@@ -36,7 +36,7 @@ class Paciente(models.Model):
     nombre = models.CharField(max_length=40, )
     apellido = models.CharField(max_length=40, )
     cedula = models.CharField(max_length=12, )
-    sexo = models.CharField(max_length=6, )
+    sexo = models.CharField(max_length=1, )
     peso = models.CharField(max_length=3, )
     altura = models.IntegerField()
     telefono = models.CharField(max_length=16, )
@@ -65,6 +65,8 @@ class Analisis(models.Model):
     probabilidad = models.CharField(max_length=4, )
     recomendaciones = models.TextField(blank=True, null=True)
     id_imagen = models.ForeignKey(Imagen, on_delete=models.PROTECT)
+    id_medico = models.ForeignKey(User, on_delete=models.PROTECT)
+    id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT, null=True)
 
 class Informe(models.Model):
     motivo_consulta = models.CharField(max_length=255, )

@@ -68,17 +68,37 @@ class IndexMedicoView(MedicoUserMixin, ListView):
     def get_queryset(self):
         return Paciente.objects.select_related('id_medico').filter(id_medico = self.request.user.id)
     
-class IndexPaciente(PacienteUserMixin, View):
+class IndexPaciente(PacienteUserMixin, ListView):
     template_name = 'index_paciente.html'
-    def get(self, request):
-        user_paciente = request.user
-        print(user_paciente.id)
-        paciente = Paciente.objects.get(id_usuario_paciente_id = user_paciente.id)
-        imagenes = Imagen.objects.filter(id_paciente=paciente.id).all()
-        analisis = Analisis.objects.filter(id_imagen__in=imagenes).all()
-        informes = Informe.objects.filter(id_paciente_id = paciente.id).all()
-        print(informes)
-        return render(request, self.template_name, {'paciente': paciente, 'informes': informes, 'analisis': analisis})
+    model = Paciente
+    context_object_name = 'pacientes'
+
+    def get_queryset(self):
+        return Paciente.objects.filter(id_usuario_paciente_id = self.request.user.id).all()
+
+class MisMedicos(PacienteUserMixin, ListView):
+    template_name = 'medicos_paciente.html'
+    model = Paciente
+    context_object_name = 'medicos'
+    pk_url_kwarg = 'pk'
+
+    def get(self, request, **kwargs):
+        pk_paciente = kwargs.get(self.pk_url_kwarg)
+        medicos = Paciente.objects.select_related('id_medico').filter(id=pk_paciente)
+        return render(request, self.template_name, {'medicos': medicos, 'pk_paciente': pk_paciente})
+
+class MisInformes(PacienteUserMixin, TemplateView):
+    template_name = 'informes_paciente.html'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        pk_paciente = kwargs['pk_paciente']
+        pk_medico = kwargs.get('pk_medico')
+        context['analisis'] = Analisis.objects.select_related('id_imagen').filter(id_medico=pk_medico, id_paciente=pk_paciente).all() 
+        context['informes'] = Informe.objects.filter(id_paciente=pk_paciente).all()
+        return self.render_to_response(context)
+
+    
 
 class RegistrarPacienteView(MedicoUserMixin, CreateView):
     template_name = 'registrar_paciente.html'
@@ -94,37 +114,38 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         form.id_medico_id = user.id
         clave = get_random_string(8)
         print(f'CLAVE DEL PACIENTE: {clave}')
-        try:
-            user_paciente = User.objects.create_user(
-                username=form.nombre,
-                email=form.email,
-                password=clave,
-            )
-            user_group = Group.objects.get(name='Paciente')
-            user_paciente.groups.add(user_group)
-            form.id_usuario_paciente_id = user_paciente.id
+        email = form.email
+        user_paciente = User.objects.filter(email=email).first()
+        if user_paciente:
+            form.id_usuario_paciente = user_paciente
             form.save()
-
-            context = {
-                'nombre_medico': user.username,
-                'correo': form.email,
-                'password': clave
-            }
-
-            mail = EnviarMail(context=context, recipient=form.email)
-            mail.enviar()
             return redirect('index_medico',)
 
-        except Exception as e:
-            messages.error(self.request, 'El correo ya esta registrado por otro usuario')
-            return redirect('registrar_paciente')
-    
-        return redirect('index_medico')
+        user_paciente = User.objects.create_user(
+            username=form.nombre,
+            email=form.email,
+            password=clave,
+        )
+        user_group = Group.objects.get(name='Paciente')
+        user_paciente.groups.add(user_group)
+        form.id_usuario_paciente_id = user_paciente.id
+        form.save()
+
+        context = {
+            'nombre_medico': user.username,
+            'correo': form.email,
+            'password': clave
+        }
+
+        mail = EnviarMail(context=context, recipient=form.email)
+        mail.enviar()
+        return redirect('index_medico',)
+
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
         response
-    
+   
 
 class VerPaciente(MedicoUserMixin, View):
     template_name = 'ver_paciente.html'
@@ -228,7 +249,9 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
             resultado=prediccion['resultado'],
             probabilidad=prediccion['probabilidad'],
             recomendaciones=recomendacion,
-            id_imagen=img
+            id_imagen=img,
+            id_medico=request.user,
+            id_paciente=paciente
         )
         return redirect('ver_paciente', pk=id_paciente)
 
@@ -312,6 +335,7 @@ class BusquedaView(MedicoUserMixin, ListView):
         return Paciente.objects.filter(
                 id_medico = self.request.user.id, 
                 apellido__icontains=datos).all()
+
 class EstadisticasView(MedicoUserMixin, TemplateView):
     template_name = 'estadisticas_pacientes.html'
     def get_context_data(self, **kwargs):

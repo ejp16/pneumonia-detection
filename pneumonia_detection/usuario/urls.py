@@ -16,6 +16,9 @@ urlpatterns = [
     path('registrar_analisis/<int:pk>', views.RegistrarAnalisis.as_view(), name='registrar_analisis'),
     path('registrar_informe/<int:pk>', views.RegistrarInforme.as_view(), name='registrar_informe'),
 
+    path('mis_medicos/<int:pk>', views.MisMedicos.as_view(), name='mis_medicos'),
+    path('mis_informes/<int:pk_paciente>/<int:pk_medico>', views.MisInformes.as_view(), name='mis_informes'),
+
     path('estadisticas', views.EstadisticasView.as_view(), name='estadisticas'),
 
     #enviar a la clase el password_reset_email.html para cambiar la plantilla que se envia al correo

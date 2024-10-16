@@ -1,0 +1,164 @@
+<head>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+  
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+</head>
+
+
+
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'logout' %}">Cerrar Sesion</a>
+              </li>
+            </ul>
+            </div>
+        </div>
+  
+  
+        
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+              </li>
+            </ul>
+            </div>
+        </div>
+      </nav>
+
+    {% if analisis %}
+    
+            {% for item in analisis %}  
+            <div class="container mt-5">
+                <div class="card">
+                  <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Resultados del Análisis</h3>
+                  </div>
+                  
+                  <div class="card-body">
+    
+            
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <div class="analysis-info">
+                      <strong>Número de Análisis:</strong>
+                      <div class="info-content mt-2">{{ item.id }}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="analysis-info">
+                      <strong>Resultado de la Red Neuronal: </strong>
+                      <div class="info-content mt-2">{{ item.resultado }}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="analysis-info">
+                      <strong>Probabilidad: </strong>
+                      <div class="info-content mt-2">{{ item.probabilidad }}</div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="analysis-info">
+                      <strong>Recomendaciones: </strong>
+                      <div class="info-content recommendations mt-2">
+                        {{ item.recomendaciones }}
+                      </div>
+                    </div>
+                  </div>
+    
+    
+                    <div class="row">
+                        <div class="col-lg-8 col-md-10 mx-auto">
+                            <div class="card custom-card">
+                                <div class="card-img-container">
+                                    <img src="{{ item.id_imagen.imagen.url }}" alt="Imagen de análisis" class="card-img-top">
+                                    <div class="card-img-overlay">
+                                        <p class="card-text" id="n-analisis">Numero de Analisis: {{ item.id }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+            {% endfor %}
+
+    {% else %}
+
+        <div class="medical-record-wrapper">      
+            <div class="medical-record-section">
+                <p class="medical-record-info">
+                    <i class="fas fa-history medical-record-icon"></i>
+                    Su medico no ha realizado analisis en el sistema
+                </p>
+            </div>
+        </div>
+
+    {% endif %}
+      
+        
+    {% if informes %}
+
+            {% for informe in informes %}
+
+            
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title mb-0">Datos de la Consulta. Informe N: {{ informe.id }}</h2>
+                </div>
+                <div class="card-body p-0">
+                    <div class="field">
+                        <div class="field-label">Motivo de consulta</div>
+                        <div class="field-value">{{ informe.motivo_consulta }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Observaciones</div>
+                        <div class="field-value large-field">
+                          {{ informe.observaciones }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Recomendaciones</div>
+                        <div class="field-value large-field">
+                          {{ informe.recomendaciones }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Medicación</div>
+                        <div class="field-value large-field">
+                          {{ informe.medicacion }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Fecha de consulta</div>
+                        {{ informe.fecha_consulta }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+    {% else %}
+        
+        <div class="medical-record-wrapper">      
+            <div class="medical-record-section">
+                <p class="medical-record-info">
+                    <i class="fas fa-history medical-record-icon"></i>
+                    Su medico no ha subido informes
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+</body>
