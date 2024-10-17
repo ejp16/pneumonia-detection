@@ -66,12 +66,13 @@ class IndexMedicoView(MedicoUserMixin, ListView):
     context_object_name = 'pacientes'
 
     def get_queryset(self):
-        return RelacionMedicoPaciente.objects.filter(id_medico = self.request.user.id).select_related('id_paciente').all()
+        relacion = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
+        return Paciente.objects.filter(id__in=relacion).all()
     
 class IndexPaciente(PacienteUserMixin, ListView):
     template_name = 'index_paciente.html'
     model = Paciente
-
+    paginate_by = 20
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
         pacientes = Paciente.objects.filter(id_usuario_paciente=self.request.user.id).all()
@@ -326,16 +327,16 @@ class BusquedaView(MedicoUserMixin, ListView):
     def get_queryset(self):
         filtro = self.request.GET.get('filtro')
         datos = self.request.GET.get('datos')
-
+        relacion = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
         if filtro == 'nombre':
-            return Paciente.objects.filter(id_medico = self.request.user.id, nombre__icontains=datos).all()
+            return Paciente.objects.filter(id__in = relacion, nombre__icontains=datos).all()
 
         elif filtro == 'cedula':
             return Paciente.objects.filter(
-                id_medico = self.request.user.id, cedula__contains=datos).all()
+                id__in = relacion, cedula__contains=datos).all()
         
         return Paciente.objects.filter(
-                id_medico = self.request.user.id, 
+                id__in = relacion,
                 apellido__icontains=datos).all()
 
 class EstadisticasView(MedicoUserMixin, TemplateView):

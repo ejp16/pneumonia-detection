@@ -300,6 +300,7 @@ body {
 /*Titulo del index paciente*/
 #titulo{
   text-align: center;
+  padding: 20px !important; 
 }
 /*Login form*/
 
@@ -360,4 +361,18 @@ body {
 .registro-form-button:hover {
   background-color: #0056b3;
   border-color: #0056b3;
+}
+
+/*Estadisticas*/
+
+.chart-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 50px;
+}
+h1 {
+  color: #0d6efd;
+  margin-bottom: 30px;
 }
