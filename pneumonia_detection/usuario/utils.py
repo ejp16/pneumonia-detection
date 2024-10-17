@@ -1,16 +1,15 @@
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 from keras.models import load_model
 import numpy as np
 import cv2
 from django.conf import settings
 import google.generativeai as genai
-import typing_extensions as typing
-import json
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
-class Recomendacion(typing.TypedDict):
-    recomendacion: str
+
 
 class Modelo:
     def __init__(self, imagen):
