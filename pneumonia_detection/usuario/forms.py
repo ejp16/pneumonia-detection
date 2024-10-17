@@ -66,10 +66,6 @@ class FormRegistrarPaciente(forms.ModelForm):
     edad = forms.IntegerField(label='Edad', min_value=0, required=True, widget=forms.NumberInput(attrs={'class': 'form-control',}))
     fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
-    def validate_unique(self):
-        pass
-
-
 class AntecedentesForm(forms.Form):
     
     medicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))

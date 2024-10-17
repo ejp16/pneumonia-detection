@@ -75,7 +75,6 @@ class IndexPaciente(PacienteUserMixin, ListView):
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
         pacientes = Paciente.objects.filter(id_usuario_paciente=self.request.user.id).all()
-        #context['pacientes'] = pacientes
         medicos = RelacionMedicoPaciente.objects.filter(id_paciente__in=pacientes).select_related('id_medico').all().distinct()
         context['items'] = list(zip(medicos, pacientes))
         return context
@@ -102,11 +101,12 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
     def form_valid(self, form_class):
         paciente = form_class.save(commit=False)
         user = self.request.user
-        clave = get_random_string(8)
+        clave = get_random_string(8) #genera la clave del paciente
         print(f'CLAVE DEL PACIENTE: {clave}')
-        email = paciente.email
-        user_paciente = User.objects.filter(email=email).first()
+        
+        user_paciente = User.objects.filter(email=paciente.email).first() #Verifica si el email ingresado ya esta en uso por un Usuario
         if user_paciente:
+            #Si esta en uso, crear registro en la tabla Paciente y asignar el id_usuario_paciente al Usuario ligado a ese correo
             paciente.id_usuario_paciente = user_paciente
             paciente.save()
             RelacionMedicoPaciente.objects.create(
@@ -114,12 +114,14 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
                 id_paciente=paciente
             )
             return redirect('index_medico',)
-
+        
+        #Crear Usuario del paciente
         user_paciente = User.objects.create_user(
             username=paciente.nombre,
             email=paciente.email,
             password=clave,
         )
+        #Asignarlo al grupo Pacientes y guardar los datos en la tabla Paciente
         user_group = Group.objects.get(name='Paciente')
         user_paciente.groups.add(user_group)
         paciente.id_usuario_paciente_id = user_paciente.id
@@ -130,10 +132,10 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
             id_paciente=paciente
         )
 
-
+        #Enviar email con los datos para el inicio de sesion
         context = {
             'nombre_medico': user.username,
-            'correo': form.email,
+            'correo': paciente.email,
             'password': clave
         }
 
@@ -340,11 +342,12 @@ class EstadisticasView(MedicoUserMixin, TemplateView):
     template_name = 'estadisticas_pacientes.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['hombres'] = Paciente.objects.filter(id_medico=self.request.user.id, sexo='H').count()
-        context['mujeres'] = Paciente.objects.filter(id_medico=self.request.user.id, sexo='M').count()
-        #Posiblemente util para los demas graficos
-        #context['edades_5_10'] = Paciente.objects.values_list('edad', flat=True).filter(id_medico=self.request.user.id, edad__range=(5,10))
-        #context['edades_10_20'] = Paciente.objects.values('edad').filter(id_medico=self.request.user.id, edad__range=(10,21)).order_by('-edad')
+        query = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
+        context['hombres'] = Paciente.objects.filter(id__in=query, sexo='H').count()
+        context['mujeres'] = Paciente.objects.filter(id__in=query, sexo='M').count()
+        
+        context['edades_5_10'] = Paciente.objects.filter(id__in=query, edad__range=(4,11)).count()
+        context['edades_10_20'] = Paciente.objects.filter(id__in=query, edad__range=(10,22)).count()
         return context
     
 class Logout(View):

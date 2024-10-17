@@ -5,7 +5,10 @@
 
     <canvas id="myChart"></canvas>
 
-    <canvas id="myGraph"></canvas>
+    <canvas id="Chart"></canvas>
+
+
+    {{edades_10_20}}
 </body>
 {% endblock content %}
 
@@ -35,15 +38,15 @@
     });
 
     
-    const edades = document.getElementById('myGraph');
+    const edad = document.getElementById('Chart');
   
-    new Graph(edades, {
+    new Chart(edad, {
       type: 'bar',
       data: {
-        labels: ['Hombres', 'Mujeres',],
+        labels: ['De 5 a 10', 'De 11 a 21',],
         datasets: [{
-          label: 'Sexo de los pacientes registrados',
-          data: [{{hombres}}, {{mujeres}}],
+          label: 'Edad en años de los pacientes registrados',
+          data: [{{edades_5_10}}, {{edades_10_20}}],
           borderWidth: 1
         }]
       },
@@ -56,7 +59,8 @@
       }
     });
 
-
+    
+  
 
 
 </script>
