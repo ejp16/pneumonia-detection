@@ -66,39 +66,30 @@ class IndexMedicoView(MedicoUserMixin, ListView):
     context_object_name = 'pacientes'
 
     def get_queryset(self):
-        return Paciente.objects.select_related('id_medico').filter(id_medico = self.request.user.id)
+        return RelacionMedicoPaciente.objects.filter(id_medico = self.request.user.id).select_related('id_paciente').all()
     
 class IndexPaciente(PacienteUserMixin, ListView):
     template_name = 'index_paciente.html'
     model = Paciente
-    context_object_name = 'pacientes'
 
-    def get_queryset(self):
-        return Paciente.objects.filter(id_usuario_paciente_id = self.request.user.id).all()
-
-class MisMedicos(PacienteUserMixin, ListView):
-    template_name = 'medicos_paciente.html'
-    model = Paciente
-    context_object_name = 'medicos'
-    pk_url_kwarg = 'pk'
-
-    def get(self, request, **kwargs):
-        pk_paciente = kwargs.get(self.pk_url_kwarg)
-        medicos = Paciente.objects.select_related('id_medico').filter(id=pk_paciente)
-        return render(request, self.template_name, {'medicos': medicos, 'pk_paciente': pk_paciente})
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        pacientes = Paciente.objects.filter(id_usuario_paciente=self.request.user.id).all()
+        #context['pacientes'] = pacientes
+        medicos = RelacionMedicoPaciente.objects.filter(id_paciente__in=pacientes).select_related('id_medico').all().distinct()
+        context['items'] = list(zip(medicos, pacientes))
+        return context
 
 class MisInformes(PacienteUserMixin, TemplateView):
     template_name = 'informes_paciente.html'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        pk_paciente = kwargs['pk_paciente']
+        pk_paciente = kwargs.get('pk_paciente')
         pk_medico = kwargs.get('pk_medico')
         context['analisis'] = Analisis.objects.select_related('id_imagen').filter(id_medico=pk_medico, id_paciente=pk_paciente).all() 
         context['informes'] = Informe.objects.filter(id_paciente=pk_paciente).all()
         return self.render_to_response(context)
-
-    
 
 class RegistrarPacienteView(MedicoUserMixin, CreateView):
     template_name = 'registrar_paciente.html'
@@ -109,27 +100,36 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         return render(request, self.template_name, {'form': self.form_class})
 
     def form_valid(self, form_class):
-        form = form_class.save(commit=False)
+        paciente = form_class.save(commit=False)
         user = self.request.user
-        form.id_medico_id = user.id
         clave = get_random_string(8)
         print(f'CLAVE DEL PACIENTE: {clave}')
-        email = form.email
+        email = paciente.email
         user_paciente = User.objects.filter(email=email).first()
         if user_paciente:
-            form.id_usuario_paciente = user_paciente
-            form.save()
+            paciente.id_usuario_paciente = user_paciente
+            paciente.save()
+            RelacionMedicoPaciente.objects.create(
+                id_medico=self.request.user,
+                id_paciente=paciente
+            )
             return redirect('index_medico',)
 
         user_paciente = User.objects.create_user(
-            username=form.nombre,
-            email=form.email,
+            username=paciente.nombre,
+            email=paciente.email,
             password=clave,
         )
         user_group = Group.objects.get(name='Paciente')
         user_paciente.groups.add(user_group)
-        form.id_usuario_paciente_id = user_paciente.id
-        form.save()
+        paciente.id_usuario_paciente_id = user_paciente.id
+        paciente.save()
+
+        RelacionMedicoPaciente.objects.create(
+            id_medico=self.request.user,
+            id_paciente=paciente
+        )
+
 
         context = {
             'nombre_medico': user.username,
@@ -151,16 +151,16 @@ class VerPaciente(MedicoUserMixin, View):
     template_name = 'ver_paciente.html'
     def get(self, request, **kwargs):
         id_paciente = kwargs['pk']
-        paciente = Paciente.objects.get(id = id_paciente)
         user_medico = self.request.user
-        if paciente.id_medico_id == user_medico.id:
-            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = paciente.id)
-            imagenes = Imagen.objects.filter(id_paciente = paciente.id).all()
-            analisis = Analisis.objects.filter(id_imagen__in = imagenes).all()
-            informes = Informe.objects.filter(id_paciente = paciente.id).all()
+        relacion_paciente = RelacionMedicoPaciente.objects.get(id_medico=user_medico.id, id_paciente=id_paciente)
+        print(relacion_paciente)
+        if relacion_paciente:
+            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = relacion_paciente.id_paciente)
+            analisis = Analisis.objects.filter(id_paciente = relacion_paciente.id_paciente).select_related('id_imagen').all()
+            informes = Informe.objects.filter(id_paciente = relacion_paciente.id_paciente).all()
             antecedentesID = AntecedentesID.objects.all()
             lista_antecedentes = list(zip(antecedentesID, antecedentes))
-            return render(request, self.template_name, {'paciente': paciente, 'antecedentes': lista_antecedentes, 'analisis': analisis, 'informes': informes})
+            return render(request, self.template_name, {'relacion_paciente': relacion_paciente, 'antecedentes': lista_antecedentes, 'analisis': analisis, 'informes': informes})
         else:
             return redirect('index_medico')
         

@@ -6,15 +6,14 @@
         
         <div class="container mt-5">
           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-
 {% for paciente in pacientes %}
                 
             <div class="col">
               <div class="card h-100 shadow-sm">
                   <div class="card-body">
-                      <h5 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h5>
-                      <p class="card-text"><i class="fas fa-id-card mr-2"></i> Cédula: {{ paciente.cedula }}</p>
-                      <a href="{% url 'ver_paciente' pk=paciente.id %}" class="card-link"><i class="fas fa-history mr-2"></i> Revisar historial</a>
+                      <h5 class="card-title">{{ paciente.id_paciente.nombre }} {{ paciente.id_paciente.apellido }}</h5>
+                      <p class="card-text"><i class="fas fa-id-card mr-2"></i> Cédula: {{ paciente.id_paciente.cedula }}</p>
+                      <a href="{% url 'ver_paciente' pk=paciente.id_paciente.id %}" class="card-link"><i class="fas fa-history mr-2"></i> Revisar historial</a>
                   </div>
               </div>
           </div>

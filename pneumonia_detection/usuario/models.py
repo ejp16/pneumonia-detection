@@ -30,8 +30,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
     
-
-
 class Paciente(models.Model):
     nombre = models.CharField(max_length=40, )
     apellido = models.CharField(max_length=40, )
@@ -45,8 +43,12 @@ class Paciente(models.Model):
     edad = models.IntegerField()
     fecha_nacimiento = models.DateField()
     registro = models.DateField(auto_now=True)
-    id_medico = models.ForeignKey(User, on_delete=models.PROTECT, related_name='id_medico')
+    #id_medico = models.ForeignKey(User, on_delete=models.PROTECT, related_name='id_medico')
     id_usuario_paciente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='id_paciente')
+
+class RelacionMedicoPaciente(models.Model):
+    id_medico = models.ForeignKey(User, on_delete=models.PROTECT, related_name='id_medico')
+    id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
 
 class AntecedentesID(models.Model):
     tipo_antecedente = models.CharField(max_length=20)

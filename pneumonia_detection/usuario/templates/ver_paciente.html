@@ -13,62 +13,62 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Nombres:</strong> {{ paciente.nombre }}
+                  <strong>Nombres:</strong> {{ relacion_paciente.id_paciente.nombre }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Apellido:</strong> {{ paciente.apellido }}
+                  <strong>Apellido:</strong> {{ relacion_paciente.id_paciente.apellido }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Cédula de Identidad:</strong> {{ paciente.cedula }}
+                  <strong>Cédula de Identidad:</strong> {{ relacion_paciente.id_paciente.cedula }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Sexo:</strong> {{ paciente.sexo }}
+                  <strong>Sexo:</strong> {{ relacion_paciente.id_paciente.sexo }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Peso:</strong> {{ paciente.peso }}
+                  <strong>Peso:</strong> {{ relacion_paciente.id_paciente.peso }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Altura:</strong> {{ paciente.altura }} cm
+                  <strong>Altura:</strong> {{ relacion_paciente.id_paciente.altura }} cm
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Correo Electrónico:</strong> {{ paciente.email }}
+                  <strong>Correo Electrónico:</strong> {{ relacion_paciente.id_paciente.email }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Teléfono:</strong> {{ paciente.telefono }}
+                  <strong>Teléfono:</strong> {{ relacion_paciente.id_paciente.telefono }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Dirección:</strong> {{ paciente.direccion }}
+                  <strong>Dirección:</strong> {{ relacion_paciente.id_paciente.direccion }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Edad:</strong> {{ paciente.edad }}
+                  <strong>Edad:</strong> {{ relacion_paciente.id_paciente.edad }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="patient-info">
-                  <strong>Fecha de Nacimiento:</strong> {{ paciente.fecha_nacimiento }}
+                  <strong>Fecha de Nacimiento:</strong> {{ relacion_paciente.id_paciente.fecha_nacimiento }}
                 </div>
               </div>
             </div>
             <div class="card-footer bg-transparent border-0 pb-4">
-              <a href="{% url 'editar_paciente' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+              <a href="{% url 'editar_paciente' pk=relacion_paciente.id_paciente_id %}"><button class="btn btn-lg w-100 edit-button">
                   <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -106,7 +106,7 @@
           </div>
           
           <div class="card-footer bg-transparent border-0 pb-4">
-            <a href="{% url 'editar_antecedentes' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+            <a href="{% url 'editar_antecedentes' pk=relacion_paciente.id_paciente_id %}"><button class="btn btn-lg w-100 edit-button">
                 <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -126,7 +126,7 @@
               <i class="fas fa-history medical-record-icon"></i>
               Este paciente no tiene antecedentes registrados
           </p>
-          <a href="{% url 'registrar_antecedentes' pk=paciente.id %}" class="medical-record-action">
+          <a href="{% url 'registrar_antecedentes' pk=relacion_paciente.id_paciente_id %}" class="medical-record-action">
               <i class="fas fa-plus-circle"></i> Registrar antecedentes de este paciente
           </a>
       </div>
@@ -196,7 +196,7 @@
 
         
         <div class="card-footer bg-transparent border-0 pb-4">
-          <a href="{% url 'registrar_analisis' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+          <a href="{% url 'registrar_analisis' pk=relacion_paciente.id_paciente_id %}"><button class="btn btn-lg w-100 edit-button">
               <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -220,7 +220,7 @@
               <i class="fas fa-history medical-record-icon"></i>
               El paciente no tiene analisis registrados
           </p>
-          <a href="{% url 'registrar_analisis' pk=paciente.id%}" class="medical-record-action">
+          <a href="{% url 'registrar_analisis' pk=relacion_paciente.id_paciente_id %}" class="medical-record-action">
               <i class="fas fa-plus-circle"></i> Registrar analisis
           </a>
       </div>
@@ -269,7 +269,7 @@
                   </div>
         
           <div class="card-footer bg-transparent border-0 pb-4">
-            <a href="{% url 'registrar_informe' pk=paciente.id %}"><button class="btn btn-lg w-100 edit-button">
+            <a href="{% url 'registrar_informe' pk=relacion_paciente.id_paciente_id %}"><button class="btn btn-lg w-100 edit-button">
                 <svg class="edit-icon me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -291,7 +291,7 @@
               <i class="fas fa-history medical-record-icon"></i>
               No ha registrado informes a este paciente
           </p>
-          <a href="{% url 'registrar_informe' pk=paciente.id%}" class="medical-record-action">
+          <a href="{% url 'registrar_informe' pk=relacion_paciente.id_paciente_id %}" class="medical-record-action">
               <i class="fas fa-plus-circle"></i> Realizar nuevo informe
           </a>
       </div>

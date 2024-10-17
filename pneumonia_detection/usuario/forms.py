@@ -67,7 +67,6 @@ class FormRegistrarPaciente(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
     def validate_unique(self):
-        cedula = self.cleaned_data('cedula')
         pass
 
 

@@ -28,10 +28,13 @@
 
 <h2 id="titulo">Bienvenido {{ user.username }}</h2>
 
-<h4>Pacientes registrados:</h4>
+{% for medico, paciente in items %}
 
-{% for paciente in pacientes %}
+      <H4>Medico: {{ medico.id_medico.username }}</H4>
 
-      <a href="{% url 'mis_medicos' pk=paciente.id %}"><h5>{{paciente.nombre}} {{paciente.apellido}} Cedula: {{paciente.cedula}}</h5></a>
+      <h4>Paciente: {{paciente.nombre}} {{paciente.apellido}} Cedula: {{paciente.cedula}} </h4>
+
+
+        <a href="{% url 'mis_informes' pk_paciente=paciente.id pk_medico=medico.id_medico_id %} ">Ver informes</a>
 
 {% endfor %}

@@ -55,7 +55,7 @@
 
 {% for medico in medicos %}
 
-      <a href="{% url 'mis_informes' pk_paciente=pk_paciente pk_medico=medico.id_medico.id %}"><h5>{{medico.id_medico.username}} {{medico.id_medico.id}}</h5></a>
+      <a href="{% comment %} {% url 'mis_informes' pk_paciente=pk_paciente pk_medico=medico.id_medico.id %} {% endcomment %}"><h5>{{medico.id_medico.username}} {{medico.id_medico.id}}</h5></a>
 
 {% endfor %}
 
