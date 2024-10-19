@@ -56,7 +56,6 @@ class LoginView(View):
                 login(request, user, backend='usuario.backend.EmailBackend')
                 return redirect('index_paciente')
             else:
-                print('malas credenciales')
                 messages.warning(request, 'Correo o contraseña incorrectos')
             return redirect('login')
 
@@ -238,25 +237,29 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
         if not antecedentes: 
             messages.warning(request, 'Debe registrar los antecedentes del paciente antes de usar la red neuronal')
             return redirect('registrar_analisis', pk=id_paciente)
-        img = Imagen.objects.create(imagen = imagen, id_paciente=paciente)
-        img_url = img.imagen.url
-        modelo = Modelo(img_url)
-        prediccion = modelo.prediccion()
-        recomendacion = modelo.prompt(
-            edad=paciente.edad,
-            peso=paciente.peso,
-            altura=paciente.altura,
-            antecedentes=antecedentes
-        )
-        Analisis.objects.create(
-            resultado=prediccion['resultado'],
-            probabilidad=prediccion['probabilidad'],
-            recomendaciones=recomendacion,
-            id_imagen=img,
-            id_medico=request.user,
-            id_paciente=paciente
-        )
-        return redirect('ver_paciente', pk=id_paciente)
+        try:
+            img = Imagen.objects.create(imagen = imagen, id_paciente=paciente)
+            img_url = img.imagen.url
+            modelo = Modelo(img_url)
+            prediccion = modelo.prediccion()
+            recomendacion = modelo.prompt(
+                edad=paciente.edad,
+                peso=paciente.peso,
+                altura=paciente.altura,
+                antecedentes=antecedentes
+            )
+            Analisis.objects.create(
+                resultado=prediccion['resultado'],
+                probabilidad=prediccion['probabilidad'],
+                recomendaciones=recomendacion,
+                id_imagen=img,
+                id_medico=request.user,
+                id_paciente=paciente
+            )
+            return redirect('ver_paciente', pk=id_paciente)
+        except:
+            messages.error(request, 'Ocurrio un error, intentalo denuevo')
+            return redirect('registrar_analisis', pk=id_paciente)
 
 class RegistrarInforme(MedicoUserMixin, FormView):
     template_name = 'registrar_informe.html'
