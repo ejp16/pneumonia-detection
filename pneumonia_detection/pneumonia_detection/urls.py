@@ -20,8 +20,10 @@ from django.urls import include
 from django.conf.urls.static import static
 from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
+from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('inicio/', views.InicioView.as_view(),),
     path('usuario/', include('usuario.urls'))
 ]
 

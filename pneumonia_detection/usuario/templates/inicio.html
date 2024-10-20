@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de detección</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero {
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://uxwjxqhqhgxhqhqhqhq.supabase.co/storage/v1/object/public/images/particles.png') repeat;
+            animation: slide 20s linear infinite;
+            opacity: 0.1;
+        }
+        @keyframes slide {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100%); }
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .btn-custom {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .feature-card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .icon-bg {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+        h2 {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 3px;
+            background: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="container text-center position-relative">
+            <h1 class="display-3 fw-bold mb-4">Sistema de detección</h1>
+            <p class="lead mb-5">Descubre nuestro innovador sistema de detección</p>
+            <a href="{% url 'login' %}"><button class="btn-custom">Comenzar</button></a>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="text-center mb-5">¿Qué es?</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card bg-primary text-white p-4">
+                            <div class="icon-bg bg-white text-primary">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="mb-3">Detección Avanzada</h3>
+                            <p>Sistema que le permite utilizar una red neuronal convolucional de alta precision para la deteccion de neumonia en imagenes radiograficas.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card bg-success text-white p-4">
+                            <div class="icon-bg bg-white text-success">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="mb-3">Fácil Configuración</h3>
+                            <p>Para utilizar el sistema solo debe registrarse e cargar los datos de su paciente junto con la imagen que desea analizar.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card bg-warning text-dark p-4">
+                            <div class="icon-bg bg-white text-warning">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="mb-3">Análisis en Tiempo Real</h3>
+                            <p>El sistema le permite visualizar estadisticas generales de todos los pacientes que hayan sido registrado por usted.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">¿Cómo funciona?</h2>
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-4">
+                        <img src="https://uxwjxqhqhgxhqhqhqhq.supabase.co/storage/v1/object/public/images/detection-system.svg" alt="Sistema de detección" class="img-fluid rounded shadow">
+                    </div>
+                    <div class="col-md-6">
+                        <p class="lead">
+                            La red neuronal convolucional con precision del 94% y la IA de Gemini trabajaran en conjunto para proporcionarle apoyo en el diagnostico de neumonia en imagenes radiograficas de torax. 
+                            <br>
+                            El sistema tambien le ofrece la posibilidad de registrar informes, en donde podra registrar todos los datos referentes a la consulta con su paciente.
+                            <br>
+                            A los pacientes se les enviara un correo con la contraseña para que puedan ingresar al sistema y ver el resultado de los analisis y los informes realizados. 
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Detección en tiempo real</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Análisis de patrones avanzados</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Notificaciones instantáneas</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Integración con IA de Gemini</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section text-center">
+            <div class="container">
+                <h2 class="mb-5">¿Listo para empezar?</h2>
+                <a href="{% url 'login' %}"><button class="btn-custom">Comenzar ahora</button></a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2023 Sistema de detección. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
