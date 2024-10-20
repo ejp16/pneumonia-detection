@@ -13,6 +13,7 @@ charset-normalizer==3.3.2
 colorama==0.4.6
 decorator==5.1.1
 defusedxml==0.7.1
+dj-database-url==2.2.0
 Django==4.2.16
 django-bootstrap-v5==1.0.11
 django-debug-toolbar==4.4.6
@@ -31,6 +32,7 @@ google-pasta==0.2.0
 googleapis-common-protos==1.65.0
 grpcio==1.66.2
 grpcio-status==1.66.2
+gunicorn==23.0.0
 h5py==3.11.0
 httplib2==0.22.0
 idna==3.10
@@ -70,6 +72,7 @@ platformdirs==4.3.6
 prompt_toolkit==3.0.48
 proto-plus==1.24.0
 protobuf==5.28.2
+psycopg2-binary==2.9.10
 pure_eval==0.2.3
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
@@ -107,5 +110,6 @@ urllib3==2.2.3
 wcwidth==0.2.13
 webencodings==0.5.1
 Werkzeug==3.0.4
+whitenoise==6.7.0
 wrapt==1.16.0
 yarg==0.1.9
