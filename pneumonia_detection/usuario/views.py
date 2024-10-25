@@ -342,17 +342,45 @@ class BusquedaView(MedicoUserMixin, ListView):
                 id__in = relacion,
                 apellido__icontains=datos).all()
 
-class EstadisticasView(MedicoUserMixin, TemplateView):
+class EstadisticasView(MedicoUserMixin, View):
     template_name = 'estadisticas_pacientes.html'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    context = {}
+    def get(self, request, **kwargs):
+        context = self.get_context_data()
+        return render(request, self.template_name, context=context)
+
+    def post(self, request):
+        desde = request.POST.get('desde')
+        hasta = request.POST.get('hasta')
+        edad_desde = request.POST.get('edad_desde')
+        edad_hasta = request.POST.get('edad_hasta')
+        context = self.get_context_data()
         query = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
-        context['hombres'] = Paciente.objects.filter(id__in=query, sexo='H').count()
-        context['mujeres'] = Paciente.objects.filter(id__in=query, sexo='M').count()
+        context['edad_desde'] = edad_desde
+        context['edad_hasta'] = edad_hasta
+        context['edades_mujeres'] = Paciente.objects.filter(id__in=query, sexo='M', edad__range=(edad_desde, edad_hasta)).count()
+        context['edades_hombres'] = Paciente.objects.filter(id__in=query, sexo='H', edad__range=(edad_desde, edad_hasta)).count()
+        neumonia = Analisis.objects.filter(id_paciente__in=query, fecha_analisis__range=(desde, hasta), resultado='neumonia').count()
+        normal = Analisis.objects.filter(id_paciente__in=query, fecha_analisis__range=(desde, hasta), resultado='normal').count()
+        context['normal'] = normal
+        context['neumonia'] = neumonia
+        context['desde'] = desde
+        context['hasta'] = hasta
+        return render(request, self.template_name, context=context)
+
+
+    def get_context_data(self, **kwargs):
+        query = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
+        self.context['hombres'] = Paciente.objects.filter(id__in=query, sexo='H').count()
+        self.context['mujeres'] = Paciente.objects.filter(id__in=query, sexo='M').count()
         
-        context['edades_5_10'] = Paciente.objects.filter(id__in=query, edad__range=(4,11)).count()
-        context['edades_10_20'] = Paciente.objects.filter(id__in=query, edad__range=(10,22)).count()
-        return context
+        self.context['edades_5_10'] = Paciente.objects.filter(id__in=query, edad__range=(4,11)).count()
+        self.context['edades_10_20'] = Paciente.objects.filter(id__in=query, edad__range=(10,22)).count()
+
+        Analisis.objects.filter(id_paciente__in=query, fecha_analisis__range=('2024-10-24', '2024-10-24'), resultado='neumonia').count()
+
+        return self.context 
+
     
 class Logout(View):
     def get(self, request):

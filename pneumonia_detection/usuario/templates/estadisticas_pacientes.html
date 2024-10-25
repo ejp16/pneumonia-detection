@@ -10,14 +10,42 @@
             <canvas id="myChart"></canvas>
         </div>
         <div class="col-md-8 offset-md-2 chart-container">
-            <h1 class="text-center">Estadísticas de Pacientes por Rango de Edad</h1>
+            <div class="d-inline-block me-2 mb-2"> 
+                <form method="post">{% csrf_token %}
+                <h4>Seleccionar el Rango de Edad:</h4>
+                <label for="desde">Desde</label>
+                <input type="number" min="0" class="form-control"  name="edad_desde" />
+            </div>
+            <div class="d-inline-block me-2 mb-2">
+                <label for="hasta">Hasta</label>
+                <input type="number" min="0" class="form-control" name="edad_hasta"/>
+            </div>
+                <input type="submit" value="Evaluar">
+                </form>
+            <h1 class="text-center">Estadísticas de Pacientes por Rango de Edad: Desde {{edad_desde}} Hasta {{edad_hasta}} Años</h1>
             <canvas id="Chart"></canvas>
         </div>
+        <div class="col-md-8 offset-md-2 chart-container">
+            <div class="d-inline-block me-2 mb-2"> 
+                <form method="post">{% csrf_token %}
+                <h4>Seleccionar las fechas:</h4>
+                <label for="desde">Desde</label>
+                <input type="date" class="form-control"  name="desde" />
+            </div>
+            <div class="d-inline-block me-2 mb-2">
+                <label for="hasta">Hasta</label>
+                <input type="date" class="form-control" name="hasta"/>
+            </div>
+                <input type="submit" value="Evaluar">
+                </form>
+            <h1 class="text-center">Estadísticas de Resultados de Analisis segun Fecha: Desde {{desde}} Hasta {{hasta}}</h1>
+            <canvas id="Chart-fecha"></canvas>
+        </div>
     </div>
+
 </div>
 
     
-
 
 </body>
 {% endblock content %}
@@ -31,7 +59,7 @@
       data: {
           labels: ['Hombres', 'Mujeres'],
           datasets: [{
-              label: 'Sexo de los pacientes registrados',
+              label: ['Sexo de los pacientes registrados'],
               data: [{{hombres}}, {{mujeres}}],
               backgroundColor: [
                   'rgba(54, 162, 235, 0.8)',
@@ -48,7 +76,7 @@
           responsive: true,
           plugins: {
               legend: {
-                  position: 'top',
+                  display: false,
               },
               title: {
                   display: true,
@@ -63,7 +91,7 @@
                   beginAtZero: true,
                   ticks: {
                       callback: function(value) {
-                          return value + '%';
+                          return value;
                       }
                   }
               }
@@ -76,10 +104,57 @@
   new Chart(edad, {
       type: 'bar',
       data: {
-          labels: ['De 5 a 11', 'De 12 a 21'],
+          labels: ['Hombres', 'Mujeres'],
           datasets: [{
-              label: 'Edad en años de los pacientes',
-              data: [{{edades_5_10}}, {{edades_10_20}}],
+              label: 'Edad en años de los pacientes distribuido por sexo',
+              data: [{{edades_hombres}}, {{edades_mujeres}}],
+              backgroundColor: [
+                  'rgba(54, 162, 235, 0.8)', //Color azul
+                  'rgba(255, 99, 132, 0.8)' //Color naranja
+              ],
+              borderColor: [
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 99, 132, 0.8)' //Color naranja
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              legend: {
+                  display: false,
+              },
+              title: {
+                  display: true,
+                  text: 'Distribución de Edad de Pacientes Registrados',
+                  font: {
+                      size: 18
+                  }
+              }
+          },
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  ticks: {
+                      callback: function(value) {
+                          return value;
+                      }
+                  }
+              }
+          }
+      }
+  });
+////////////////////////////////////////////////
+      
+  const fechas = document.getElementById('Chart-fecha').getContext('2d');
+  new Chart(fechas, {
+      type: 'bar',
+      data: {
+          labels: ['Normal', 'Neumonia'],
+          datasets: [{
+              label: 'Resultados de los Pacientes Analizados',
+              data: [{{normal}}, {{neumonia}}],
               backgroundColor: [
                   'rgba(54, 162, 235, 0.8)', //Color azul
                   'rgba(54, 162, 235, 0.8)'
@@ -95,11 +170,11 @@
           responsive: true,
           plugins: {
               legend: {
-                  position: 'top',
+                display: false,
               },
               title: {
                   display: true,
-                  text: 'Distribución de Edad de Pacientes Registrados',
+                  text: 'Distribución de Resultados de Analisis en las Fechas Seleccionadas',
                   font: {
                       size: 18
                   }
@@ -110,16 +185,14 @@
                   beginAtZero: true,
                   ticks: {
                       callback: function(value) {
-                          return value + '%';
+                          return value;
                       }
                   }
               }
           }
       }
   });
-    
   
-
 
 </script>
 

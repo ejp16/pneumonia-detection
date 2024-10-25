@@ -43,7 +43,6 @@ class Paciente(models.Model):
     edad = models.IntegerField()
     fecha_nacimiento = models.DateField()
     registro = models.DateField(auto_now=True)
-    #id_medico = models.ForeignKey(User, on_delete=models.PROTECT, related_name='id_medico')
     id_usuario_paciente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='id_paciente')
 
 class RelacionMedicoPaciente(models.Model):
@@ -69,6 +68,7 @@ class Analisis(models.Model):
     id_imagen = models.ForeignKey(Imagen, on_delete=models.PROTECT)
     id_medico = models.ForeignKey(User, on_delete=models.PROTECT)
     id_paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT, null=True)
+    fecha_analisis = models.DateField(auto_now=True)
 
 class Informe(models.Model):
     motivo_consulta = models.CharField(max_length=255, )
