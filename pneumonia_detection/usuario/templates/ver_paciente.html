@@ -276,8 +276,15 @@
                 </svg>
                 Realizar nuevo informe
             </button></a>
-
-              </div>
+              </div>        
+              <div class="card-footer bg-transparent border-0 pb-4">
+                <a href="{% url 'descargar' pk=informe.id %}" target="_blank"><button class="btn btn-lg w-100 edit-button">
+                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14-4-4m4 4 4-4"/>
+                  </svg>
+                    Imprimir Informe
+                </button></a>
+                  </div>
           </div>
         
         {% endfor %}

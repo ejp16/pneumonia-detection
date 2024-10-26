@@ -7,15 +7,17 @@ from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
 from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm
-from .utils import Modelo, EnviarMail
+from .utils import Modelo, EnviarMail, render_to_pdf
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
-
+from django_xhtml2pdf.utils import generate_pdf
 from django.template.loader import render_to_string
-
+from django.template.loader import get_template
+from io import BytesIO
+from xhtml2pdf import pisa
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Medico').exists()
@@ -381,6 +383,24 @@ class EstadisticasView(MedicoUserMixin, View):
 
         return self.context 
 
+class DescargarInforme(View):
+    template_name = 'informe.html'
+    
+    def get(self, request, **kwargs):
+        template = get_template(self.template_name)
+        id_informe = kwargs['pk']
+        informe = Informe.objects.get(id = id_informe)
+        context = {
+            'id': id_informe,
+            'motivo_consulta': informe.motivo_consulta,
+            'observaciones': informe.observaciones,
+            'recomendaciones': informe.recomendaciones,
+            'medicacion': informe.medicacion,
+            'fecha_consulta': informe.fecha_consulta
+        }
+
+        pdf = render_to_pdf(self.template_name, context)
+        return HttpResponse(pdf, content_type='application/pdf')
     
 class Logout(View):
     def get(self, request):

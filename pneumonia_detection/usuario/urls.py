@@ -15,6 +15,7 @@ urlpatterns = [
     path('editar_antecedentes/<int:pk>', views.EditarAntecedentes.as_view(), name='editar_antecedentes'),
     path('registrar_analisis/<int:pk>', views.RegistrarAnalisis.as_view(), name='registrar_analisis'),
     path('registrar_informe/<int:pk>', views.RegistrarInforme.as_view(), name='registrar_informe'),
+    path('descargar/<int:pk>', views.DescargarInforme.as_view(), name='descargar'),
 
     path('mis_informes/<int:pk_paciente>/<int:pk_medico>', views.MisInformes.as_view(), name='mis_informes'),
 

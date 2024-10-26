@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos de la Consulta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .field h2 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .field p {
+            margin: 0;
+            color: #666;
+        }
+        p{
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Datos de la Consulta. Informe N: {{ id }}</h1>
+        </div>
+        <div class="content">
+            <div class="field">
+                <h2>Motivo de consulta</h2>
+                <p>{{ motivo_consulta }}</p>
+            </div>
+            <div class="field">
+                <h2>Observaciones</h2>
+                <p>{{ observaciones }}</p>
+            </div>
+            <div class="field">
+                <h2>Recomendaciones</h2>
+                <p>{{ recomendaciones }}</p>
+            </div>
+            <div class="field">
+                <h2>Medicación</h2>
+                <p>{{ medicacion }}</p>
+            </div>
+            <div class="field">
+                <h2>Fecha de consulta</h2>
+                <p>{{ fecha_consulta }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
