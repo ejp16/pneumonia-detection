@@ -141,7 +141,7 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
             'password': clave
         }
 
-        mail = EnviarMail(context=context, recipient=form.email)
+        mail = EnviarMail(context=context, recipient=paciente.email)
         mail.enviar()
         return redirect('index_medico',)
 
