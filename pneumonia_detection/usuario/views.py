@@ -18,6 +18,7 @@ from django.template.loader import render_to_string
 from django.template.loader import get_template
 from io import BytesIO
 from xhtml2pdf import pisa
+import time
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Medico').exists()
