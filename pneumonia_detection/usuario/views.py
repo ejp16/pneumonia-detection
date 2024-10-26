@@ -384,7 +384,7 @@ class EstadisticasView(MedicoUserMixin, View):
         return self.context 
 
 class DescargarInforme(View):
-    template_name = 'informe.html'
+    template_name = 'pdf_informe.html'
     
     def get(self, request, **kwargs):
         template = get_template(self.template_name)
