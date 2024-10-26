@@ -104,7 +104,6 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         paciente = form_class.save(commit=False)
         user = self.request.user
         clave = get_random_string(8) #genera la clave del paciente
-        print(f'CLAVE DEL PACIENTE: {clave}')
         
         user_paciente = User.objects.filter(email=paciente.email).first() #Verifica si el email ingresado ya esta en uso por un Usuario
         if user_paciente:
@@ -141,7 +140,7 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
             'password': clave
         }
 
-        mail = EnviarMail(context=context, recipient=form.email)
+        mail = EnviarMail(context=context, recipient=paciente.email)
         mail.enviar()
         return redirect('index_medico',)
 
