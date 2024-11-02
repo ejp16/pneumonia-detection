@@ -162,8 +162,8 @@ class VerPaciente(MedicoUserMixin, View):
             antecedentes = AntecedentesPaciente.objects.filter(id_paciente = relacion_paciente.id_paciente)
             analisis = Analisis.objects.filter(id_paciente = relacion_paciente.id_paciente).select_related('id_imagen').all()
             informes = Informe.objects.filter(id_paciente = relacion_paciente.id_paciente).all()
-            antecedentesID = AntecedentesID.objects.all()
-            lista_antecedentes = list(zip(antecedentesID, antecedentes))
+            antecedentesID = ["Médicos", "Quirúrgicos", "Alergológicos", "Cardiovasculares", "Sociales", "Familiares", "Vacunación"]
+            lista_antecedentes = zip(antecedentesID, antecedentes)
             return render(request, self.template_name, {'relacion_paciente': relacion_paciente, 'antecedentes': lista_antecedentes, 'analisis': analisis, 'informes': informes})
         else:
             return redirect('index_medico')
