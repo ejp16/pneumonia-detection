@@ -18,11 +18,11 @@ from django.http import HttpResponse
 
 class Modelo:
     def __init__(self, imagen):
-        self.imagen = 'C:/Users/usuario/Desktop/Eduardo/sistema_tesis/pneumonia_detection'+imagen
+        self.imagen = '../pneumonia_detection'+imagen
         self.prob = 0
         self.clase = ''
     def prediccion(self):
-        modelo = load_model('C:/Users/usuario/Desktop/Eduardo/sistema_tesis/pneumonia_detection/modelo.keras')
+        modelo = load_model('modelo.keras')
         carga = cv2.resize(cv2.imread(self.imagen, 3), (160,160))
         carga = carga.reshape((160, 160, 3))
         prediccion = modelo.predict(carga)
