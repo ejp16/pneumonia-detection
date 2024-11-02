@@ -1,5 +1,5 @@
 env
 .env
+.python-version
 pneumonia_detection/media
 pneumonia_detection/usuario/migrations
-.python-version

@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email']
 
     def __str__(self):
-        return self.username
+        return f"Username: {self.username} Email: {self.email}"
     
 class Paciente(models.Model):
     nombre = models.CharField(max_length=40, )
@@ -51,6 +51,9 @@ class RelacionMedicoPaciente(models.Model):
 
 class AntecedentesID(models.Model):
     tipo_antecedente = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.tipo_antecedente
 
 class AntecedentesPaciente(models.Model):
     id_antecedentesID = models.ForeignKey(AntecedentesID, on_delete=models.PROTECT)

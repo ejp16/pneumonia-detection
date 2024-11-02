@@ -1,3 +1,5 @@
 from django.contrib import admin
+from usuario.models import AntecedentesID, User
 
-# Register your models here.
+admin.site.register(AntecedentesID)
+admin.site.register(User)
