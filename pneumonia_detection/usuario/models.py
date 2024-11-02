@@ -17,8 +17,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=150, unique=False)  # Permitir duplicados
-    email = models.EmailField(unique=True)  # Asegurarte de que los correos sean únicos
+    username = models.CharField(max_length=150, unique=False)  
+    email = models.EmailField(unique=True)  
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)

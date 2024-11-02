@@ -368,6 +368,7 @@ class EstadisticasView(MedicoUserMixin, View):
         context['neumonia'] = neumonia
         context['desde'] = desde
         context['hasta'] = hasta
+        
         return render(request, self.template_name, context=context)
 
 
@@ -379,15 +380,12 @@ class EstadisticasView(MedicoUserMixin, View):
         self.context['edades_5_10'] = Paciente.objects.filter(id__in=query, edad__range=(4,11)).count()
         self.context['edades_10_20'] = Paciente.objects.filter(id__in=query, edad__range=(10,22)).count()
 
-        Analisis.objects.filter(id_paciente__in=query, fecha_analisis__range=('2024-10-24', '2024-10-24'), resultado='neumonia').count()
-
         return self.context 
 
 class DescargarInforme(View):
     template_name = 'pdf_informe.html'
     
     def get(self, request, **kwargs):
-        template = get_template(self.template_name)
         id_informe = kwargs['pk']
         informe = Informe.objects.get(id = id_informe)
         context = {

@@ -13,7 +13,7 @@ class FormRegistro(BaseUserCreationForm):
 
     
     username = forms.CharField(label='Nombre', min_length=12, max_length=28, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(required=True, label='Correo electronico', max_length=24, min_length=15, widget=forms.EmailInput(
+    email = forms.EmailField(required=True, label='Correo electronico', max_length=40, min_length=11, widget=forms.EmailInput(
         attrs={'class': 'form-control'}
     ))
 
