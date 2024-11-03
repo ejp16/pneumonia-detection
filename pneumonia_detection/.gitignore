@@ -1,0 +1,4 @@
+env
+.env
+pneumonia_detection/media
+media/radiografias
