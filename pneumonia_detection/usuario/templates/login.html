@@ -21,7 +21,7 @@
       <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="{% url 'index_medico' %}"><i class="bi bi-house-door"></i> Inicio</a>
+                  <a class="nav-link active" aria-current="page" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
               </li>
       </div>
   </div>
@@ -59,6 +59,9 @@
           </div>
           <div class="text-center mt-3">
             <a href="{% url 'reset_password' %}" class="enlace-recuperar">Recuperar contraseña</a>
+          </div>
+          <div class="text-center mt-3">
+            <a href="{% url 'register' %}" class="enlace-recuperar">Registrarse</a>
           </div>
         </form>
       </div>

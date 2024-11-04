@@ -2,3 +2,5 @@ env
 .env
 pneumonia_detection/media
 media/radiografias
+Dockerfile
+.dockerignore

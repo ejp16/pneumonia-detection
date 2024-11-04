@@ -23,7 +23,7 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('inicio/', views.InicioView.as_view(),),
+    path('inicio/', views.InicioView.as_view(), name='inicio'),
     path('usuario/', include('usuario.urls'))
 ]
 
