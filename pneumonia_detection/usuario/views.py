@@ -21,13 +21,11 @@ from xhtml2pdf import pisa
 
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
-        if self.request.user.groups.filter(name='Medico').exists():
-            return redirect('inicio')
+        return self.request.user.groups.filter(name='Medico').exists()
 
 class PacienteUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
-        if self.request.user.groups.filter(name='Paciente').exists():
-            return redirect('inicio')
+        return self.request.user.groups.filter(name='Paciente').exists()
 
 class RegistroView(CreateView):
     template_name = 'registro.html'
@@ -159,13 +157,16 @@ class VerPaciente(MedicoUserMixin, View):
         id_paciente = kwargs['pk']
         user_medico = self.request.user
         relacion_paciente = RelacionMedicoPaciente.objects.get(id_medico=user_medico.id, id_paciente=id_paciente)
-        print(relacion_paciente)
         if relacion_paciente:
-            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = relacion_paciente.id_paciente)
             analisis = Analisis.objects.filter(id_paciente = relacion_paciente.id_paciente).select_related('id_imagen').all()
             informes = Informe.objects.filter(id_paciente = relacion_paciente.id_paciente).all()
-            antecedentesID = ["Médicos", "Quirúrgicos", "Alergológicos", "Cardiovasculares", "Sociales", "Familiares", "Vacunación"]
-            lista_antecedentes = zip(antecedentesID, antecedentes)
+            antecedentes = AntecedentesPaciente.objects.filter(id_paciente = relacion_paciente.id_paciente)
+            lista_antecedentes = None
+            print(antecedentes)
+            print(bool(antecedentes))
+            if antecedentes:
+                antecedentesID = ["Médicos", "Quirúrgicos", "Alergológicos", "Cardiovasculares", "Sociales", "Familiares", "Vacunación"]
+                lista_antecedentes = zip(antecedentesID, antecedentes)
             return render(request, self.template_name, {'relacion_paciente': relacion_paciente, 'antecedentes': lista_antecedentes, 'analisis': analisis, 'informes': informes})
         else:
             return redirect('index_medico')
