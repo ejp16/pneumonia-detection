@@ -2,6 +2,7 @@ from django import forms
 from usuario.models import Paciente, Informe, AntecedentesPaciente, User
 from django.contrib.auth.forms import UserCreationForm, BaseUserCreationForm
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 class FormRegistro(BaseUserCreationForm):
     class Meta:
         model = User
@@ -54,7 +55,7 @@ class FormRegistrarPaciente(forms.ModelForm):
 
     nombre = forms.CharField(label='Nombre', required=True, max_length=40, widget=forms.TextInput(attrs={'class': 'form-control',}))
     apellido = forms.CharField(label='Apellido', required=True, max_length=40, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    cedula = forms.CharField(label='Cedula', required=True, max_length=12, widget=forms.TextInput(attrs={'class': 'form-control',}))
+    cedula = forms.CharField(label='Cedula', required=True, max_length=12, validators=[RegexValidator('[+-/%]', inverse_match=True)], widget=forms.TextInput(attrs={'class': 'form-control',}))
     sexo = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-select'}))
     peso = forms.CharField(label='Peso en Kg', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
     altura = forms.CharField(label='Altura en cm', required=True, widget=forms.TextInput(attrs={'class': 'form-control',}))
