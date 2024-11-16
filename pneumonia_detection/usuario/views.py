@@ -9,15 +9,9 @@ from django.contrib import messages
 from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm
 from .utils import Modelo, EnviarMail, render_to_pdf
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django_xhtml2pdf.utils import generate_pdf
-from django.template.loader import render_to_string
-from django.template.loader import get_template
-from io import BytesIO
-from xhtml2pdf import pisa
 
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
@@ -105,7 +99,7 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         paciente = form_class.save(commit=False)
         user = self.request.user
         clave = get_random_string(8) #genera la clave del paciente
-        
+        paciente_exist = Paciente.objects.filter(cedula=paciente.cedula)
         user_paciente = User.objects.filter(email=paciente.email).first() #Verifica si el email ingresado ya esta en uso por un Usuario
         if user_paciente:
             #Si esta en uso, crear registro en la tabla Paciente y asignar el id_usuario_paciente al Usuario ligado a ese correo

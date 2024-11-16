@@ -4,3 +4,5 @@ pneumonia_detection/media
 media/radiografias
 Dockerfile
 .dockerignore
+../.python-version
+.python-version

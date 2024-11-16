@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- Fondo circular -->
+  <circle cx="50" cy="50" r="48" fill="#E6F3FF" />
+
+  <!-- Forma de pulmón estilizada -->
+  <path
+    d="M30 30 Q50 20 70 30 Q80 40 80 55 Q80 70 65 80 Q50 85 35 80 Q20 70 20 55 Q20 40 30 30"
+    fill="#4A90E2"
+    opacity="0.7"
+  />
+
+  <!-- Red neuronal estilizada -->
+  <g>
+    <circle cx="40" cy="40" r="3" fill="white" />
+    <circle cx="60" cy="40" r="3" fill="white" />
+    <circle cx="50" cy="55" r="3" fill="white" />
+    <circle cx="35" cy="70" r="3" fill="white" />
+    <circle cx="65" cy="70" r="3" fill="white" />
+    <line x1="40" y1="40" x2="60" y2="40" stroke="white" stroke-width="1" />
+    <line x1="40" y1="40" x2="50" y2="55" stroke="white" stroke-width="1" />
+    <line x1="60" y1="40" x2="50" y2="55" stroke="white" stroke-width="1" />
+    <line x1="50" y1="55" x2="35" y2="70" stroke="white" stroke-width="1" />
+    <line x1="50" y1="55" x2="65" y2="70" stroke="white" stroke-width="1" />
+  </g>
+
+  <!-- Texto "Neumonet" -->
+  <text
+    x="50"
+    y="95"
+    text-anchor="middle"
+    font-size="12"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#2C3E50"
+  >
+    NEUMONET
+  </text>
+</svg>
