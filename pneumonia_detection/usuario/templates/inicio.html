@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,17 +19,6 @@
             padding: 100px 0;
             position: relative;
             overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('https://uxwjxqhqhgxhqhqhqhq.supabase.co/storage/v1/object/public/images/particles.png') repeat;
-            animation: slide 20s linear infinite;
-            opacity: 0.1;
         }
         @keyframes slide {
             from { transform: translateY(0); }
@@ -85,9 +75,14 @@
             background: #ff6b6b;
         }
     </style>
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'neumonet-logo.ico' %}"/>
+
+    <title>Neumonet</title>
 </head>
 <body>
     <header class="hero">
+        <img src="" alt="">
         <div class="container text-center position-relative">
             <h1 class="display-3 fw-bold mb-4">Sistema de detección</h1>
             <p class="lead mb-5">Descubre nuestro innovador sistema de detección</p>
@@ -137,15 +132,15 @@
                 <h2 class="text-center mb-5">¿Cómo funciona?</h2>
                 <div class="row align-items-center">
                     <div class="col-md-6 mb-4">
-                        <img src="https://uxwjxqhqhgxhqhqhqhq.supabase.co/storage/v1/object/public/images/detection-system.svg" alt="Sistema de detección" class="img-fluid rounded shadow">
+                        <img src="{% static 'neumonet-logo.svg' %}" alt="Sistema de detección" class="img-fluid rounded shadow">
                     </div>
                     <div class="col-md-6">
                         <p class="lead">
-                            La red neuronal convolucional con precision del 94% y la IA de Gemini trabajaran en conjunto para proporcionarle apoyo en el diagnostico de neumonia en imagenes radiograficas de torax. 
+                            La <b>red neuronal convolucional</b> con <b>precisión del 94%</b> y la <b>IA de Gemini</b> trabajaran en conjunto para proporcionarle apoyo en la <b>detección de neumonía en imágenes radiográficas de tórax.</b>
                             <br>
-                            El sistema tambien le ofrece la posibilidad de registrar informes, en donde podra registrar todos los datos referentes a la consulta con su paciente.
+                            El sistema también le ofrece la posibilidad de registrar informes, en donde podrá registrar todos los datos referentes a la consulta con su paciente.
                             <br>
-                            A los pacientes se les enviara un correo con la contraseña para que puedan ingresar al sistema y ver el resultado de los analisis y los informes realizados. 
+                            A los pacientes se les enviara un correo con la contraseña para que puedan ingresar al sistema y ver el resultado de los análisis y los informes realizados. 
                         </p>
                         <ul class="list-unstyled">
                             <li><i class="fas fa-check-circle text-success me-2"></i> Detección en tiempo real</li>

@@ -44,6 +44,7 @@ class FormRegistrarPaciente(forms.ModelForm):
             'telefono', 
             'email',
             'direccion',
+            'edad',
             'fecha_nacimiento',
             ]
     
@@ -63,6 +64,7 @@ class FormRegistrarPaciente(forms.ModelForm):
         attrs={'class': 'form-control'}
     ))
     direccion = forms.CharField(required=True, max_length=255, widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
+    edad = forms.IntegerField(label='Peso en Kg', min_value=0, required=True, widget=forms.NumberInput(attrs={'class': 'form-control',}))
     fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
 class AntecedentesForm(forms.Form):
@@ -92,3 +94,5 @@ class InformeForm(forms.ModelForm):
     recomendaciones = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
     medicacion = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
 
+class ImagenForm(forms.Form):
+    image_field = forms.ImageField(required=True,)

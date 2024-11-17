@@ -7,10 +7,18 @@
         {% bootstrap_javascript %}
         {% load static %}
     
-        <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+  <link rel="shortcut icon" type="image/png" href="{% static 'neumonet-logo.ico' %}"/>
+
+  <title>Neumonet</title>
 
     
 </head>
+
+
+<body>
+
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
@@ -55,7 +63,7 @@
             {{ form.password }}
           </div>
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
           </div>
           <div class="text-center mt-3">
             <a href="{% url 'reset_password' %}" class="enlace-recuperar">Recuperar contraseña</a>
@@ -82,5 +90,7 @@
        }
     }, 3000);
 </script>
+
+</body>
 
 </html>

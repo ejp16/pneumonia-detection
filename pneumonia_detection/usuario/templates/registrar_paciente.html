@@ -31,66 +31,70 @@
     {% csrf_token %}
 
     
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 form-container">
-            <h2 class="form-title">Registro de Paciente</h2>
-            <form>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        {{ form.nombre }}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 form-container">
+                <h2 class="form-title">Registro de Paciente</h2>
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            {{ form.nombre }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            {{ form.apellido }}
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="apellido" class="form-label">Apellido</label>
-                        {{ form.apellido }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="cedula" class="form-label">Cédula</label>
+                            {{ form.cedula }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edad" class="form-label">Edad</label>
+                            {{ form.edad }}
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <label for="cedula" class="form-label">Cédula</label>
-                        {{ form.cedula }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="peso" class="form-label">Peso (Kg)</label>
+                            {{ form.peso }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="altura" class="form-label">Altura (cm)</label>
+                            {{ form.altura }}
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="peso" class="form-label">Peso (Kg)</label>
-                        {{ form.peso }}
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        {{ form.telefono }}
                     </div>
-                    <div class="col-md-6">
-                        <label for="altura" class="form-label">Altura (cm)</label>
-                        {{ form.altura }}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        {{ form.email }}
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="telefono" class="form-label">Teléfono</label>
-                    {{ form.telefono }}
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico</label>
-                    {{ form.email }}
-                </div>
-                <div class="mb-3">
-                    <label for="direccion" class="form-label">Dirección</label>
-                    {{ form.direccion }}
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                        {{form.fecha_nacimiento}}
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        {{ form.direccion }}
                     </div>
-                    <div class="col-md-6">
-                        <label for="sexo" class="form-label">Sexo</label>
-                        {{form.sexo}}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                            {{form.fecha_nacimiento}}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sexo" class="form-label">Sexo</label>
+                            {{form.sexo}}
+                        </div>
                     </div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-submit">Registrar Paciente</button>
-                </div>
-            </form>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-submit">Registrar Paciente</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
     
 </form>
 </body>

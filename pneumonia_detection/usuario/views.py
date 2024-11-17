@@ -6,13 +6,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
-from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm
+from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm, ImagenForm
 from .utils import Modelo, EnviarMail, render_to_pdf
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
-
+import datetime
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Medico').exists()
@@ -99,7 +99,6 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         paciente = form_class.save(commit=False)
         user = self.request.user
         clave = get_random_string(8) #genera la clave del paciente
-        paciente_exist = Paciente.objects.filter(cedula=paciente.cedula)
         user_paciente = User.objects.filter(email=paciente.email).first() #Verifica si el email ingresado ya esta en uso por un Usuario
         if user_paciente:
             #Si esta en uso, crear registro en la tabla Paciente y asignar el id_usuario_paciente al Usuario ligado a ese correo
@@ -172,7 +171,7 @@ class EditarPaciente(MedicoUserMixin, UpdateView):
     pk_url_kwarg = 'pk'
     
     def form_valid(self, form_class):
-        form = form_class.save()
+        form = form_class.save(commit=False)
         pk = form.id_usuario_paciente_id
         user_paciente = User.objects.get(id = pk)
         user_paciente.email = form.email
@@ -223,18 +222,21 @@ class RegistrarAntecedentes(MedicoUserMixin, FormView):
 
 class RegistrarAnalisis(MedicoUserMixin, FormView):
     template_name = 'registrar_analisis.html'
+    form_class = ImagenForm
+
     def get(self, request, **kwargs):
         id_paciente = kwargs['pk']
         paciente = Paciente.objects.get(id=id_paciente)
-        return render(request, self.template_name, {'paciente': paciente}) 
-
-    def post(self, request, **kwargs):
-        imagen = request.FILES['radiografia']
-        id_paciente = request.POST.get('pk')
+        form = self.form_class
+        return render(request, self.template_name, {'paciente': paciente, 'form': form}) 
+    
+    def form_valid(self, form):
+        imagen = form.cleaned_data.get('image_field')
+        id_paciente = self.request.POST.get('pk')
         paciente = Paciente.objects.get(id=id_paciente)
         antecedentes = list(AntecedentesPaciente.objects.filter(id_paciente = paciente.id).order_by('-id_antecedentesID'))
         if not antecedentes: 
-            messages.warning(request, 'Debe registrar los antecedentes del paciente antes de usar la red neuronal')
+            messages.warning(self.request, 'Debe registrar los antecedentes del paciente antes de usar la red neuronal')
             return redirect('registrar_analisis', pk=id_paciente)
         try:
             img = Imagen.objects.create(imagen = imagen, id_paciente=paciente)
@@ -252,12 +254,12 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
                 probabilidad=prediccion['probabilidad'],
                 recomendaciones=recomendacion,
                 id_imagen=img,
-                id_medico=request.user,
+                id_medico=self.request.user,
                 id_paciente=paciente
             )
             return redirect('ver_paciente', pk=id_paciente)
         except:
-            messages.error(request, 'Ocurrio un error, intentalo denuevo')
+            messages.error(self.request, 'Ocurrio un error, intentalo denuevo')
             return redirect('registrar_analisis', pk=id_paciente)
 
 class RegistrarInforme(MedicoUserMixin, FormView):
@@ -400,5 +402,5 @@ class DescargarInforme(View):
 class Logout(View):
     def get(self, request):
         logout(request)
-        return redirect('login')
+        return redirect('inicio')
 
