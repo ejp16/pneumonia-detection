@@ -3,6 +3,7 @@ from usuario.models import Paciente, Informe, AntecedentesPaciente, User
 from django.contrib.auth.forms import UserCreationForm, BaseUserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+import datetime
 class FormRegistro(BaseUserCreationForm):
     class Meta:
         model = User
@@ -44,7 +45,6 @@ class FormRegistrarPaciente(forms.ModelForm):
             'telefono', 
             'email',
             'direccion',
-            'edad',
             'fecha_nacimiento',
             ]
     
@@ -57,15 +57,14 @@ class FormRegistrarPaciente(forms.ModelForm):
     apellido = forms.CharField(label='Apellido', required=True, max_length=40, validators=[RegexValidator('[0-9+-/%]', inverse_match=True)], widget=forms.TextInput(attrs={'class': 'form-control',}))
     cedula = forms.CharField(label='Cedula', required=True, max_length=12, validators=[RegexValidator('[a-z+-/%]', inverse_match=True)], widget=forms.TextInput(attrs={'class': 'form-control',}))
     sexo = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-select'}))
-    peso = forms.IntegerField(label='Peso en Kg', min_value=0, required=True, widget=forms.NumberInput(attrs={'class': 'form-control',}))
+    peso = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control',}))
     altura = forms.IntegerField(label='Altura en cm', required=True, widget=forms.NumberInput(attrs={'class': 'form-control',}))
-    telefono = forms.CharField(label='Telefono', required=True, max_length=16, validators=[RegexValidator('[a-z+-/%-]', inverse_match=True)], widget=forms.TextInput(attrs={'class': 'form-control', }))
+    telefono = forms.CharField(label='Telefono', required=True, max_length=16, validators=[RegexValidator('[a-z+-/%-]', inverse_match=True, message='Usar solo numeros en este campo')], widget=forms.TextInput(attrs={'class': 'form-control', }))
     email = forms.EmailField(required=True, label='Correo electronico', widget=forms.EmailInput(
         attrs={'class': 'form-control'}
     ))
     direccion = forms.CharField(required=True, max_length=255, widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    edad = forms.IntegerField(label='Peso en Kg', min_value=0, required=True, widget=forms.NumberInput(attrs={'class': 'form-control',}))
-    fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'max': datetime.datetime.now().date()}),)
 
 class AntecedentesForm(forms.Form):
     

@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
-import datetime
+from datetime import datetime
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Medico').exists()
@@ -100,6 +100,11 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         user = self.request.user
         clave = get_random_string(8) #genera la clave del paciente
         user_paciente = User.objects.filter(email=paciente.email).first() #Verifica si el email ingresado ya esta en uso por un Usuario
+
+        #Calcular la edad del paciente
+        edad = datetime.now().date() - paciente.fecha_nacimiento
+        paciente.edad = edad.days//365
+        
         if user_paciente:
             #Si esta en uso, crear registro en la tabla Paciente y asignar el id_usuario_paciente al Usuario ligado a ese correo
             paciente.id_usuario_paciente = user_paciente
@@ -141,7 +146,7 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
-        response
+        return response
    
 
 class VerPaciente(MedicoUserMixin, View):
