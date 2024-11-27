@@ -297,7 +297,7 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
         paciente = Paciente.objects.get(id=id_paciente)
         id = kwargs['pk']
         data = list(AntecedentesPaciente.objects.filter(id_paciente = id).order_by('-id_antecedentesID'))
-        antecedentesIds = list(AntecedentesID.objects.all())
+        antecedentesIds = list(AntecedentesID.objects.all().order_by('-id'))
         initial_data = {}
         for index in range(len(data)):
             initial_data[antecedentesIds[index].tipo_antecedente.lower()] = data[index].antecedente_descrip
@@ -321,12 +321,60 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
                 form.cleaned_data['vacunacion']
             ]
             for indice, descrip in enumerate(antecedentes_paciente):
-                descrip.antecedente_descrip = antecedente_descrip=data[indice]
+                descrip.antecedente_descrip = data[indice]
                 descrip.save()
             return redirect('ver_paciente', pk=id_paciente)
         
         else:
             return redirect('index_paciente', pk=id_paciente)
+        
+class DuplicarHistoria(MedicoUserMixin, TemplateView):
+    template_name = 'duplicar_historia.html'
+
+    def get(self, request, **kwargs):
+        id_paciente = kwargs['pk']
+        user_medico = request.user.id
+        relacion_paciente = RelacionMedicoPaciente.objects.get(id_medico=user_medico, id_paciente=id_paciente)
+        if relacion_paciente:
+            return render(request, self.template_name, {'paciente_id': id_paciente})
+        return redirect('login')
+    
+    def post(self, request, **kwargs):
+        id_paciente = request.POST.get('pk')
+        datos_paciente = Paciente.objects.get(id=id_paciente)
+        antecedentes = list(AntecedentesPaciente.objects.filter(id_paciente=id_paciente).all())
+        if not antecedentes:
+            messages.warning(self.request, 'Debe registrar los antecedentes del paciente antes de duplicar la historia')
+            return redirect('ver_paciente', pk=id_paciente)
+        paciente = Paciente(
+            nombre = datos_paciente.nombre,
+            apellido = datos_paciente.apellido,
+            cedula = datos_paciente.cedula,
+            sexo = datos_paciente.sexo,
+            peso = datos_paciente.sexo,
+            altura = datos_paciente.altura,
+            telefono = datos_paciente.telefono,
+            email = datos_paciente.email,
+            direccion = datos_paciente.direccion,
+            edad = datos_paciente.edad,
+            fecha_nacimiento = datos_paciente.fecha_nacimiento,
+            registro = datetime.now().date(),
+            id_usuario_paciente = datos_paciente.id_usuario_paciente
+        )
+
+        paciente.save()
+
+        antecedentesID = list(AntecedentesID.objects.all())
+        for i in range(len(antecedentesID)):
+            AntecedentesPaciente.objects.create(
+                id_antecedentesID = antecedentesID[i],
+                antecedente_descrip = antecedentes[i].antecedente_descrip,
+                id_paciente = paciente
+            )
+
+        RelacionMedicoPaciente.objects.create(id_medico=request.user, id_paciente=paciente)
+
+        return redirect('ver_paciente', pk=paciente.id)
 
 class BusquedaView(MedicoUserMixin, ListView):
     model = Paciente
