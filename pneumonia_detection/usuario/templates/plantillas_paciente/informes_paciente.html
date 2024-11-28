@@ -4,61 +4,66 @@
 
 
 
-    {% if analisis %}
+{% if analisis %}
+
+<div class="container mt-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Resultados del Análisis</h3>
+      </div>
+      
+      <div class="card-body">
+
+    {% for item in analisis %}
+
     
-            {% for item in analisis %}  
-            <div class="container mt-5">
-                <div class="card">
-                  <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Resultados del Análisis</h3>
-                  </div>
-                  
-                  <div class="card-body">
-    
-            
-                <div class="row g-4">
-                  <div class="col-md-6">
-                    <div class="analysis-info">
-                      <strong>Número de Análisis:</strong>
-                      <div class="info-content mt-2">{{ item.id }}</div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="analysis-info">
-                      <strong>Resultado de la Red Neuronal: </strong>
-                      <div class="info-content mt-2">{{ item.resultado }}</div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="analysis-info">
-                      <strong>Probabilidad: </strong>
-                      <div class="info-content mt-2">{{ item.probabilidad }}</div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="analysis-info">
-                      <strong>Recomendaciones: </strong>
-                      <div class="info-content recommendations mt-2">
-                        {{ item.recomendaciones }}
-                      </div>
-                    </div>
-                  </div>
-    
-    
-                    <div class="row">
-                        <div class="col-lg-8 col-md-10 mx-auto">
-                            <div class="card custom-card">
-                                <div class="card-img-container">
-                                    <img src="{{ item.id_imagen.imagen.url }}" alt="Imagen de análisis" class="card-img-top">
-                                    <div class="card-img-overlay">
-                                        <p class="card-text" id="n-analisis">Numero de Analisis: {{ item.id }}</p>
-                                    </div>
-                                </div>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="analysis-info">
+              <strong>Número de Análisis:</strong>
+              <div class="info-content mt-2">{{ item.id }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="analysis-info">
+              <strong>Resultado de la Red Neuronal: </strong>
+              <div class="info-content mt-2">{{ item.resultado }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="analysis-info">
+              <strong>Probabilidad: </strong>
+              <div class="info-content mt-2">{{ item.probabilidad }}</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="analysis-info">
+              <strong>Recomendaciones: </strong>
+              <div class="info-content recommendations mt-2">
+                {{ item.recomendaciones }}
+              </div>
+            </div>
+          </div>
+
+
+          <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="card custom-card">
+                        <div class="card-img-container">
+                            <img src="{{ item.id_imagen.imagen.url }}" alt="Imagen de análisis" class="card-img-top">
+                            <div class="card-img-overlay">
+                                <p class="card-text" id="n-analisis">Numero de Análisis: {{ item.id }}</p>
                             </div>
                         </div>
                     </div>
-            
-            {% endfor %}
+                </div>
+            </div>
+        </div>
+          
+
+    {% endfor %}
+
 
     {% else %}
 
@@ -66,7 +71,7 @@
             <div class="medical-record-section">
                 <p class="medical-record-info">
                     <i class="fas fa-history medical-record-icon"></i>
-                    Su medico no ha realizado analisis en el sistema
+                    Su médico no ha realizado análisis en el sistema
                 </p>
             </div>
         </div>
@@ -128,7 +133,7 @@
             <div class="medical-record-section">
                 <p class="medical-record-info">
                     <i class="fas fa-history medical-record-icon"></i>
-                    Su medico no ha subido informes
+                    Su médico no ha subido informes
                 </p>
             </div>
         </div>

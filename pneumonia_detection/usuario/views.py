@@ -13,19 +13,23 @@ from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import datetime
+
+#Validar que el usuario que ingresa a la ruta es un medico
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Medico').exists()
 
+#Validar que el usuario que ingresa a la ruta es un paciente
 class PacienteUserMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Paciente').exists()
 
+#Vista para el registro del medico
 class RegistroView(CreateView):
-    template_name = 'registro.html'
-    form_class = FormRegistro
-    success_url = '/usuario/login'
-    model = User
+    template_name = 'registro.html' #Plantilla
+    form_class = FormRegistro #Formulario de registro
+    success_url = '/usuario/login' #Ruta a la que se redirige el usuario si el formulario es valido
+    model = User 
     def form_valid(self, form_class):
         user = form_class.save(commit=False)
         group = Group.objects.get(name='Medico')
@@ -33,16 +37,17 @@ class RegistroView(CreateView):
         user.groups.add(group)
         
         return redirect('login')
-        
+
+#Vista para iniciar sesion
 class LoginView(View):
-    template_name = "login.html"
-    form_class = LoginForm()
+    template_name = "login.html" #Platilla
+    form_class = LoginForm() #Formulario de login 
     def get(self, request):
         return render(request, self.template_name, {'form': self.form_class})
 
     def post(self, request):
-        form = LoginForm(request.POST)
-        if form.is_valid():
+        form = LoginForm(request.POST) #Carga el formulario con los datos ingresados
+        if form.is_valid(): #Verificar si es valido
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = EmailBackend.authenticate(self, request=request, email=email, password=password)
@@ -55,18 +60,21 @@ class LoginView(View):
             else:
                 messages.warning(request, 'Correo o contraseña incorrectos')
             return redirect('login')
+        return redirect('login')
 
+#Vista de inicio del medico 
 class IndexMedicoView(MedicoUserMixin, ListView):
-    template_name = 'index_medico.html'
+    template_name = 'plantillas_medico/index_medico.html'
     model = Paciente
     context_object_name = 'pacientes'
 
     def get_queryset(self):
         relacion = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
         return Paciente.objects.filter(id__in=relacion).all()
-    
+
+ #Vista de inicio del paciente   
 class IndexPaciente(PacienteUserMixin, ListView):
-    template_name = 'index_paciente.html'
+    template_name = 'plantillas_paciente/index_paciente.html'
     model = Paciente
     paginate_by = 20
     def get_context_data(self, **kwargs) -> dict[str, any]:
@@ -76,8 +84,9 @@ class IndexPaciente(PacienteUserMixin, ListView):
         context['items'] = list(zip(medicos, pacientes))
         return context
 
+#Vista de revision de informes por parte del paciente
 class MisInformes(PacienteUserMixin, TemplateView):
-    template_name = 'informes_paciente.html'
+    template_name = 'plantillas_paciente/informes_paciente.html'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -88,7 +97,7 @@ class MisInformes(PacienteUserMixin, TemplateView):
         return self.render_to_response(context)
 
 class RegistrarPacienteView(MedicoUserMixin, CreateView):
-    template_name = 'registrar_paciente.html'
+    template_name = 'plantillas_medico/registrar_paciente.html'
     form_class = FormRegistrarPaciente
     success_url = 'usuario/index_medico'
     model = Paciente
@@ -148,9 +157,9 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         response = super().form_invalid(form)
         return response
    
-
+#Vista del medico para ver la informacion y analisis de un paciente
 class VerPaciente(MedicoUserMixin, View):
-    template_name = 'ver_paciente.html'
+    template_name = 'plantillas_medico/ver_paciente.html'
     def get(self, request, **kwargs):
         id_paciente = kwargs['pk']
         user_medico = self.request.user
@@ -168,18 +177,19 @@ class VerPaciente(MedicoUserMixin, View):
             return render(request, self.template_name, {'relacion_paciente': relacion_paciente, 'antecedentes': lista_antecedentes, 'analisis': analisis, 'informes': informes})
         else:
             return redirect('index_medico')
-        
+
+#Vista para editar los datos personales del paciente        
 class EditarPaciente(MedicoUserMixin, UpdateView):
-    template_name = 'registrar_paciente.html'
+    template_name = 'plantillas_medico/registrar_paciente.html'
     form_class = FormRegistrarPaciente
     model = Paciente
     pk_url_kwarg = 'pk'
     
     def form_valid(self, form_class):
-        form = form_class.save(commit=False)
-        pk = form.id_usuario_paciente_id
-        user_paciente = User.objects.get(id = pk)
-        user_paciente.email = form.email
+        form = form_class.save(commit=False) #Cargar los datos en el formulario
+        pk = form.id_usuario_paciente_id #Obtener el id del usuario del paciente
+        user_paciente = User.objects.get(id = pk) #Obtener el usuario del paciente  
+        user_paciente.email = form.email #Actualizar el correo electronico del usuario del paciente
         user_paciente.save()
         return super().form_valid(form)
 
@@ -187,8 +197,9 @@ class EditarPaciente(MedicoUserMixin, UpdateView):
         pk = self.kwargs.get(self.pk_url_kwarg)
         return reverse('ver_paciente', args=[pk])
 
+#Vista para registrar antecedentes
 class RegistrarAntecedentes(MedicoUserMixin, FormView):
-    template_name = 'registrar_antecedentes.html'
+    template_name = 'plantillas_medico/registrar_antecedentes.html'
     form_class = AntecedentesForm
     def get(self, request, **kwargs):
         id_paciente = kwargs['pk']
@@ -224,9 +235,9 @@ class RegistrarAntecedentes(MedicoUserMixin, FormView):
             print(form.errors)
             return redirect('registrar_antecedentes', pk=id_paciente)
    
-
+#
 class RegistrarAnalisis(MedicoUserMixin, FormView):
-    template_name = 'registrar_analisis.html'
+    template_name = 'plantillas_medico/registrar_analisis.html'
     form_class = ImagenForm
 
     def get(self, request, **kwargs):
@@ -268,7 +279,7 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
             return redirect('registrar_analisis', pk=id_paciente)
 
 class RegistrarInforme(MedicoUserMixin, FormView):
-    template_name = 'registrar_informe.html'
+    template_name = 'plantillas_medico/registrar_informe.html'
     form_class = InformeForm
     model = Informe
     def get(self, request, **kwargs):
@@ -289,7 +300,7 @@ class RegistrarInforme(MedicoUserMixin, FormView):
         return redirect('ver_paciente', pk=id_paciente)
 
 class EditarAntecedentes(MedicoUserMixin, FormView):
-    template_name = 'registrar_antecedentes.html'
+    template_name = 'plantillas_medico/registrar_antecedentes.html'
     form_class = AntecedentesForm
     
     def get(self, request, **kwargs):
@@ -329,7 +340,7 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
             return redirect('index_paciente', pk=id_paciente)
         
 class DuplicarHistoria(MedicoUserMixin, TemplateView):
-    template_name = 'duplicar_historia.html'
+    template_name = 'plantillas_medico/duplicar_historia.html'
 
     def get(self, request, **kwargs):
         id_paciente = kwargs['pk']
@@ -378,7 +389,7 @@ class DuplicarHistoria(MedicoUserMixin, TemplateView):
 
 class BusquedaView(MedicoUserMixin, ListView):
     model = Paciente
-    template_name = 'index_medico.html'
+    template_name = 'plantillas_medico/index_medico.html'
     context_object_name = 'pacientes'
     
     def get_queryset(self):
@@ -397,7 +408,7 @@ class BusquedaView(MedicoUserMixin, ListView):
                 apellido__icontains=datos).all()
 
 class EstadisticasView(MedicoUserMixin, View):
-    template_name = 'estadisticas_pacientes.html'
+    template_name = 'plantillas_medico/estadisticas_pacientes.html'
     context = {}
     def get(self, request, **kwargs):
         context = self.get_context_data()
