@@ -64,7 +64,7 @@ class FormRegistrarPaciente(forms.ModelForm):
         attrs={'class': 'form-control'}
     ))
     direccion = forms.CharField(required=True, max_length=255, widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
-    fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'max': datetime.datetime.now().date()}),)
+    fecha_nacimiento = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'max': datetime.datetime.now().date(),}))
 
 class AntecedentesForm(forms.Form):
     

@@ -67,7 +67,7 @@ class IndexMedicoView(MedicoUserMixin, ListView):
     template_name = 'plantillas_medico/index_medico.html'
     model = Paciente
     context_object_name = 'pacientes'
-
+    #Metodo para obtener la informacion de la base de datos
     def get_queryset(self):
         relacion = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
         return Paciente.objects.filter(id__in=relacion).all()
@@ -77,7 +77,8 @@ class IndexPaciente(PacienteUserMixin, ListView):
     template_name = 'plantillas_paciente/index_paciente.html'
     model = Paciente
     paginate_by = 20
-    def get_context_data(self, **kwargs) -> dict[str, any]:
+    def get_context_data(self, **kwargs):
+        #Metodo para obtener la informacion de la base de datos
         context = super().get_context_data(**kwargs)
         pacientes = Paciente.objects.filter(id_usuario_paciente=self.request.user.id).all()
         medicos = RelacionMedicoPaciente.objects.filter(id_paciente__in=pacientes).select_related('id_medico').all().distinct()
@@ -103,7 +104,7 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
     model = Paciente
     def get(self, request):
         return render(request, self.template_name, {'form': self.form_class})
-
+    #Metodo que solo se llamara si el formulario fue llenado correctamente
     def form_valid(self, form_class):
         paciente = form_class.save(commit=False)
         user = self.request.user
@@ -152,7 +153,7 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
         mail.enviar()
         return redirect('index_medico',)
 
-
+    #Metodo que se llama si hay errores en el formulario
     def form_invalid(self, form):
         response = super().form_invalid(form)
         return response
@@ -190,9 +191,12 @@ class EditarPaciente(MedicoUserMixin, UpdateView):
         pk = form.id_usuario_paciente_id #Obtener el id del usuario del paciente
         user_paciente = User.objects.get(id = pk) #Obtener el usuario del paciente  
         user_paciente.email = form.email #Actualizar el correo electronico del usuario del paciente
+        #Calcular la fecha de nacimiento
+        edad = datetime.now().date() - form.fecha_nacimiento
+        form.edad = edad.days//365
         user_paciente.save()
         return super().form_valid(form)
-
+    #Si la accion es exitosa, redirigir a la vista del paciente
     def get_success_url(self):
         pk = self.kwargs.get(self.pk_url_kwarg)
         return reverse('ver_paciente', args=[pk])
@@ -235,7 +239,7 @@ class RegistrarAntecedentes(MedicoUserMixin, FormView):
             print(form.errors)
             return redirect('registrar_antecedentes', pk=id_paciente)
    
-#
+#Registrar analisis
 class RegistrarAnalisis(MedicoUserMixin, FormView):
     template_name = 'plantillas_medico/registrar_analisis.html'
     form_class = ImagenForm
@@ -245,7 +249,7 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
         paciente = Paciente.objects.get(id=id_paciente)
         form = self.form_class
         return render(request, self.template_name, {'paciente': paciente, 'form': form}) 
-    
+    #Si el formulario es valido
     def form_valid(self, form):
         imagen = form.cleaned_data.get('image_field')
         id_paciente = self.request.POST.get('pk')
@@ -277,7 +281,7 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
         except:
             messages.error(self.request, 'Ocurrio un error, intentalo denuevo')
             return redirect('registrar_analisis', pk=id_paciente)
-
+#Registrar informes
 class RegistrarInforme(MedicoUserMixin, FormView):
     template_name = 'plantillas_medico/registrar_informe.html'
     form_class = InformeForm
@@ -289,7 +293,7 @@ class RegistrarInforme(MedicoUserMixin, FormView):
         analisis = Analisis.objects.filter(id_imagen__in = img).all()
         return render(request, self.template_name, {'form': self.form_class, 'paciente': paciente, 'analisis': analisis})
 
-
+    
     def form_valid(self, form_class):
         form = form_class.save(commit=False)            
         id_paciente = self.request.POST.get('pk')

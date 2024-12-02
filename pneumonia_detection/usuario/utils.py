@@ -27,10 +27,10 @@ class Modelo:
         carga = carga.reshape((160, 160, 3))
         prediccion = modelo.predict(carga)
         if prediccion[0][0] > prediccion[0][1]:
-            self.clase = 'normal'
+            self.clase = 'Normal'
             self.prob = prediccion[0][0] 
         else: 
-            self.clase = 'neumonia'
+            self.clase = 'Neumonía'
             self.prob = prediccion[0][1]
         
         return {'resultado': self.clase, 'probabilidad': round(self.prob, 2)}
