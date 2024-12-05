@@ -36,7 +36,7 @@ class Paciente(models.Model):
     cedula = models.CharField(max_length=12, )
     sexo = models.CharField(max_length=1, )
     peso = models.CharField(max_length=3, )
-    altura = models.IntegerField()
+    altura = models.FloatField()
     telefono = models.CharField(max_length=16, )
     email = models.EmailField()
     direccion = models.CharField(max_length=255, )
