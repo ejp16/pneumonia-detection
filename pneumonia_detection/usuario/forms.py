@@ -58,7 +58,7 @@ class FormRegistrarPaciente(forms.ModelForm):
     cedula = forms.CharField(label='Cédula', required=True, max_length=12, validators=[RegexValidator('[a-z+-/%]', inverse_match=True)], widget=forms.TextInput(attrs={'class': 'form-control',}))
     sexo = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-select'}))
     peso = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control',}))
-    altura = forms.FloatField(label='Altura en cm', required=True, validators=[RegexValidator('[a-z+-/%]', inverse_match=True)], widget=forms.NumberInput(attrs={'class': 'form-control',}))
+    altura = forms.FloatField(label='Altura', required=True, widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '01'}) )
     telefono = forms.CharField(label='Teléfono', required=True, max_length=16, validators=[RegexValidator('[a-z+-/%-]', inverse_match=True, message='Usar solo números en este campo')], widget=forms.TextInput(attrs={'class': 'form-control', }))
     email = forms.EmailField(required=True, label='Correo electronico', widget=forms.EmailInput(
         attrs={'class': 'form-control'}

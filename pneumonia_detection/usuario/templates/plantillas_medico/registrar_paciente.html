@@ -39,48 +39,58 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="nombre" class="form-label">Nombre</label>
+                            <label for="nombre" style="color: red;">*</label>
                             {{ form.nombre }}
                         </div>
                         <div class="col-md-6">
                             <label for="apellido" class="form-label">Apellido</label>
+                            <label for="apellido" style="color: red;">*</label>
                             {{ form.apellido }}
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="cedula" class="form-label">Cédula</label>
+                            <label for="cedula" style="color: red;">*</label>
                             {{ form.cedula }}
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="peso" class="form-label">Peso (Kg)</label>
+                            <label for="peso" style="color: red;">*</label>
                             {{ form.peso }}
                         </div>
                         <div class="col-md-6">
                             <label for="altura" class="form-label">Altura (m)</label>
+                            <label for="altura" style="color: red;">*</label>
                             {{ form.altura }}
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
+                            <label for="telefono" style="color: red;">*</label>
                         {{ form.telefono }}
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico</label>
+                            <label for="email" style="color: red;">*</label>
                         {{ form.email }}
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
+                            <label for="direccion" style="color: red;">*</label>
                         {{ form.direccion }}
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <label for="fecha_nacimiento" style="color: red;">*</label>
                             {{form.fecha_nacimiento}}
                         </div>
                         <div class="col-md-6">
                             <label for="sexo" class="form-label">Sexo</label>
+                            <label for="sexo" style="color: red;">*</label>
                             {{form.sexo}}
                         </div>
                     </div>
