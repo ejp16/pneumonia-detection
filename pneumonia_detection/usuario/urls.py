@@ -10,7 +10,6 @@ urlpatterns = [
     path('registrar_paciente/', views.RegistrarPacienteView.as_view(), name='registrar_paciente'),
     path('ver_paciente/<int:pk>', views.VerPaciente.as_view(), name='ver_paciente'),
     path('editar_paciente/<int:pk>', views.EditarPaciente.as_view(), name='editar_paciente'),
-    path('duplicar_historia/<int:pk>/', views.DuplicarHistoria.as_view(), name='duplicar_historia'),
 
     path('registrar_antecedentes/<int:pk>', views.RegistrarAntecedentes.as_view(), name='registrar_antecedentes'),
     path('editar_antecedentes/<int:pk>', views.EditarAntecedentes.as_view(), name='editar_antecedentes'),

@@ -342,17 +342,6 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
         
         else:
             return redirect('index_paciente', pk=id_paciente)
-        
-class DuplicarHistoria(MedicoUserMixin, TemplateView):
-    template_name = 'plantillas_medico/duplicar_historia.html'
-
-    def get(self, request, **kwargs):
-        id_paciente = kwargs['pk']
-        user_medico = request.user.id
-        relacion_paciente = RelacionMedicoPaciente.objects.get(id_medico=user_medico, id_paciente=id_paciente)
-        if relacion_paciente:
-            return render(request, self.template_name, {'paciente_id': id_paciente})
-        return redirect('login')
     
     def post(self, request, **kwargs):
         id_paciente = request.POST.get('pk')
