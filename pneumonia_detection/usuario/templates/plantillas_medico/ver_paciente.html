@@ -162,25 +162,31 @@
             <div class="row g-4">
               <div class="col-md-6">
                 <div class="analysis-info">
-                  <strong>Número de Análisis:</strong>
+                  <strong>Código de Análisis</strong>
                   <div class="info-content mt-2">{{ item.id }}</div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="analysis-info">
-                  <strong>Resultado de la Red Neuronal: </strong>
+                  <strong>Resultado de la Red Neuronal </strong>
                   <div class="info-content mt-2">{{ item.resultado }}</div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="analysis-info">
-                  <strong>Probabilidad: </strong>
+                  <strong>Probabilidad </strong>
                   <div class="info-content mt-2">{{ item.probabilidad }}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="analysis-info">
+                  <strong>Fecha del análisis </strong>
+                  <div class="info-content mt-2">{{ item.fecha_analisis }}</div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="analysis-info">
-                  <strong>Recomendaciones: </strong>
+                  <strong>Recomendaciones </strong>
                   <div class="info-content recommendations mt-2">
                     {{ item.recomendaciones }}
                   </div>
@@ -195,13 +201,15 @@
                             <div class="card-img-container">
                                 <img src="{{ item.id_imagen.imagen.url }}" alt="Imagen de análisis" class="card-img-top">
                                 <div class="card-img-overlay">
-                                    <p class="card-text" id="n-analisis">Numero de Analisis: {{ item.id }}</p>
+                                    <p class="card-text" id="n-analisis">Código de Analisis: {{ item.id }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <hr style="text-align:left; margin-left:0; border-color: black; height: 20px;" >
               
 
         {% endfor %}
@@ -213,7 +221,7 @@
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
               </svg>
-              Realizar nuevo analisis
+              Realizar nuevo análisis
           </button></a>
 
         </div>
@@ -230,10 +238,10 @@
       <div class="medical-record-section">
           <p class="medical-record-info">
               <i class="fas fa-history medical-record-icon"></i>
-              El paciente no tiene analisis registrados
+              El paciente no tiene análisis registrados
           </p>
           <a href="{% url 'registrar_analisis' pk=relacion_paciente.id_paciente_id %}" class="medical-record-action">
-              <i class="fas fa-plus-circle"></i> Registrar analisis
+              <i class="fas fa-plus-circle"></i> Registrar análisis
           </a>
       </div>
   </div>
