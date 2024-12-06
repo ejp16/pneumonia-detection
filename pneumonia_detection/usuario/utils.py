@@ -61,26 +61,23 @@ class Modelo:
 
         return response.text
             
-class EnviarMail:
-    def __init__(self, context, recipient):
-        self.context = context
-        self.recipient = recipient
-    def enviar(self):
-        template_name = 'correo.html'
-        convert_to_html_content = render_to_string(
-            template_name=template_name,
-            context=self.context
-        )
-        print(self.recipient)
-        plain_message = strip_tags(convert_to_html_content)
-        send_mail(
-            subject='Contraseña del sistema',
-            message=plain_message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.recipient],
-            html_message=convert_to_html_content,
-            fail_silently=True
-        )
+
+def enviar_email(context, recipient, template, asunto):
+    template_name = template
+    convert_to_html_content = render_to_string(
+        template_name=template_name,
+        context=context
+    )
+    print(recipient)
+    plain_message = strip_tags(convert_to_html_content)
+    send_mail(
+        subject=asunto,
+        message=plain_message,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[recipient],
+        html_message=convert_to_html_content,
+        fail_silently=True
+    )
 
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)

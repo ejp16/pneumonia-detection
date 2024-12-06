@@ -7,7 +7,7 @@ from .backend import EmailBackend
 from .models import *
 from django.contrib import messages
 from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm, ImagenForm
-from .utils import Modelo, EnviarMail, render_to_pdf
+from .utils import Modelo, enviar_email, render_to_pdf
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
@@ -149,8 +149,11 @@ class RegistrarPacienteView(MedicoUserMixin, CreateView):
             'password': clave
         }
 
-        mail = EnviarMail(context=context, recipient=paciente.email)
-        mail.enviar()
+        enviar_email(context=context, 
+                    recipient=paciente.email, 
+                    template='correo_password.html', 
+                    asunto='Contraseña del sistema Neumonet')
+        
         return redirect('index_medico',)
 
     #Metodo que se llama si hay errores en el formulario
@@ -170,8 +173,6 @@ class VerPaciente(MedicoUserMixin, View):
             informes = Informe.objects.filter(id_paciente = relacion_paciente.id_paciente).all()
             antecedentes = AntecedentesPaciente.objects.filter(id_paciente = relacion_paciente.id_paciente)
             lista_antecedentes = None
-            print(antecedentes)
-            print(bool(antecedentes))
             if antecedentes:
                 antecedentesID = ["Médicos", "Quirúrgicos", "Alergológicos", "Cardiovasculares", "Sociales", "Familiares", "Vacunación"]
                 lista_antecedentes = zip(antecedentesID, antecedentes)
@@ -311,6 +312,7 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
         id_paciente = kwargs['pk']
         paciente = Paciente.objects.get(id=id_paciente)
         id = kwargs['pk']
+        #Listar los antecedentes y antecedentes id
         data = list(AntecedentesPaciente.objects.filter(id_paciente = id).order_by('-id_antecedentesID'))
         antecedentesIds = list(AntecedentesID.objects.all().order_by('-id'))
         initial_data = {}
@@ -341,44 +343,8 @@ class EditarAntecedentes(MedicoUserMixin, FormView):
             return redirect('ver_paciente', pk=id_paciente)
         
         else:
+            print(form.errors)
             return redirect('index_paciente', pk=id_paciente)
-    
-    def post(self, request, **kwargs):
-        id_paciente = request.POST.get('pk')
-        datos_paciente = Paciente.objects.get(id=id_paciente)
-        antecedentes = list(AntecedentesPaciente.objects.filter(id_paciente=id_paciente).all())
-        if not antecedentes:
-            messages.warning(self.request, 'Debe registrar los antecedentes del paciente antes de duplicar la historia')
-            return redirect('ver_paciente', pk=id_paciente)
-        paciente = Paciente(
-            nombre = datos_paciente.nombre,
-            apellido = datos_paciente.apellido,
-            cedula = datos_paciente.cedula,
-            sexo = datos_paciente.sexo,
-            peso = datos_paciente.sexo,
-            altura = datos_paciente.altura,
-            telefono = datos_paciente.telefono,
-            email = datos_paciente.email,
-            direccion = datos_paciente.direccion,
-            edad = datos_paciente.edad,
-            fecha_nacimiento = datos_paciente.fecha_nacimiento,
-            registro = datetime.now().date(),
-            id_usuario_paciente = datos_paciente.id_usuario_paciente
-        )
-
-        paciente.save()
-
-        antecedentesID = list(AntecedentesID.objects.all())
-        for i in range(len(antecedentesID)):
-            AntecedentesPaciente.objects.create(
-                id_antecedentesID = antecedentesID[i],
-                antecedente_descrip = antecedentes[i].antecedente_descrip,
-                id_paciente = paciente
-            )
-
-        RelacionMedicoPaciente.objects.create(id_medico=request.user, id_paciente=paciente)
-
-        return redirect('ver_paciente', pk=paciente.id)
 
 class BusquedaView(MedicoUserMixin, ListView):
     model = Paciente

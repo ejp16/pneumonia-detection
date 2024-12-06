@@ -68,13 +68,13 @@ class FormRegistrarPaciente(forms.ModelForm):
 
 class AntecedentesForm(forms.Form):
     
-    medicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
-    quirurgicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
-    alergologicos = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
-    cardiovasculares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
-    sociales = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
-    familiares = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control'}))
-    vacunacion = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control antecedentes-form-control '}))
+    medicos = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control'}))
+    quirurgicos = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control'}))
+    alergologicos = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control'}))
+    cardiovasculares = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control'}))
+    sociales = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control'}))
+    familiares = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control'}))
+    vacunacion = forms.CharField(empty_value='No aplica', required=False, widget=forms.Textarea(attrs={"rows":"4", 'class': 'form-control antecedentes-form-control '}))
 
 class InformeForm(forms.ModelForm):
     class Meta:
