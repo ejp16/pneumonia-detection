@@ -8,11 +8,14 @@ from .models import *
 from django.contrib import messages
 from .forms import FormRegistro, LoginForm, AntecedentesForm, FormRegistrarPaciente, InformeForm, ImagenForm
 from .utils import Modelo, enviar_email, render_to_pdf
+from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import datetime
+from django.conf import settings
+from django.core.files import File
 
 #Validar que el usuario que ingresa a la ruta es un medico
 class MedicoUserMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -270,7 +273,7 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
                 altura=paciente.altura,
                 antecedentes=antecedentes
             )
-            Analisis.objects.create(
+            analisis = Analisis.objects.create(
                 resultado=prediccion['resultado'],
                 probabilidad=prediccion['probabilidad'],
                 recomendaciones=recomendacion,
@@ -278,6 +281,17 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
                 id_medico=self.request.user,
                 id_paciente=paciente
             )
+
+            context = {
+                'nombre_medico': analisis.id_medico.username,
+                'link': f'http://127.0.0.1:8000/usuario/descargar_analisis/{analisis.id}'
+            }
+
+            enviar_email(context=context,
+                        recipient=paciente.email,
+                        template='correo_analisis.html',
+                        asunto='Resultado de Análisis de Radiografía')
+                                                
             return redirect('ver_paciente', pk=id_paciente)
         except Exception as e:
             messages.error(self.request, 'Ocurrio un error, intentalo denuevo')
@@ -416,12 +430,34 @@ class DescargarInforme(View):
             'observaciones': informe.observaciones,
             'recomendaciones': informe.recomendaciones,
             'medicacion': informe.medicacion,
-            'fecha_consulta': informe.fecha_consulta
+            'fecha_consulta': informe.fecha_consulta,
         }
 
         pdf = render_to_pdf(self.template_name, context)
         return HttpResponse(pdf, content_type='application/pdf')
     
+class DescargarAnalisis(View):
+    template_name = 'pdf_analisis.html'
+    
+    def get(self, request, **kwargs):
+        id_analisis = kwargs['pk']
+        analisis = Analisis.objects.get(id = id_analisis)
+        imagen = Imagen.objects.get(id = analisis.id_imagen_id)
+        context = {
+            'id': id_analisis,
+            'resultado': analisis.resultado,
+            'probabilidad': analisis.probabilidad,
+            'recomendaciones': analisis.recomendaciones,
+            'fecha': analisis.fecha_analisis,
+            'nombre_paciente': analisis.id_paciente.nombre,
+            'apellido_paciente': analisis.id_paciente.apellido,
+            'nombre_medico': analisis.id_medico.username,
+            'img': imagen
+        }
+
+        pdf = render_to_pdf(self.template_name, context)
+        return HttpResponse(pdf, content_type='application/pdf')
+
 class Logout(View):
     def get(self, request):
         logout(request)

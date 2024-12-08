@@ -1,77 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% load static %}
 
     <link rel="stylesheet" href="{% static 'styles.css' %}">
-
     <link rel="shortcut icon" type="image/png" href="{% static 'neumonet-logo.ico' %}"/>
-
     <title>Neumonet</title>
 
+    <style>
+        .login-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-side {
+            background-image: url('{% static "ERS-2019.jpg" %}');
+            height: 642px;
+            background-color: #f0f0f0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .form-side {
+            padding: 40px;
+        }
+
+        .registro-form-input {
+            margin-bottom: 1.5rem;
+        }
+
+        .registro-form-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 <body>
-
-    
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><i class="bi bi-hospital"></i>NeumoNet</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
-                </li>
-        </div>
-    </div>
-  </nav>
-    
-{% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div class="alert alert-danger">
-                <strong>{{field.label_tag}} {{ error }}</strong>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-hospital"></i>NeumoNet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </nav>
+    
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{field.label_tag}} {{ error }}</strong>
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-{% endif %}
+    {% endif %}
 
-<div class="container">
-    <div class="registro-form-container">
-        <h2 class="titulo-formulario card-title text-center mb-4">Registro</h2>
-        <form method='post'>  {% csrf_token %}
-            <div class="registro-form-input">
-                <label for="nombre" class="form-label">Nombre:</label>
-                {{ form.username }}
+    <div class="container">
+        <div class="login-container">
+            <div class="row g-0">
+                <div class="col-md-6">
+                    <div class="image-side">
+                        <!-- Image placeholder -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-side">
+                        <div class="registro-form-container">
+                            <h2 class="titulo-formulario card-title text-center mb-4">Registro</h2>
+                            <form method='post'> {% csrf_token %}
+                                <div class="registro-form-input">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    {{ form.username }}
+                                </div>
+                                <div class="registro-form-input">
+                                    <label for="correo" class="form-label">Correo electrónico</label>
+                                    {{ form.email }}
+                                </div>
+                                <div class="registro-form-input">
+                                    <label for="contrasena" class="form-label">Contraseña</label>
+                                    {{ form.password1 }}
+                                </div>
+                                <div class="registro-form-input">
+                                    <label for="confirmar-contrasena" class="form-label">Confirmar contraseña</label>
+                                    {{ form.password2 }}
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 registro-form-button">Registrarse</button>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a href="{% url 'login' %}" class="enlace-recuperar">Iniciar sesion</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="registro-form-input">
-                <label for="correo" class="form-label">Correo electrónico:</label>
-                {{ form.email }}
-            </div>
-            <div class="registro-form-input">
-                <label for="contrasena" class="form-label">Contraseña:</label>
-                {{ form.password1 }}
-            </div>
-            <div class="registro-form-input">
-                <label for="confirmar-contrasena" class="form-label">Confirmar contraseña:</label>
-                {{ form.password2 }}
-            </div>
-            <button type="submit" class="btn btn-primary w-100 registro-form-button">Registrarse</button>
-        </form>
-        <div class="text-center mt-3">
-          <a href="{% url 'login' %}" class="enlace-recuperar">Iniciar sesion</a>
         </div>
     </div>
-</div>
-
-
 </body>
 </html>
-

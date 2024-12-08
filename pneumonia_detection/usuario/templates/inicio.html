@@ -14,18 +14,21 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .hero {
-            background: linear-gradient(135deg, #3f60ce, #50abbb);
-            color: white;
-            padding: 100px 0;
-            position: relative;
-            overflow: hidden;
+            background-image: url('{% static "PULMON.jpg"%}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: rgb(0, 0, 0);
+            height: 50vh; /* Cambiado a 48% de la altura de la ventana */
+            display: flex;
+            align-items: center;
         }
         @keyframes slide {
             from { transform: translateY(0); }
             to { transform: translateY(-100%); }
         }
         .section {
-            padding: 80px 0;
+            padding: 30px 0 60px 0;
         }
         .btn-custom {
             background: linear-gradient(45deg, #6bd0ff, #152e74);
@@ -74,9 +77,12 @@
             height: 3px;
             background: #ff6b6b;
         }
+        .img-fluid rounded shadow{
+            border-radius: 20%;
+        }
     </style>
 
-    <link rel="shortcut icon" type="image/png" href="{% static 'neumonet-logo.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'image.webp' %}"/>
 
     <title>Neumonet</title>
 </head>
@@ -84,8 +90,8 @@
     <header class="hero">
         <img src="" alt="">
         <div class="container text-center position-relative">
-            <h1 class="display-3 fw-bold mb-4">Sistema de Detección de Neumonia</h1>
-            <p class="lead mb-5">Descubre nuestro innovador sistema de detección de neumonía a traves de una Red Neuronal Convolucional</p>
+            <h1 class="display-3 fw-bold mb-4">Sistema de Detección de Neumonía</h1>
+            <p class="lead mb-5"><b>Descubre nuestro innovador sistema de detección de neumonía con Redes Neuronales Convolucionales</b></p>
             <a href="{% url 'register' %}"><button class="btn-custom">Registrarse</button></a>
             <a href="{% url 'login' %}"><button class="btn-custom">Iniciar sesión</button></a>
         </div>
@@ -94,7 +100,7 @@
     <main>
         <section class="section">
             <div class="container">
-                <h2 class="text-center mb-5">¿Qué es?</h2>
+                <h2 class="text-center mb-5" style="margin-bottom: 1.3rem !important;">¿Qué es?</h2>
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <div class="feature-card bg-primary text-white p-4">
@@ -132,15 +138,15 @@
                 <h2 class="text-center mb-5">¿Cómo funciona?</h2>
                 <div class="row align-items-center">
                     <div class="col-md-6 mb-4">
-                        <img src="{% static 'neumonet-logo.ico' %}" alt="Sistema de detección" class="img-fluid rounded shadow">
+                        <img src="{% static 'redondeado.png' %}" alt="Sistema de detección">
                     </div>
                     <div class="col-md-6">
                         <p class="lead">
-                            La <b>red neuronal convolucional</b> con <b>precisión del 94%</b> y la <b>IA de Gemini</b> trabajaran en conjunto para proporcionarle apoyo en la <b>detección de neumonía en imágenes radiográficas de tórax.</b>
+                            La <b>red neuronal convolucional</b> con <b>precisión del 94%</b> y la <b>IA de Gemini</b> trabajarán en conjunto para proporcionarle apoyo en la <b>detección de neumonía en imágenes radiográficas de tórax.</b>
                             <br>
                             El sistema también le ofrece la posibilidad de registrar informes, en donde podrá registrar todos los datos referentes a la consulta con su paciente.
                             <br>
-                            A los pacientes se les enviara un correo con la contraseña para que puedan ingresar al sistema y ver el resultado de los análisis y los informes realizados. 
+                            A los pacientes se les enviará un correo con la contraseña para que puedan ingresar al sistema y ver el resultado de los análisis y los informes realizados. 
                         </p>
                         <ul class="list-unstyled">
                             <li><i class="fas fa-check-circle text-success me-2"></i> Detección en tiempo real</li>
@@ -163,7 +169,7 @@
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p>&copy; 2023 Sistema de detección. Todos los derechos reservados.</p>
+            <p>&copy; 2024 Sistema de detección. Todos los derechos reservados.</p>
         </div>
     </footer>
 

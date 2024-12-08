@@ -9,7 +9,6 @@ import google.generativeai as genai
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
-
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from io import BytesIO
@@ -84,7 +83,7 @@ def render_to_pdf(template_src, context_dict={}):
     html = template.render(context_dict)
     result = BytesIO()
     pdf = pisa.pisaDocument(BytesIO(html.encode('utf-8')), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    if not pdf.err: 
+        return HttpResponse(result.getvalue(), content_type='application/pdf') 
     else:
         return None
