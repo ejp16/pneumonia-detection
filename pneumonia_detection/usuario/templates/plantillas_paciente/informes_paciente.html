@@ -20,25 +20,25 @@
         <div class="row g-4">
           <div class="col-md-6">
             <div class="analysis-info">
-              <strong>Número de Análisis:</strong>
+              <strong>Código de Análisis</strong>
               <div class="info-content mt-2">{{ item.id }}</div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="analysis-info">
-              <strong>Resultado de la Red Neuronal: </strong>
+              <strong>Resultado de la Red Neuronal </strong>
               <div class="info-content mt-2">{{ item.resultado }}</div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="analysis-info">
-              <strong>Probabilidad: </strong>
+              <strong>Probabilidad </strong>
               <div class="info-content mt-2">{{ item.probabilidad }}</div>
             </div>
           </div>
           <div class="col-12">
             <div class="analysis-info">
-              <strong>Recomendaciones: </strong>
+              <strong>Recomendaciones </strong>
               <div class="info-content recommendations mt-2">
                 {{ item.recomendaciones }}
               </div>
@@ -53,7 +53,7 @@
                         <div class="card-img-container">
                             <img src="{{ item.id_imagen.imagen.url }}" alt="Imagen de análisis" class="card-img-top">
                             <div class="card-img-overlay">
-                                <p class="card-text" id="n-analisis">Numero de Análisis: {{ item.id }}</p>
+                                <p class="card-text" id="n-analisis">Código de Análisis: {{ item.id }}</p>
                             </div>
                         </div>
                     </div>
@@ -82,48 +82,56 @@
     {% if informes %}
 
             {% for informe in informes %}
-
             
-        <div class="container mt-4">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title mb-0">Datos de la Consulta. Informe N: {{ informe.id }}</h2>
-                </div>
-                <div class="card-body p-0">
-                    <div class="field">
-                        <div class="field-label">Motivo de consulta</div>
-                        <div class="field-value">{{ informe.motivo_consulta }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Observaciones</div>
-                        <div class="field-value large-field">
-                          {{ informe.observaciones }}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Recomendaciones</div>
-                        <div class="field-value large-field">
-                          {{ informe.recomendaciones }}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Medicación</div>
-                        <div class="field-value large-field">
-                          {{ informe.medicacion }}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Fecha de consulta</div>
-                        {{ informe.fecha_consulta }}
-                    </div>
-                    <div class="card-footer bg-transparent border-0 pb-4">
-                      <a href="{% url 'descargar' pk=informe.id %}" target="_blank"><button class="btn btn-lg w-100 edit-button">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14-4-4m4 4 4-4"/>
-                        </svg>
-                          Imprimir Informe
-                    </button></a>
-                </div>
+            <div class="container mt-4">
+              <div class="card">
+                  <div class="card-header">
+                      <h2 class="card-title mb-0">Datos de la Consulta. Informe</h2>
+                  </div>
+                  <div class="card-body p-0">
+                      <div class="field">
+                          <div class="field-label">Inicio de la enfermedad</div>
+                          <div class="field-value">{{ informe.inicio_enfermedad }}</div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Caracteristicas de la enfermedad</div>
+                          <div class="field-value large-field">
+                            {{ informe.caracterizado }}
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Examenes realizados</div>
+                          <div class="field-value large-field">
+                            {{ informe.examenes }}
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Antecedentes de importancia</div>
+                          <div class="field-value large-field">
+                            {{ informe.antecedentes_importancia }}
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Frecuencia cardíaca (PPM)</div>
+                          {{ informe.frecuencia_cardiaca }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Frecuencia respiratoria (RPM)</div>
+                          {{ informe.frecuencia_respiratoria }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Tensión arterial (mmHg)</div>
+                          {{ informe.tension_arterial }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Saturación de oxígeno (%)</div>
+                          {{ informe.saturacion_oxigeno }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Recomendación</div>
+                          {{ informe.recomendacion }}
+                      </div>
+                  </div>
             </div>
             {% endfor %}
 

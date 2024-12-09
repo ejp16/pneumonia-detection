@@ -317,6 +317,10 @@ class RegistrarInforme(MedicoUserMixin, FormView):
         form.id_paciente_id = id_paciente
         form.save()
         return redirect('ver_paciente', pk=id_paciente)
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
 
 class EditarAntecedentes(MedicoUserMixin, FormView):
     template_name = 'plantillas_medico/registrar_antecedentes.html'

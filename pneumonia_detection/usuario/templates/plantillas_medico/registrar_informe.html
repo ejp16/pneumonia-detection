@@ -7,30 +7,52 @@
 
 <div class="patient-report-outer-container">
     <div class="patient-report-inner-container">
-        <h2 class="patient-report-title">Realizar informe del paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+        <h2 class="patient-report-title">Realizar informe al paciente {{ paciente.nombre }} {{ paciente.apellido }}</h2>
         <form>
             <div class="mb-3">
-                <label for="patientReportAnalysisNumber" class="patient-report-label form-label">Detalle todo lo relacionado a la consulta o analisis realizado:</label>
+                <label for="patientReportConsultationReason" class="patient-report-label form-label">Inicio de la enfermedad</label>
+                <label style="color: red;">*</label>
+                {{ form.inicio_enfermedad }}
             </div>
             <div class="mb-3">
-                <label for="patientReportConsultationReason" class="patient-report-label form-label">Motivo de la consulta:</label>
-                {{ form.motivo_consulta }}
+                <label for="patientReportObservations" class="patient-report-label form-label">Caracteristicas de la enfermedad</label>
+                <label style="color: red;">*</label>
+                {{ form.caracterizado }}
             </div>
             <div class="mb-3">
-                <label for="patientReportObservations" class="patient-report-label form-label">Observaciones:</label>
-                {{ form.observaciones }}
+                <label for="patientReportRecommendations" class="patient-report-label form-label">Examenes realizados</label>
+                <label style="color: red;">*</label>
+                {{ form.examenes }}
             </div>
             <div class="mb-3">
-                <label for="patientReportRecommendations" class="patient-report-label form-label">Recomendaciones:</label>
-                {{ form.recomendaciones }}
+                <label for="patientReportMedication" class="patient-report-label form-label">Antecedentes de importancia</label>
+                <label style="color: red;">*</label>
+                {{ form.antecedentes_importancia }}
             </div>
             <div class="mb-3">
-                <label for="patientReportMedication" class="patient-report-label form-label">Medicación:</label>
-                {{ form.medicacion }}
+                <label for="patientReportConsultationDate" class="patient-report-label form-label">Frecuencia cardíaca (PPM)</label>
+                <label style="color: red;">*</label>
+                {{ form.frecuencia_cardiaca }}
             </div>
             <div class="mb-3">
-                <label for="patientReportConsultationDate" class="patient-report-label form-label">Fecha consulta:</label>
-                {{ form.fecha_consulta }}
+                <label for="patientReportConsultationDate" class="patient-report-label form-label">Frecuencia respiratoria (RPM)</label>
+                <label style="color: red;">*</label>
+                {{ form.frecuencia_respiratoria }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportConsultationDate" class="patient-report-label form-label">Tensión arterial (mmHg)</label>
+                <label style="color: red;">*</label>
+                {{ form.tension_arterial }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportConsultationDate" class="patient-report-label form-label">Saturación de oxígeno (%)</label>
+                <label style="color: red;">*</label>
+                {{ form.saturacion_oxigeno }}
+            </div>
+            <div class="mb-3">
+                <label for="patientReportConsultationDate" class="patient-report-label form-label">Recomendación</label>
+                <label style="color: red;">*</label>
+                {{ form.recomendacion }}
             </div>
             <button type="submit" class="patient-report-submit-btn btn btn-primary">Registrar informe</button>
             

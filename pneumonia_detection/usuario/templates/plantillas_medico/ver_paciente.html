@@ -273,30 +273,46 @@
                   </div>
                   <div class="card-body p-0">
                       <div class="field">
-                          <div class="field-label">Motivo de consulta</div>
-                          <div class="field-value">{{ informe.motivo_consulta }}</div>
+                          <div class="field-label">Inicio de la enfermedad</div>
+                          <div class="field-value">{{ informe.inicio_enfermedad }}</div>
                       </div>
                       <div class="field">
-                          <div class="field-label">Observaciones</div>
+                          <div class="field-label">Caracteristicas de la enfermedad</div>
                           <div class="field-value large-field">
-                            {{ informe.observaciones }}
+                            {{ informe.caracterizado }}
                           </div>
                       </div>
                       <div class="field">
-                          <div class="field-label">Recomendaciones</div>
+                          <div class="field-label">Examenes realizados</div>
                           <div class="field-value large-field">
-                            {{ informe.recomendaciones }}
+                            {{ informe.examenes }}
                           </div>
                       </div>
                       <div class="field">
-                          <div class="field-label">Medicación</div>
+                          <div class="field-label">Antecedentes de importancia</div>
                           <div class="field-value large-field">
-                            {{ informe.medicacion }}
+                            {{ informe.antecedentes_importancia }}
                           </div>
                       </div>
                       <div class="field">
-                          <div class="field-label">Fecha de consulta</div>
-                          {{ informe.fecha_consulta }}
+                          <div class="field-label">Frecuencia cardíaca (PPM)</div>
+                          {{ informe.frecuencia_cardiaca }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Frecuencia respiratoria (RPM)</div>
+                          {{ informe.frecuencia_respiratoria }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Tensión arterial (mmHg)</div>
+                          {{ informe.tension_arterial }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Saturación de oxígeno (%)</div>
+                          {{ informe.saturacion_oxigeno }}
+                      </div>
+                      <div class="field">
+                          <div class="field-label">Recomendación</div>
+                          {{ informe.recomendacion }}
                       </div>
                   </div>
         
