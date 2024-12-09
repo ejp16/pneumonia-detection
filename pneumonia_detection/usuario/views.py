@@ -283,14 +283,14 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
             )
 
             context = {
-                'nombre_medico': analisis.id_medico.username,
+                'nombre_medico': self.request.user.username,
                 'link': f'http://127.0.0.1:8000/usuario/descargar_analisis/{analisis.id}'
             }
 
             enviar_email(context=context,
                         recipient=paciente.email,
                         template='correo_analisis.html',
-                        asunto='Resultado de Análisis de Radiografía')
+                        asunto='Resultado de Análisis de Radiografía | Neumonet')
                                                 
             return redirect('ver_paciente', pk=id_paciente)
         except Exception as e:
@@ -312,10 +312,25 @@ class RegistrarInforme(MedicoUserMixin, FormView):
     def form_valid(self, form_class):
         form = form_class.save(commit=False)            
         id_paciente = self.request.POST.get('pk')
+        paciente = Paciente.objects.get(id=id_paciente)
         user_medico = self.request.user
         form.id_medico_id = user_medico.id
-        form.id_paciente_id = id_paciente
+        form.id_paciente_id = paciente.id
         form.save()
+
+        context = {
+            'nombre_medico': self.request.user.username,
+            'link': f'http://127.0.0.1:8000/usuario/descargar_analisis/{form.id}'
+        }
+
+        enviar_email(
+            context=context,
+            recipient=paciente.email,
+            template='correo_informe.html',
+            asunto='Informe médico | Neumonet'
+        )
+
+
         return redirect('ver_paciente', pk=id_paciente)
     
     def form_invalid(self, form):
@@ -416,9 +431,6 @@ class EstadisticasView(MedicoUserMixin, View):
         query = RelacionMedicoPaciente.objects.filter(id_medico=self.request.user.id).values_list('id_paciente', flat=True)
         self.context['hombres'] = Paciente.objects.filter(id__in=query, sexo='H').count()
         self.context['mujeres'] = Paciente.objects.filter(id__in=query, sexo='M').count()
-        
-        self.context['edades_5_10'] = Paciente.objects.filter(id__in=query, edad__range=(4,11)).count()
-        self.context['edades_10_20'] = Paciente.objects.filter(id__in=query, edad__range=(10,22)).count()
 
         return self.context 
 
@@ -430,11 +442,21 @@ class DescargarInforme(View):
         informe = Informe.objects.get(id = id_informe)
         context = {
             'id': id_informe,
-            'motivo_consulta': informe.motivo_consulta,
-            'observaciones': informe.observaciones,
-            'recomendaciones': informe.recomendaciones,
-            'medicacion': informe.medicacion,
-            'fecha_consulta': informe.fecha_consulta,
+            'inicio_enfermedad': informe.inicio_enfermedad,
+            'caracterizado': informe.caracterizado,
+            'examenes': informe.examenes,
+            'antecedentes_importancia': informe.antecedentes_importancia,
+            'frecuencia_cardiaca': informe.frecuencia_cardiaca,
+            'frecuencia_respiratoria' : informe.frecuencia_respiratoria,
+            'tension_arterial': informe.tension_arterial,
+            'saturacion_oxigeno': informe.saturacion_oxigeno,
+            'recomendacion': informe.recomendacion,
+            'fecha_informe': informe.fecha_informe,
+            'nombre_paciente:': informe.id_paciente.nombre,
+            'apellido_paciente': informe.id_paciente.apellido,
+            'edad_paciente': informe.id_paciente.edad,
+            'peso_paciente': informe.id_paciente.peso,
+            'nombre_medico': informe.id_medico.username,
         }
 
         pdf = render_to_pdf(self.template_name, context)
