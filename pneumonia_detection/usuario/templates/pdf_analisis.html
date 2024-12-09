@@ -9,152 +9,159 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-            font-size: 20px; /* Increased base font size by 25% from 16px to 20px */
+            font-family: Arial, sans-serif;
         }
 
         body {
             background-color: #f5f5f5;
-            padding: 2rem;
-            color: #333;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #0066ff;
+            color: white;
+            padding: 10px 10px;
+            margin-bottom: 8px;
+            display: flex;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: normal;
         }
 
         .container {
-            max-width: 1000px; /* Increased from 800px to accommodate larger text */
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 0.2rem;
-            padding-bottom: 0.6rem;
-            border-bottom: 2px solid #eee;
-            font-size: 2.5rem; /* Increased from 2rem */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .form-group {
-            margin-bottom: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            margin: 1rem !important; 
+            padding: 1rem !important;
         }
 
         label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: #666;
-            font-size: 1.125rem; /* Increased from 0.9rem */
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .data {
-            padding: 0.75rem;
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            min-height: 3.125rem; /* Increased from 2.5rem */
-        }
-
-        .result-section {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 2px solid #eee;
-        }
-
-        .probability {
-            background-color: #e8f4f8;
-            padding: 1rem;
-            border-radius: 4px;
-            margin: 1rem 0;
-            border-left: 4px solid #2196f3;
+            background-color: white;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
         }
 
         .recommendations {
-            background-color: #fff3e0;
-            padding: 1.5rem;
+            margin-top: 15px;
+        }
+
+        .recommendations label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .recommendations .data {
+            min-height: 100px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            padding: 12px;
+        }
+
+        .xray-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .xray-container img {
+            max-width: 100%;
+            height: auto;
             border-radius: 4px;
-            margin-top: 2rem;
-            border-left: 4px solid #ff9800;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #logo-preview{
+            height: 60px;
+            width: 60px;
         }
 
-        .recommendations h2 {
-            color: #e65100;
-            margin-bottom: 1rem;
-            font-size: 1.5rem; /* Increased from 1.2rem */
-        }
-
-        .recommendations p {
-            line-height: 1.6;
-        }
-
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
             body {
-                padding: 1rem;
+                padding: 10px;
             }
-
+            
             .container {
-                padding: 1rem;
-            }
-
-            * {
-                font-size: 18px; /* Slightly smaller base font for mobile */
-            }
-
-            h1 {
-                font-size: 2rem;
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Resultados del Análisis</h1>
-
-        <div class="form-group">
-            <label>Nombre</label>
-            <div class="data">{{ nombre_paciente }} {{ apellido_paciente }}</div>
-        </div>
-
-        <div class="form-group">
-            <label>Nombre del Médico</label>
-            <div class="data">{{ nombre_medico }}</div>
-        </div>
-
-        <div class="form-group">
-            <label>Código de Análisis</label>
-            <div class="data">{{ id }}</div>
-        </div>
-
-        <div class="form-group">
-            <label>Fecha del análisis</label>
-            <div class="data">{{ fecha_analisis }}</div>
-        </div>
-
-        <div class="result-section">
-            <label>Resultado de la Red Neuronal</label>
-            <div class="data">{{ resultado }}</div>
-
-            <div class="probability">
-                <label>Probabilidad</label>
-                <div class="data">{{ probabilidad }}</div>
-            </div>
-            
-        </div>
-
-        <div class="recommendations">
-            <h2>Recomendaciones</h2>
-            <p>
-                {{ recomendaciones }}
-            </p>
-        </div>
+    
+    
+    <div class="header">
+        <h1>Resultados del Análisis | Neumonet </h1>
     </div>
 
-    <h1>Radiografia analizada </h1>
+    <div class="container">
+        <div class="grid-container">
+            <div class="form-group">
+                <label>Nombre del paciente: {{ nombre_paciente }} {{ apellido_paciente }}</label>
+            </div> <br>
+            <div class="form-group">
+                <label>Nombre del médico: {{ nombre_medico }}</label>
+            </div> <br>
+            <div class="form-group">
+                <label>Código de Análisis: {{ id }}</label>
+            </div> <br>
 
-    <img src="{{ img.imagen.path }}">
+            <div class="form-group">
+                <label>Resultado de la Red Neuronal: {{ resultado }}</label>
+            </div> <br>
+
+            <div class="form-group">
+                <label>Probabilidad: {{ probabilidad }}%</label>
+            </div> <br>
+
+            <div class="form-group">
+                <label>Fecha del análisis: {{ fecha }}</label>
+            </div> <br>
+        </div>
+
+        
+
+        <div class="recommendations">
+            <label>Recomendaciones: {{ recomendaciones }}</label>
+        </div>
 
 
+        <h1>Imagen analizada:</h1>
+
+        <div class="xray-container">
+            <img src="{{ img.imagen.path }}" alt="Radiografía analizada">
+        </div>
+    </div>
 </body>
 </html>
