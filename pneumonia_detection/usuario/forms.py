@@ -80,18 +80,28 @@ class InformeForm(forms.ModelForm):
     class Meta:
         model = Informe
         fields = [
-            'motivo_consulta',
-            'observaciones',
-            'recomendaciones',
-            'medicacion',
-            'fecha_consulta'
+            'inicio_enfermedad',
+            'caracterizado',
+            'examenes',
+            'antecedentes_importancia',
+            'frecuencia_cardiaca',
+            'frecuencia_respiratoria',
+            'tension_arterial',
+            'saturacion_oxigeno',
+            'recomendacion',
+
+
         ]
 
-    motivo_consulta = forms.CharField(label='Motivo de la consulta', required=True, widget=forms.TextInput(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
-    fecha_consulta = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'patient-report-input form-control', 'type': 'date'}))
-    observaciones = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
-    recomendaciones = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
-    medicacion = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
+    inicio_enfermedad = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'max': datetime.datetime.now().date(),}, format="d%m%Y%"))
+    caracterizado = forms.CharField(required=True, widget=forms.Textarea(attrs={"rows":"3", 'class': 'patient-report-input form-control'}))
+    examenes = forms.CharField(required=True, widget=forms.Textarea(attrs={"rows":"3", 'class': 'patient-report-input form-control'}))
+    antecedentes_importancia = forms.CharField(required=True, widget=forms.Textarea(attrs={"rows":"3", 'class': 'patient-report-input form-control'}))
+    frecuencia_cardiaca = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control',}))
+    frecuencia_respiratoria = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control',}))
+    tension_arterial = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control',}))
+    saturacion_oxigeno = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control',}))
+    recomendacion = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'patient-report-input form-control', 'rows': 3}))
 
 class ImagenForm(forms.Form):
     image_field = forms.ImageField(required=True,)
