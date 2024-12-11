@@ -31,7 +31,7 @@ class Modelo:
         else: 
             self.clase = 'Neumonía'
             self.prob = prediccion[0][1] 
-        return {'resultado': self.clase, 'probabilidad': round(self.prob*100, 1)}
+        return {'resultado': self.clase, 'probabilidad': round(self.prob*100, 2)}
 
     def prompt(self, edad, peso, altura, antecedentes):
         texto = (f"Paciente de {edad} años de edad con peso de {peso} "

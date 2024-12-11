@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datos de la Consulta</title>
+    <title>Informe Médico</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,12 +29,22 @@
             font-size: 24px;
         }
         .content {
-            padding: 11px;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            font-size: 18px;
+            color: #1a73e8;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #1a73e8;
+            padding-bottom: 5px;
         }
         .field {
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
-        .field h2 {
+        .field h3 {
             font-size: 16px;
             color: #333;
             margin-bottom: 3px;
@@ -42,8 +52,6 @@
         .field p {
             margin: 0;
             color: #666;
-        }
-        p{
             font-size: 15px;
         }
     </style>
@@ -51,60 +59,82 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Informe médico al paciente {{ nombre_paciente }} {{ apellido_paciente }}</h1>
+            <h1>Informe médico</h1>
         </div>
         <div class="content">
-            <div class="field">
-                <h2>Nombre del médico</h2>
-                <p>{{ nombre_medico }}</p>
+            <div class="section">
+                <h2>Información del Paciente</h2>
+                <div class="field">
+                    <h3>Nombre completo</h3>
+                    <p>{{ nombre_paciente }} {{ apellido_paciente }}</p>
+                </div>
+                <div class="field">
+                    <h3>Edad</h3>
+                    <p>{{ edad_paciente }}</p>
+                </div>
+                <div class="field">
+                    <h3>Peso</h3>
+                    <p>{{ peso_paciente }}</p>
+                </div>
             </div>
-            <div class="field">
-                <h2>Edad del paciente</h2>
-                <p>{{ edad_paciente }}</p>
+
+            <div class="section">
+                <h2>Información de la Consulta</h2>
+                <div class="field">
+                    <h3>Nombre del médico</h3>
+                    <p>{{ nombre_medico }}</p>
+                </div>
+                <div class="field">
+                    <h3>Fecha del informe</h3>
+                    <p>{{ fecha_informe }}</p>
+                </div>
             </div>
-            <div class="field">
-                <h2>Peso del paciente</h2>
-                <p>{{ peso_paciente }}</p>
+
+            <div class="section">
+                <h2>Historial y Síntomas</h2>
+                <div class="field">
+                    <h3>Fecha de inicio de la enfermedad</h3>
+                    <p>{{ inicio_enfermedad }}</p>
+                </div>
+                <div class="field">
+                    <h3>Características de la enfermedad</h3>
+                    <p>{{ caracterizado }}</p>
+                </div>
+                <div class="field">
+                    <h3>Antecedentes de importancia</h3>
+                    <p>{{ antecedentes_importancia }}</p>
+                </div>
             </div>
-            <div class="field">
-                <h2>Fecha de inicio de la enfermedad</h2>
-                <p>{{ inicio_enfermedad }}</p>
+
+            <div class="section">
+                <h2>Exámenes y Signos Vitales</h2>
+                <div class="field">
+                    <h3>Exámenes realizados</h3>
+                    <p>{{ examenes }}</p>
+                </div>
+                <div class="field">
+                    <h3>Frecuencia cardíaca</h3>
+                    <p>{{ frecuencia_cardiaca }}</p>
+                </div>
+                <div class="field">
+                    <h3>Frecuencia respiratoria</h3>
+                    <p>{{ frecuencia_respiratoria }}</p>
+                </div>
+                <div class="field">
+                    <h3>Tensión arterial</h3>
+                    <p>{{ tension_arterial }}</p>
+                </div>
+                <div class="field">
+                    <h3>Saturación de oxígeno</h3>
+                    <p>{{ saturacion_oxigeno }}</p>
+                </div>
             </div>
-            <div class="field">
-                <h2>Caracteristicas de la enfermedad</h2>
-                <p>{{ caracterizado }}</p>
-            </div>
-            <div class="field">
-                <h2>Examenes realizados</h2>
-                <p>{{ examenes }}</p>
-            </div>
-            <div class="field">
-                <h2>Antecedentes de importancia</h2>
-                <p>{{ antecedentes_importancia }}</p>
-            </div>
-            <div class="field">
-                <h2>Frecuencia cardíaca</h2>
-                <p>{{ frecuencia_cardiaca }}</p>
-            </div>
-            <div class="field">
-                <h2>Frecuencia respiratoria</h2>
-                <p>{{ frecuencia_respiratoria }}</p>
-            </div>
-            <div class="field">
-                <h2>Tensión arterial</h2>
-                <p>{{ tension_arterial }}</p>
-            </div>
-            <div class="field">
-                <h2>Saturación de oxígeno</h2>
-                <p>{{ saturacion_oxigeno }}</p>
-            </div>
-            <div class="field">
+
+            <div class="section">
                 <h2>Recomendación</h2>
-                <p>{{ recomendacion }}</p>
-            </div>
-            <div class="field">
-                <h2>Fecha del informe</h2>
-                <p>{{ fecha_informe }}</p>
+                <div class="field">
+                    <p>{{ recomendacion }}</p>
+                </div>
             </div>
         </div>
     </div>

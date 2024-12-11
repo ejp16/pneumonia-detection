@@ -66,7 +66,7 @@ class Imagen(models.Model):
 
 class Analisis(models.Model):
     resultado = models.CharField(max_length=8, )
-    probabilidad = models.CharField(max_length=4, )
+    probabilidad = models.CharField(max_length=10, )
     recomendaciones = models.TextField(blank=True, null=True)
     id_imagen = models.ForeignKey(Imagen, on_delete=models.PROTECT)
     id_medico = models.ForeignKey(User, on_delete=models.PROTECT)

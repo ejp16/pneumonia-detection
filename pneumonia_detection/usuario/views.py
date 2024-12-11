@@ -294,6 +294,7 @@ class RegistrarAnalisis(MedicoUserMixin, FormView):
                                                 
             return redirect('ver_paciente', pk=id_paciente)
         except Exception as e:
+            print(e)
             messages.error(self.request, 'Ocurrio un error, intentalo denuevo')
             return redirect('registrar_analisis', pk=id_paciente)
 #Registrar informes
