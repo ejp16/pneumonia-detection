@@ -48,7 +48,6 @@ class Modelo:
         f"dando como resultado {self.clase} con una probabilidad de {self.prob}. "
 
         "Escribe las recomendaciones generales que deberia seguir el paciente en menos de 1100 caracteres"
-        "No utilizar tildes ni acentos durante la respuesta"
 
         )
         
